@@ -30,9 +30,6 @@ public class Subject implements Serializable {
     @Column(name = "time")
     private LocalTime time;
 
-    @ManyToOne
-    private Schedule schedule;
-
     public Subject(String subjectName, String subjectDescription, LocalTime time) {
         this.subjectName = subjectName;
         this.subjectDescription = subjectDescription;
