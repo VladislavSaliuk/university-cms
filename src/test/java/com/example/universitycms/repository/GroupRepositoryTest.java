@@ -82,7 +82,7 @@ public class GroupRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
-    void existsByGroupName_shouldReturnNullPointerException_whenInputContainsNull(){
+    void existsByGroupName_shouldReturnException_whenInputContainsNull(){
         boolean isGroupNameExists = groupRepository.existsByGroupName(null);
         assertFalse(isGroupNameExists);
     }

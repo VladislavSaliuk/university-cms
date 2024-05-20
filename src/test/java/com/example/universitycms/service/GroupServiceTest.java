@@ -2,6 +2,7 @@ package com.example.universitycms.service;
 
 import com.example.universitycms.model.Group;
 import com.example.universitycms.repository.GroupRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,62 +25,59 @@ public class GroupServiceTest {
     @MockBean
     GroupRepository groupRepository;
 
-    @Test
-    void findAll_shouldReturnCorrectGroupList(){
-        List<Group> expectedGroupList = new LinkedList<>();
-        expectedGroupList.add(new Group("Test group 1"));
-        expectedGroupList.add(new Group("Test group 2"));
-        expectedGroupList.add(new Group("Test group 3"));
-        expectedGroupList.add(new Group("Test group 4"));
-        expectedGroupList.add(new Group("Test group 5"));
-        expectedGroupList.add(new Group("Test group 6"));
-        when(groupRepository.findAll()).thenReturn(expectedGroupList);
-        List<Group> actualGroupList = groupService.findAll();
-        assertEquals(expectedGroupList,actualGroupList);
-        verify(groupRepository).findAll();
-    }
+    static List<Group> groupList = new LinkedList<>();
 
-    @Test
-    void findGroupByGroupName_shouldReturnCorrectGroup_whenInputContainsExistingGroupName(){
-        List<Group> groupList = new LinkedList<>();
+    @BeforeAll
+    static void init() {
         groupList.add(new Group("Test group 1"));
         groupList.add(new Group("Test group 2"));
         groupList.add(new Group("Test group 3"));
         groupList.add(new Group("Test group 4"));
         groupList.add(new Group("Test group 5"));
-        groupList.add(new Group("Test group 6"));
+    }
+
+    @Test
+    void getAll_shouldReturnCorrectGroupList(){
+        when(groupRepository.findAll()).thenReturn(groupList);
+        List<Group> actualGroupList = groupService.getAll();
+        assertEquals(groupList,actualGroupList);
+        verify(groupRepository).findAll();
+    }
+
+    @Test
+    void getGroupByGroupName_shouldReturnCorrectGroup_whenInputContainsExistingGroupName(){
         String groupName = "Test group 1";
         Group expetedGroup = new Group();
         expetedGroup.setGroupName(groupList.get(0).getGroupName());
         when(groupRepository.existsByGroupName(groupName)).thenReturn(true);
         when(groupRepository.findGroupByGroupName(groupName)).thenReturn(expetedGroup);
-        Group actualGroup = groupService.findGroupByGroupName(groupName);
+        Group actualGroup = groupService.getGroupByGroupName(groupName);
         assertTrue(actualGroup.equals(expetedGroup));
         verify(groupRepository).existsByGroupName(groupName);
         verify(groupRepository).findGroupByGroupName(groupName);
     }
 
     @Test
-    void findGroupByGroupName_shouldThrowIllegalArgumentException_whenInputContainsNull(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.findGroupByGroupName(null));
+    void getGroupByGroupName_shouldThrowException_whenInputContainsNull(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.getGroupByGroupName(null));
         assertEquals("Input contains null!", exception.getMessage());
         verify(groupRepository,never()).existsByGroupName(null);
         verify(groupRepository,never()).findGroupByGroupName(null);
     }
 
     @Test
-    void findGroupByGroupName_shouldThrowIllegalArgumentException_whenInputContainsNotExistingGroupName(){
+    void getGroupByGroupName_shouldThrowException_whenInputContainsNotExistingGroupName(){
         String groupName = "Test group 10";
         when(groupRepository.existsByGroupName(groupName)).thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.findGroupByGroupName(groupName));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.getGroupByGroupName(groupName));
         assertEquals("Group name doesn't exists!", exception.getMessage());
         verify(groupRepository).existsByGroupName(groupName);
         verify(groupRepository,never()).findGroupByGroupName(groupName);
     }
 
     @Test
-    void findGroupByGroupId_shouldReturnCorrectGroup_whenInputContainsExistingGroupId(){
+    void getGroupByGroupId_shouldReturnCorrectGroup_whenInputContainsExistingGroupId(){
         List<Group> groupList = LongStream.range(0, 10)
                 .mapToObj(groupId -> {
                     Group group = new Group();
@@ -92,18 +90,18 @@ public class GroupServiceTest {
         expetedGroup.setGroupId(groupList.get(0).getGroupId());
         when(groupRepository.existsByGroupId(groupId)).thenReturn(true);
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(expetedGroup);
-        Group actualGroup = groupService.findGroupByGroupId(groupId);
+        Group actualGroup = groupService.getGroupByGroupId(groupId);
         assertTrue(actualGroup.equals(expetedGroup));
         verify(groupRepository).existsByGroupId(groupId);
         verify(groupRepository).findGroupByGroupId(groupId);
     }
 
     @Test
-    void findGroupByGroupId_shouldThrowIllegalArgumentException_whenInputContiansNotExistingGroupId(){
+    void getGroupByGroupId_shouldThrowException_whenInputContainsNotExistingGroupId(){
         long groupId = 100;
         when(groupRepository.existsByGroupId(groupId)).thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.findGroupByGroupId(groupId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.getGroupByGroupId(groupId));
         assertEquals("Group Id doesn't exists!", exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
         verify(groupRepository,never()).findGroupByGroupId(groupId);

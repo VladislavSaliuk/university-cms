@@ -13,11 +13,11 @@ public class GroupService {
     @Autowired
     private GroupRepository groupRepository;
 
-    public List<Group> findAll(){
+    public List<Group> getAll(){
         return groupRepository.findAll();
     }
 
-    public Group findGroupByGroupName(String groupName){
+    public Group getGroupByGroupName(String groupName){
 
         if(groupName == null){
             throw new IllegalArgumentException("Input contains null!");
@@ -30,7 +30,7 @@ public class GroupService {
         return groupRepository.findGroupByGroupName(groupName);
     }
 
-    public Group findGroupByGroupId(long groupId){
+    public Group getGroupByGroupId(long groupId){
 
         if(!groupRepository.existsByGroupId(groupId)){
             throw new IllegalArgumentException("Group Id doesn't exists!");

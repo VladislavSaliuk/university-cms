@@ -17,11 +17,11 @@ import java.io.Serializable;
 public class Faculty implements Serializable {
 
     @Id
-    @Column(name = "faculty_id")
+    @Column(name = "faculty_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long facultyId;
 
-    @Column(name = "faculty_name" , unique = true)
+    @Column(name = "faculty_name" , unique = true, nullable = false)
     private String facultyName;
     public Faculty(String facultyName) {
         this.facultyName = facultyName;

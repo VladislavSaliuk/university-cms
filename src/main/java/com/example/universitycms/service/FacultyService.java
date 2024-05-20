@@ -13,11 +13,11 @@ public class FacultyService {
     @Autowired
     private FacultyRepository facultyRepository;
 
-    public List<Faculty> findAll() {
+    public List<Faculty> getAll() {
         return facultyRepository.findAll();
     }
 
-    public Faculty findFacultyByFacultyName(String facultyName) {
+    public Faculty getFacultyByFacultyName(String facultyName) {
 
         if(facultyName == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -29,7 +29,7 @@ public class FacultyService {
 
         return facultyRepository.findFacultyByFacultyName(facultyName);
     }
-    public Faculty findFacultyByFacultyId(long facultyId) {
+    public Faculty getFacultyByFacultyId(long facultyId) {
 
         if(!facultyRepository.existsByFacultyId(facultyId)) {
             throw new IllegalArgumentException("Faculty Id doesn't exists!");

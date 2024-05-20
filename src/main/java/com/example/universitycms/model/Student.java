@@ -14,19 +14,19 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_id")
+    @Column(name = "student_id", nullable = false)
     private long studentId;
 
-    @Column(name = "login", unique = true)
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone_number", unique = true)
+    @Column(name = "phone_number", unique = true, nullable = false)
     private String phoneNumber;
 
     @Column(name = "first_name")
@@ -46,15 +46,10 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    public Student(String login, String password, String email, String phoneNumber, String firstName, String lastName, int age, Group group, Faculty faculty) {
+    public Student(String login, String password, String email, String phoneNumber) {
         this.login = login;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.group = group;
-        this.faculty = faculty;
     }
 }

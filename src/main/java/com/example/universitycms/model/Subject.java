@@ -17,17 +17,17 @@ import java.time.LocalTime;
 public class Subject implements Serializable {
 
     @Id
-    @Column(name = "subject_id")
+    @Column(name = "subject_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long subjectId;
 
-    @Column(name = "subject_name", unique = true)
+    @Column(name = "subject_name", unique = true, nullable = false)
     private String subjectName;
 
-    @Column(name = "subject_description")
+    @Column(name = "subject_description", nullable = false)
     private String subjectDescription;
 
-    @Column(name = "time")
+    @Column(name = "time", nullable = false)
     private LocalTime time;
 
     public Subject(String subjectName, String subjectDescription, LocalTime time) {

@@ -22,18 +22,10 @@ public class StudentRepositoryTest {
     @Autowired
     StudentRepository studentRepository;
 
-    @Autowired
-    GroupRepository groupRepository;
-
-    @Autowired
-    FacultyRepository facultyRepository;
-
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
     void save_shouldInsertStudent_whenInputContainsStudent() {
-        Group group = groupRepository.findGroupByGroupId(1);
-        Faculty faculty = facultyRepository.findFacultyByFacultyId(1);
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number", "Test first name", "Test last name", 50,  group, faculty);
+        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
         studentRepository.save(student);
         long studentCount = studentRepository.count();
         assertEquals(11, studentCount);
@@ -41,7 +33,7 @@ public class StudentRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void save_shouldThrowInvalidDataAccessApiUsageException_whenInputContainsNull() {
+    void save_shouldThrowException_whenInputContainsNull() {
         assertThrows(InvalidDataAccessApiUsageException.class, () -> studentRepository.save(null));
     }
 

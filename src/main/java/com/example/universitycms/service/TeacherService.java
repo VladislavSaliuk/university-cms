@@ -11,7 +11,7 @@ public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
 
-    public void save(Teacher teacher) {
+    public void addTeacher(Teacher teacher) {
 
         if(teacherRepository.existsByLogin(teacher.getLogin())) {
             throw new IllegalArgumentException("This login exists!");
@@ -28,7 +28,7 @@ public class TeacherService {
         teacherRepository.save(teacher);
     }
 
-    public Teacher findTeacherByLogin(String login) {
+    public Teacher getTeacherByLogin(String login) {
 
         if(login == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -41,7 +41,7 @@ public class TeacherService {
         return teacherRepository.findTeacherByLogin(login);
     }
 
-    public Teacher findTeacherByPhoneNumber(String phoneNumber) {
+    public Teacher getTeacherByPhoneNumber(String phoneNumber) {
 
         if(phoneNumber == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -54,7 +54,7 @@ public class TeacherService {
         return teacherRepository.findTeacherByPhoneNumber(phoneNumber);
     }
 
-    public Teacher findTeacherByEmail(String email) {
+    public Teacher getTeacherByEmail(String email) {
 
         if(email == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -67,7 +67,7 @@ public class TeacherService {
         return teacherRepository.findTeacherByEmail(email);
     }
 
-    public Teacher findTeacherByTeacherId(long teacherId) {
+    public Teacher getTeacherByTeacherId(long teacherId) {
 
         if(!teacherRepository.existsByTeacherId(teacherId)) {
             throw new IllegalArgumentException("Teacher with this Id doesn't exist!");

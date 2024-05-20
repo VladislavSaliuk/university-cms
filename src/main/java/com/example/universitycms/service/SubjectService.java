@@ -13,11 +13,11 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public List<Subject> findAll() {
+    public List<Subject> getAll() {
         return subjectRepository.findAll();
     }
 
-    public Subject findSubjectBySubjectName(String subjectName) {
+    public Subject getSubjectBySubjectName(String subjectName) {
 
         if(subjectName == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -30,7 +30,7 @@ public class SubjectService {
         return subjectRepository.findSubjectBySubjectName(subjectName);
     }
 
-    public Subject findSubjectBySubjectId(long subjectId) {
+    public Subject getSubjectBySubjectId(long subjectId) {
 
         if(!subjectRepository.existsBySubjectId(subjectId)) {
             throw new IllegalArgumentException("Subject Id doesn't exists!");

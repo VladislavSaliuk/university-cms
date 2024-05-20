@@ -20,19 +20,10 @@ public class TeacherRepositoryTest {
 
     @Autowired
     TeacherRepository teacherRepository;
-
-    @Autowired
-    GroupRepository groupRepository;
-
-    @Autowired
-    FacultyRepository facultyRepository;
-
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_teachers.sql"})
     void save_shouldInsertTeacher_whenInputContainsTeacher() {
-        Group group = groupRepository.findGroupByGroupId(1);
-        Faculty faculty = facultyRepository.findFacultyByFacultyId(1);
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number", "Test first name", "Test last name", 50,  group, faculty);
+        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number");
         teacherRepository.save(teacher);
         long teacherCount = teacherRepository.count();
         assertEquals(11, teacherCount);

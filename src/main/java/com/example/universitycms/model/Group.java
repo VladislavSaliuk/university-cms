@@ -17,11 +17,11 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class Group implements Serializable{
     @Id
-    @Column(name = "group_id")
+    @Column(name = "group_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
 
-    @Column(name = "group_name", unique = true)
+    @Column(name = "group_name", unique = true, nullable = false)
     private String groupName;
 
     public Group(String groupName) {
