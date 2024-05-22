@@ -2,8 +2,11 @@ package com.example.universitycms.service;
 
 import com.example.universitycms.model.Teacher;
 import com.example.universitycms.repository.TeacherRepository;
+import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TeacherService {
@@ -26,6 +29,10 @@ public class TeacherService {
         }
 
         teacherRepository.save(teacher);
+    }
+
+    public List<Teacher> getAll() {
+        return teacherRepository.findAll();
     }
 
     public Teacher getTeacherByLogin(String login) {

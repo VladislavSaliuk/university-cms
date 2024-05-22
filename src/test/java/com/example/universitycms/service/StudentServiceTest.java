@@ -91,6 +91,13 @@ public class StudentServiceTest {
         verify(studentRepository,never()).save(student);
     }
 
+    @Test
+    void gelAll_shouldReturnCorrectStudentList() {
+        when(studentRepository.findAll()).thenReturn(studentList);
+        List<Student> expectedStudentList = studentService.getAll();
+        assertEquals(studentList, expectedStudentList);
+        verify(studentRepository).findAll();
+    }
 
     @Test
     void getStudentByLogin_shouldReturnCorrectStudent_whenInputContainsStudentWithExistingLogin() {

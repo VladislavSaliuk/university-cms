@@ -89,6 +89,13 @@ public class TeacherServiceTest {
         verify(teacherRepository,never()).save(teacher);
     }
 
+    @Test
+    void getAll_shouldReturnCorrectTeacherList() {
+        when(teacherRepository.findAll()).thenReturn(teacherList);
+        List<Teacher> expectedTeacherList = teacherService.getAll();
+        assertEquals(teacherList, expectedTeacherList);
+        verify(teacherRepository).findAll();
+    }
 
     @Test
     void getTeacherByLogin_shouldReturnCorrectTeacher_whenInputContainsTeacherWithExistingLogin() {

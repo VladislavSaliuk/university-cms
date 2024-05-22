@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Students</title>
+    <link href="/css/table.css" rel="stylesheet">
+</head>
+<body>
+<main class="table">
+    <section class="table-header">
+        <h1>Students</h1>
+    </section>
+    <section class="table-body">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Login</th>
+                <th scope="col">Password</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Group</th>
+                <th scope="col">Faculty</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${studentList}">
+                <td th:text="${student.getStudentId()}"></td>
+                <td th:text="${student.getLogin()}"></td>
+                <td th:text="${student.getPassword()}"></td>
+                <td th:text="${student.getEmail()}"></td>
+                <td th:text="${student.getPhoneNumber()}"></td>
+                <td th:text="${student.getFirstName()}"></td>
+                <td th:text="${student.getLastName()}"></td>
+                <td th:text="${student.getGroup().getGroupName()}"></td>
+                <td th:text="${student.getFaculty().getFacultyName()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

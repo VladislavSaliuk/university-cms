@@ -5,6 +5,8 @@ import com.example.universitycms.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class StudentService {
 
@@ -28,6 +30,9 @@ public class StudentService {
         studentRepository.save(student);
     }
 
+    public List<Student> getAll() {
+        return studentRepository.findAll();
+    }
     public Student getStudentByLogin(String login) {
 
         if(login == null) {

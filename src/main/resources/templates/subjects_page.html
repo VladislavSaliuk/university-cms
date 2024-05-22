@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subjects</title>
+    <link href="/css/table.css" rel="stylesheet">
+</head>
+<body>
+<main class="table">
+    <section class="table-header">
+        <h1>Subjects</h1>
+    </section>
+    <section class="table-body">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Subject name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="subject : ${subjectList}">
+                <td th:text="${subject.getSubjectId()}"></td>
+                <td th:text="${subject.getSubjectName()}"></td>
+                <td th:text="${subject.getSubjectDescription()}"></td>
+                <td th:text="${subject.getTime()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
