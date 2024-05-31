@@ -29,17 +29,11 @@ public class Teacher implements Serializable {
     @Column(name = "email",unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone_number", unique = true, nullable = false)
-    private String phoneNumber;
-
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "age")
-    private int age;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -49,10 +43,9 @@ public class Teacher implements Serializable {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    public Teacher(String login, String password, String email, String phoneNumber) {
+    public Teacher(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.phoneNumber = phoneNumber;
     }
 }

@@ -20,7 +20,6 @@ create table public.students (
     last_name varchar(255),
     login varchar(255) not null unique,
     password varchar(255) not null,
-    phone_number varchar(255) not null unique,
     primary key (student_id)
 );
 
@@ -42,7 +41,6 @@ create table public.teachers (
     last_name varchar(255),
     login varchar(255) not null unique,
     password varchar(255) not null,
-    phone_number varchar(255) not null unique,
     primary key (teacher_id)
 );
 

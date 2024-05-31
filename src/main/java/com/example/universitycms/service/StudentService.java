@@ -23,10 +23,6 @@ public class StudentService {
             throw new IllegalArgumentException("This E-mail exists!");
         }
 
-        if(studentRepository.existsByPhoneNumber(student.getPhoneNumber())) {
-            throw new IllegalArgumentException("This phone number exists");
-        }
-
         studentRepository.save(student);
     }
 
@@ -46,18 +42,6 @@ public class StudentService {
         return studentRepository.findStudentByLogin(login);
     }
 
-    public Student getStudentByPhoneNumber(String phoneNumber) {
-
-        if(phoneNumber == null) {
-            throw new IllegalArgumentException("Input contains null!");
-        }
-
-        if(!studentRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new IllegalArgumentException("Student with this phone number doesn't exist!");
-        }
-
-        return studentRepository.findStudentByPhoneNumber(phoneNumber);
-    }
 
     public Student getStudentByEmail(String email) {
 

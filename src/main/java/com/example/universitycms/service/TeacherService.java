@@ -24,9 +24,6 @@ public class TeacherService {
             throw new IllegalArgumentException("This E-mail exists!");
         }
 
-        if(teacherRepository.existsByPhoneNumber(teacher.getPhoneNumber())) {
-            throw new IllegalArgumentException("This phone number exists");
-        }
 
         teacherRepository.save(teacher);
     }
@@ -46,19 +43,6 @@ public class TeacherService {
         }
 
         return teacherRepository.findTeacherByLogin(login);
-    }
-
-    public Teacher getTeacherByPhoneNumber(String phoneNumber) {
-
-        if(phoneNumber == null) {
-            throw new IllegalArgumentException("Input contains null!");
-        }
-
-        if(!teacherRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new IllegalArgumentException("Teacher with this phone number doesn't exist!");
-        }
-
-        return teacherRepository.findTeacherByPhoneNumber(phoneNumber);
     }
 
     public Teacher getTeacherByEmail(String email) {

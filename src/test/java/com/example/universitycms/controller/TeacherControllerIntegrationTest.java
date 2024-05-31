@@ -36,11 +36,11 @@ public class TeacherControllerIntegrationTest {
         Faculty faculty = new Faculty("Test faculty");
         Group group = new Group("Test group");
 
-        teacherList.add(new Teacher("Test login 1" , "Test password 1" , "Test email 1", "Test phone number 1"));
-        teacherList.add(new Teacher("Test login 2" , "Test password 2" , "Test email 2", "Test phone number 2"));
-        teacherList.add(new Teacher("Test login 3" , "Test password 3" , "Test email 3", "Test phone number 3"));
-        teacherList.add(new Teacher("Test login 4" , "Test password 4" , "Test email 4", "Test phone number 4"));
-        teacherList.add(new Teacher("Test login 5" , "Test password 5" , "Test email 5", "Test phone number 5"));
+        teacherList.add(new Teacher("Test login 1" , "Test password 1" , "Test email 1"));
+        teacherList.add(new Teacher("Test login 2" , "Test password 2" , "Test email 2"));
+        teacherList.add(new Teacher("Test login 3" , "Test password 3" , "Test email 3"));
+        teacherList.add(new Teacher("Test login 4" , "Test password 4" , "Test email 4"));
+        teacherList.add(new Teacher("Test login 5" , "Test password 5" , "Test email 5"));
 
 
         teacherList.forEach(teacher -> {

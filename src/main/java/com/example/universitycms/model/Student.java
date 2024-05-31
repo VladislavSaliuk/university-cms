@@ -26,17 +26,11 @@ public class Student {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone_number", unique = true, nullable = false)
-    private String phoneNumber;
-
     @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "age")
-    private int age;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "group_id")
@@ -46,10 +40,9 @@ public class Student {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    public Student(String login, String password, String email, String phoneNumber) {
+    public Student(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
-        this.phoneNumber = phoneNumber;
     }
 }

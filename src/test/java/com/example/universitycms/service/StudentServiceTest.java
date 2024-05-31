@@ -3,7 +3,6 @@ package com.example.universitycms.service;
 
 import com.example.universitycms.model.Student;
 import com.example.universitycms.repository.StudentRepository;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,62 +31,55 @@ public class StudentServiceTest {
 
     @BeforeAll
     static void init() {
-        studentList.add(new Student("Test login 1" , "Test password 1" , "Test email 1", "Test phone number 1"));
-        studentList.add(new Student("Test login 2" , "Test password 2" , "Test email 2", "Test phone number 2"));
-        studentList.add(new Student("Test login 3" , "Test password 3" , "Test email 3", "Test phone number 3"));
-        studentList.add(new Student("Test login 4" , "Test password 4" , "Test email 4", "Test phone number 4"));
-        studentList.add(new Student("Test login 5" , "Test password 5" , "Test email 5", "Test phone number 5"));
+        studentList.add(new Student("Test login 1" , "Test password 1" , "Test email 1"));
+        studentList.add(new Student("Test login 2" , "Test password 2" , "Test email 2"));
+        studentList.add(new Student("Test login 3" , "Test password 3" , "Test email 3"));
+        studentList.add(new Student("Test login 4" , "Test password 4" , "Test email 4"));
+        studentList.add(new Student("Test login 5" , "Test password 5" , "Test email 5"));
     }
 
     @Test
     void addStudent_shouldInsertStudentToDatabase_whenInputContainsStudent() {
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
+        Student student = new Student("Test login" , "Test password" , "Test email");
         when(studentRepository.existsByLogin(student.getLogin())).thenReturn(false);
         when(studentRepository.existsByEmail(student.getEmail())).thenReturn(false);
-        when(studentRepository.existsByPhoneNumber(student.getPhoneNumber())).thenReturn(false);
         studentService.addStudent(student);
         verify(studentRepository).existsByLogin(student.getLogin());
         verify(studentRepository).existsByEmail(student.getEmail());
-        verify(studentRepository).existsByPhoneNumber(student.getPhoneNumber());
         verify(studentRepository).save(student);
     }
 
     @Test
     void addStudent_shouldThrowException_whenInputContainsStudentWithAlreadyExistingLogin() {
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
+        Student student = new Student("Test login" , "Test password" , "Test email");
         when(studentRepository.existsByLogin(student.getLogin())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> studentService.addStudent(student));
         verify(studentRepository).existsByLogin(student.getLogin());
         verify(studentRepository,never()).existsByEmail(student.getEmail());
-        verify(studentRepository,never()).existsByPhoneNumber(student.getPhoneNumber());
         verify(studentRepository,never()).save(student);
     }
 
     @Test
     void addStudent_shouldThrowException_whenInputContainsStudentWithAlreadyExistingEmail() {
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
+        Student student = new Student("Test login" , "Test password" , "Test email");
         when(studentRepository.existsByLogin(student.getLogin())).thenReturn(false);
         when(studentRepository.existsByEmail(student.getEmail())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> studentService.addStudent(student));
         verify(studentRepository).existsByLogin(student.getLogin());
         verify(studentRepository).existsByEmail(student.getEmail());
-        verify(studentRepository,never()).existsByPhoneNumber(student.getPhoneNumber());
         verify(studentRepository,never()).save(student);
     }
 
     @Test
     void addStudent_shouldThrowException_whenInputContainsStudentWithAlreadyExistingPhoneNumber() {
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
+        Student student = new Student("Test login" , "Test password" , "Test email");
         when(studentRepository.existsByLogin(student.getLogin())).thenReturn(false);
         when(studentRepository.existsByEmail(student.getEmail())).thenReturn(false);
-        when(studentRepository.existsByPhoneNumber(student.getPhoneNumber())).thenReturn(true)
-                .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> studentService.addStudent(student));
         verify(studentRepository).existsByLogin(student.getLogin());
         verify(studentRepository).existsByEmail(student.getEmail());
-        verify(studentRepository).existsByPhoneNumber(student.getPhoneNumber());
         verify(studentRepository,never()).save(student);
     }
 
@@ -128,37 +120,6 @@ public class StudentServiceTest {
         assertEquals("Input contains null!", exception.getMessage());
         verify(studentRepository,never()).existsByLogin(null);
         verify(studentRepository,never()).findStudentByLogin(null);
-    }
-
-    @Test
-    void getStudentByPhoneNumber_shouldReturnCorrectStudent_whenInputContainsStudentWithExistingPhoneNumber() {
-        String phoneNumber = "Test phone number 1";
-        Student expectedStudent = studentList.get(0);
-        when(studentRepository.existsByPhoneNumber(phoneNumber)).thenReturn(true);
-        when(studentRepository.findStudentByPhoneNumber(phoneNumber)).thenReturn(expectedStudent);
-        Student actualStudent = studentService.getStudentByPhoneNumber(phoneNumber);
-        assertEquals(expectedStudent, actualStudent);
-        verify(studentRepository).existsByPhoneNumber(phoneNumber);
-        verify(studentRepository).findStudentByPhoneNumber(phoneNumber);
-    }
-
-    @Test
-    void getStudentByPhoneNumber_shouldThrowException_whenInputContainsStudentWithNotExistingPhoneNumber() {
-        String phoneNumber = "Test phone number";
-        when(studentRepository.existsByPhoneNumber(phoneNumber)).thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> studentService.getStudentByPhoneNumber(phoneNumber));
-        assertEquals("Student with this phone number doesn't exist!", exception.getMessage());
-        verify(studentRepository).existsByPhoneNumber(phoneNumber);
-        verify(studentRepository,never()).findStudentByPhoneNumber(phoneNumber);
-    }
-
-    @Test
-    void getStudentByPhoneNumber_shouldThrowException_whenInputContainsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> studentService.getStudentByPhoneNumber(null));
-        assertEquals("Input contains null!", exception.getMessage());
-        verify(studentRepository,never()).existsByPhoneNumber(null);
-        verify(studentRepository,never()).findStudentByPhoneNumber(null);
     }
 
     @Test

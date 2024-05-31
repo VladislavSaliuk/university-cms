@@ -30,62 +30,55 @@ public class TeacherServiceTest {
     static List<Teacher> teacherList = new LinkedList<>();
     @BeforeAll
     static void init() {
-        teacherList.add(new Teacher("Test login 1" , "Test password 1" , "Test email 1", "Test phone number 1"));
-        teacherList.add(new Teacher("Test login 2" , "Test password 2" , "Test email 2", "Test phone number 2"));
-        teacherList.add(new Teacher("Test login 3" , "Test password 3" , "Test email 3", "Test phone number 3"));
-        teacherList.add(new Teacher("Test login 4" , "Test password 4" , "Test email 4", "Test phone number 4"));
-        teacherList.add(new Teacher("Test login 5" , "Test password 5" , "Test email 5", "Test phone number 5"));
+        teacherList.add(new Teacher("Test login 1" , "Test password 1" , "Test email 1"));
+        teacherList.add(new Teacher("Test login 2" , "Test password 2" , "Test email 2"));
+        teacherList.add(new Teacher("Test login 3" , "Test password 3" , "Test email 3"));
+        teacherList.add(new Teacher("Test login 4" , "Test password 4" , "Test email 4"));
+        teacherList.add(new Teacher("Test login 5" , "Test password 5" , "Test email 5"));
     }
 
     @Test
     void addTeacher_shouldInsertTeacherToDatabase_whenInputContainsTeacher() {
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number");
+        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email");
         when(teacherRepository.existsByLogin(teacher.getLogin())).thenReturn(false);
         when(teacherRepository.existsByEmail(teacher.getEmail())).thenReturn(false);
-        when(teacherRepository.existsByPhoneNumber(teacher.getPhoneNumber())).thenReturn(false);
         teacherService.addTeacher(teacher);
         verify(teacherRepository).existsByLogin(teacher.getLogin());
         verify(teacherRepository).existsByEmail(teacher.getEmail());
-        verify(teacherRepository).existsByPhoneNumber(teacher.getPhoneNumber());
         verify(teacherRepository).save(teacher);
     }
 
     @Test
     void addTeacher_shouldThrowException_whenInputContainsTeacherWithAlreadyExistingLogin() {
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number");
+        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email");
         when(teacherRepository.existsByLogin(teacher.getLogin())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.addTeacher(teacher));
         verify(teacherRepository).existsByLogin(teacher.getLogin());
         verify(teacherRepository,never()).existsByEmail(teacher.getEmail());
-        verify(teacherRepository,never()).existsByPhoneNumber(teacher.getPhoneNumber());
         verify(teacherRepository,never()).save(teacher);
     }
 
     @Test
     void addTeacher_shouldThrowException_whenInputContainsTeacherWithAlreadyExistingEmail() {
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number");
+        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email");
         when(teacherRepository.existsByLogin(teacher.getLogin())).thenReturn(false);
         when(teacherRepository.existsByEmail(teacher.getEmail())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.addTeacher(teacher));
         verify(teacherRepository).existsByLogin(teacher.getLogin());
         verify(teacherRepository).existsByEmail(teacher.getEmail());
-        verify(teacherRepository,never()).existsByPhoneNumber(teacher.getPhoneNumber());
         verify(teacherRepository,never()).save(teacher);
     }
 
     @Test
     void addTeacher_shouldThrowException_whenInputContainsTeacherWithAlreadyExistingPhoneNumber() {
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email", "Test phone number");
+        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email");
         when(teacherRepository.existsByLogin(teacher.getLogin())).thenReturn(false);
         when(teacherRepository.existsByEmail(teacher.getEmail())).thenReturn(false);
-        when(teacherRepository.existsByPhoneNumber(teacher.getPhoneNumber())).thenReturn(true)
-                .thenThrow(IllegalArgumentException.class);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.addTeacher(teacher));
         verify(teacherRepository).existsByLogin(teacher.getLogin());
         verify(teacherRepository).existsByEmail(teacher.getEmail());
-        verify(teacherRepository).existsByPhoneNumber(teacher.getPhoneNumber());
         verify(teacherRepository,never()).save(teacher);
     }
 
@@ -126,37 +119,6 @@ public class TeacherServiceTest {
         assertEquals("Input contains null!", exception.getMessage());
         verify(teacherRepository,never()).existsByLogin(null);
         verify(teacherRepository,never()).findTeacherByLogin(null);
-    }
-
-    @Test
-    void getTeacherByPhoneNumber_shouldReturnCorrectTeacher_whenInputContainsTeacherWithExistingPhoneNumber() {
-        String phoneNumber = "Test phone number 1";
-        Teacher expectedTeacher = teacherList.get(0);
-        when(teacherRepository.existsByPhoneNumber(phoneNumber)).thenReturn(true);
-        when(teacherRepository.findTeacherByPhoneNumber(phoneNumber)).thenReturn(expectedTeacher);
-        Teacher actualTeacher = teacherService.getTeacherByPhoneNumber(phoneNumber);
-        assertEquals(expectedTeacher, actualTeacher);
-        verify(teacherRepository).existsByPhoneNumber(phoneNumber);
-        verify(teacherRepository).findTeacherByPhoneNumber(phoneNumber);
-    }
-
-    @Test
-    void getTeacherByPhoneNumber_shouldThrowException_whenInputContainsTeacherWithNotExistingPhoneNumber() {
-        String phoneNumber = "Test phone number";
-        when(teacherRepository.existsByPhoneNumber(phoneNumber)).thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.getTeacherByPhoneNumber(phoneNumber));
-        assertEquals("Teacher with this phone number doesn't exist!", exception.getMessage());
-        verify(teacherRepository).existsByPhoneNumber(phoneNumber);
-        verify(teacherRepository,never()).findTeacherByPhoneNumber(phoneNumber);
-    }
-
-    @Test
-    void getTeacherByPhoneNumber_shouldThrowException_whenInputContainsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.getTeacherByPhoneNumber(null));
-        assertEquals("Input contains null!", exception.getMessage());
-        verify(teacherRepository,never()).existsByPhoneNumber(null);
-        verify(teacherRepository,never()).findTeacherByPhoneNumber(null);
     }
 
     @Test

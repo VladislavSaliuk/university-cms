@@ -25,7 +25,7 @@ public class StudentRepositoryTest {
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
     void save_shouldInsertStudent_whenInputContainsStudent() {
-        Student student = new Student("Test login" , "Test password" , "Test email", "Test phone number");
+        Student student = new Student("Test login" , "Test password" , "Test email");
         studentRepository.save(student);
         long studentCount = studentRepository.count();
         assertEquals(11, studentCount);
@@ -63,29 +63,6 @@ public class StudentRepositoryTest {
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
     void findStudentByLogin_shouldReturnNull_whenInputContainsNull() {
         Student student = studentRepository.findStudentByLogin(null);
-        assertNull(student);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void findStudentByPhoneNumber_shouldReturnStudentWithCorrectPhoneNumber_whenInputContainsStudentWithExistingPhoneNumber() {
-        String phoneNumber = "123456789";
-        Student student = studentRepository.findStudentByPhoneNumber(phoneNumber);
-        assertEquals(student.getPhoneNumber(), phoneNumber);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void findStudentByPhoneNumber_shouldReturnNull_whenInputContainsStudentWithNotExistingPhoneNumber() {
-        String phoneNumber = "Test phone number";
-        Student student = studentRepository.findStudentByPhoneNumber(phoneNumber);
-        assertNull(student);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void findStudentByPhoneNumber_shouldReturnNull_whenInputContainsNull() {
-        Student student = studentRepository.findStudentByPhoneNumber(null);
         assertNull(student);
     }
 
@@ -148,28 +125,6 @@ public class StudentRepositoryTest {
     void existsByLogin_shouldReturnFalse_whenInputContainsNull() {
         boolean isLoginExists = studentRepository.existsByLogin(null);
         assertFalse(isLoginExists);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void existsByPhoneNumber_shouldReturnTrue_whenInputContainsStudentWithExistingPhoneNumber() {
-        String phoneNumber = "123456789";
-        boolean isPhoneNumberExists = studentRepository.existsByPhoneNumber(phoneNumber);
-        assertTrue(isPhoneNumberExists);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void existsByPhoneNumber_shouldReturnFalse_whenInputContainsStudentWithNotExistingPhoneNumber() {
-        String phoneNumber = "Test phone number";
-        boolean isPhoneNumberExists = studentRepository.existsByPhoneNumber(phoneNumber);
-        assertFalse(isPhoneNumberExists);
-    }
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_faculties.sql", "/sql/insert_students.sql"})
-    void existsByPhoneNumber_shouldReturnFalse_whenInputContainsNull() {
-        boolean isPhoneNumberExists = studentRepository.existsByPhoneNumber(null);
-        assertFalse(isPhoneNumberExists);
     }
 
     @Test
