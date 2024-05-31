@@ -36,6 +36,13 @@
             vertical-align: text-top;
         }
 
+        #brand-label {
+            font-weight: 500;
+            color: #009970;
+            font-size: 24px;
+            transition: 0.3s color;
+        }
+
         a {
             text-decoration: none;
         }
@@ -75,7 +82,7 @@
     <div class = "row vh-100 g-0">
 
         <div class="col-lg-6 position-relative d-none d-lg-block">
-            <div class="bg-holder" style="background-image: url(/static/img/hero-bg.jpg)">
+            <div class="bg-holder" style="background-image: url(/img/login-bg.jpg)">
             </div>
         </div>
 
@@ -84,7 +91,7 @@
                 <div class="col col-sm-6 col-lg-7 col-xl-6">
 
                     <div class="text-center mb-5">
-                        <h3 class="fw-bold">Log In</h3>
+                        <a class="fw-bold" id="brand-label">MyCampus</a>
                         <p class="text-secondary">Get access to your account</p>
                     </div>
 
@@ -101,19 +108,19 @@
                         <div class="divider-content-center">or</div>
                     </div>
 
-                    <form action="#">
+                    <form action="/login" method="post">
                         <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-user'></i>
                             </span>
-                            <input type="text" class="form-control form-control-lg fs-6" placeholder="Login">
+                            <input name="username" type="text" class="form-control form-control-lg fs-6" placeholder="Login" required>
                         </div>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-lock-alt'></i>
                             </span>
-                            <input type="password" class="form-control form-control-lg fs-6" placeholder="Password">
+                            <input name="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password" required>
                         </div>
 
                         <div class="input-group mb-3 d-flex justify-content-between">
@@ -125,7 +132,7 @@
                                 <small><a href="#">Forgot password?</a></small>
                             </div>
                         </div>
-                        <button class="btn btn-primary btn-lg w-100 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
                             Login
                         </button>
                     </form>
