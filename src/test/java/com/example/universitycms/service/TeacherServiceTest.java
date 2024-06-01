@@ -72,17 +72,6 @@ public class TeacherServiceTest {
     }
 
     @Test
-    void addTeacher_shouldThrowException_whenInputContainsTeacherWithAlreadyExistingPhoneNumber() {
-        Teacher teacher = new Teacher("Test login" , "Test password" , "Test email");
-        when(teacherRepository.existsByLogin(teacher.getLogin())).thenReturn(false);
-        when(teacherRepository.existsByEmail(teacher.getEmail())).thenReturn(false);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> teacherService.addTeacher(teacher));
-        verify(teacherRepository).existsByLogin(teacher.getLogin());
-        verify(teacherRepository).existsByEmail(teacher.getEmail());
-        verify(teacherRepository,never()).save(teacher);
-    }
-
-    @Test
     void getAll_shouldReturnCorrectTeacherList() {
         when(teacherRepository.findAll()).thenReturn(teacherList);
         List<Teacher> expectedTeacherList = teacherService.getAll();

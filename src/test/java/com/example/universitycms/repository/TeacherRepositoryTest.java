@@ -1,7 +1,5 @@
 package com.example.universitycms.repository;
 
-import com.example.universitycms.model.Faculty;
-import com.example.universitycms.model.Group;
 import com.example.universitycms.model.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

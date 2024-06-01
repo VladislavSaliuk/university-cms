@@ -47,35 +47,6 @@
             text-decoration: none;
         }
 
-        .btn-outline-custom {
-            color: #31374a;
-            border-color: #ddd;
-        }
-
-        .btn-outline-custom:hover {
-            color: #31374a;
-            border-color: #eee;
-            background-color: #eee;
-        }
-
-        .divider-content-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            background-color: #fff;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #999;
-        }
-
-        .divider {
-            margin: 2rem 0;
-        }
-
-
     </style>
 
 </head>
@@ -83,7 +54,7 @@
 <div class = "row vh-100 g-0">
 
     <div class="col-lg-6 position-relative d-none d-lg-block">
-        <div class="bg-holder" style="background-image: url(/img/login-bg_2.jpg)">
+        <div class="bg-holder" style="background-image: url(/static/img/login-bg_2.jpg)">
         </div>
     </div>
 
@@ -97,17 +68,10 @@
                 </div>
 
                 <form action="/register" method="post">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="input-group mb-3">
-                                <input name="firstname" type="text" class="form-control form-control-lg fs-6" placeholder="Firstname" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="input-group mb-3">
-                                <input name="lastname" type="text" class="form-control form-control-lg fs-6" placeholder="Lastname" required>
-                            </div>
-                        </div>
+
+                    <div class="input-group input-group-horizontal mb-3">
+                        <input name="firstname" type="text" class="form-control form-control-lg fs-6" placeholder="First name" required>
+                        <input name="lastname" type="text" class="form-control form-control-lg fs-6" placeholder="Last name" required>
                     </div>
 
                     <div class="input-group mb-3">
