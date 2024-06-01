@@ -11,7 +11,6 @@ create table public.groups (
 );
 
 create table public.students (
-    age integer,
     faculty_id bigint,
     group_id bigint,
     student_id bigserial not null,
@@ -32,7 +31,6 @@ create table public.subjects (
 );
 
 create table public.teachers (
-    age integer,
     faculty_id bigint,
     group_id bigint,
     teacher_id bigserial not null,

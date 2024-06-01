@@ -54,7 +54,7 @@
 <div class = "row vh-100 g-0">
 
     <div class="col-lg-6 position-relative d-none d-lg-block">
-        <div class="bg-holder" style="background-image: url(/static/img/login-bg_2.jpg)">
+        <div class="bg-holder" style="background-image: url(/img/login-bg_2.jpg)">
         </div>
     </div>
 
@@ -67,32 +67,32 @@
                     <p class="text-secondary">Create your account</p>
                 </div>
 
-                <form action="/register" method="post">
+                <form action="/register" method="post" th:object="${teacher}">
 
                     <div class="input-group input-group-horizontal mb-3">
-                        <input name="firstname" type="text" class="form-control form-control-lg fs-6" placeholder="First name" required>
-                        <input name="lastname" type="text" class="form-control form-control-lg fs-6" placeholder="Last name" required>
+                        <input name="firstName" type="text" class="form-control form-control-lg fs-6" placeholder="First name"  required>
+                        <input name="lastName" type="text" class="form-control form-control-lg fs-6" placeholder="Last name"  required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-user'></i>
                             </span>
-                        <input name="username" type="text" class="form-control form-control-lg fs-6" placeholder="Login" required>
+                        <input name="login" type="text" class="form-control form-control-lg fs-6" placeholder="Login"  required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bxl-gmail'></i>
                             </span>
-                        <input name="email" type="email" class="form-control form-control-lg fs-6" placeholder="E-mail" required>
+                        <input name="email" type="email" class="form-control form-control-lg fs-6" placeholder="E-mail"  required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-lock-alt'></i>
                             </span>
-                        <input name="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password" required>
+                        <input name="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password"  required>
                     </div>
 
                     <div class="input-group mb-3">

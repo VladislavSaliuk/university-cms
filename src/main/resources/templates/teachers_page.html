@@ -60,24 +60,18 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Login</th>
-                <th scope="col">Password</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">First name</th>
                 <th scope="col">Last name</th>
-                <th scope="col">Group</th>
-                <th scope="col">Faculty</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="teacher : ${teacherList}">
                 <td th:text="${teacher.getTeacherId()}"></td>
                 <td th:text="${teacher.getLogin()}"></td>
-                <td th:text="${teacher.getPassword()}"></td>
                 <td th:text="${teacher.getEmail()}"></td>
                 <td th:text="${teacher.getFirstName()}"></td>
                 <td th:text="${teacher.getLastName()}"></td>
-                <td th:text="${teacher.getGroup().getGroupName()}"></td>
-                <td th:text="${teacher.getFaculty().getFacultyName()}"></td>
             </tr>
             </tbody>
         </table>

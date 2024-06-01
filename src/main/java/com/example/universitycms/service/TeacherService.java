@@ -4,12 +4,16 @@ import com.example.universitycms.model.Teacher;
 import com.example.universitycms.repository.TeacherRepository;
 import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TeacherService {
+public class TeacherService implements UserDetailsService {
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -65,6 +69,20 @@ public class TeacherService {
         }
 
         return teacherRepository.findTeacherByTeacherId(teacherId);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Teacher teacher = teacherRepository.findTeacherByLogin(username);
+        if(teacher != null) {
+            return User.builder()
+                    .username(teacher.getLogin())
+                    .password(teacher.getPassword())
+                    .roles("TEACHER")
+                    .build();
+        } else {
+            throw new UsernameNotFoundException(username);
+        }
     }
 
 }

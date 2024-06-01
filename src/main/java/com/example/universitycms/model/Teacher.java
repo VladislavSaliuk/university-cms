@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @Setter
 @Table(name = "teachers")
 @NoArgsConstructor
+@ToString
 public class Teacher implements Serializable {
 
     @Id
