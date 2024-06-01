@@ -43,6 +43,10 @@ public class Teacher implements Serializable {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     public Teacher(String login, String password, String email) {
         this.login = login;
         this.password = password;
