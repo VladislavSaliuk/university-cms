@@ -5,23 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
 @Table(name = "students")
 @NoArgsConstructor
-public class Student {
+public class Student extends User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id", nullable = false)
     private long studentId;
-
-    @Column(name = "login", unique = true, nullable = false)
-    private String login;
-
-    @Column(name = "password", nullable = false)
-    private String password;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
@@ -31,18 +27,6 @@ public class Student {
 
     @Column(name = "last_name")
     private String lastName;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "group_id")
-    private Group group;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "faculty_id")
-    private Faculty faculty;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     public Student(String login, String password, String email) {
         this.login = login;

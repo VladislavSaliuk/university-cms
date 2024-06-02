@@ -1,12 +1,10 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.model.Role;
 import com.example.universitycms.model.Student;
+import com.example.universitycms.repository.RoleRepository;
 import com.example.universitycms.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +15,12 @@ public class StudentService  {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public void addStudent(Student student) {
+
+        long studentId = 3;
 
         if(studentRepository.existsByLogin(student.getLogin())) {
             throw new IllegalArgumentException("This login exists!");
@@ -26,6 +29,9 @@ public class StudentService  {
         if(studentRepository.existsByEmail(student.getEmail())) {
             throw new IllegalArgumentException("This E-mail exists!");
         }
+
+        Role role = roleRepository.findRoleByRoleId(studentId);
+        student.setRole(role);
 
         studentRepository.save(student);
     }

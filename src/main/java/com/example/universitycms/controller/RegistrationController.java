@@ -34,26 +34,26 @@ public class RegistrationController {
     @GetMapping("/register-teacher")
     public String showTeacherRegistrationPage(@ModelAttribute Teacher teacher, Model model) {
         model.addAttribute("teacher", teacher);
-        return "teacher-registration-page";  // Назва шаблону
+        return "teacher-registration-page";
     }
 
     @PostMapping("/register-teacher")
     public String registerTeacher(@ModelAttribute Teacher teacher) {
         teacher.setPassword(passwordEncoder.encode(teacher.getPassword()));
         teacherService.addTeacher(teacher);
-        return "redirect:/login";  // Перенаправлення після реєстрації
+        return "redirect:/login";
     }
 
     @GetMapping("/register-student")
     public String showStudentRegistrationPage(@ModelAttribute Student student, Model model) {
         model.addAttribute("student", student);
-        return "student-registration-page";  // Назва шаблону
+        return "student-registration-page";
     }
 
     @PostMapping("/register-student")
     public String registerStudent(@ModelAttribute Student student) {
         student.setPassword(passwordEncoder.encode(student.getPassword()));
         studentService.addStudent(student);
-        return "redirect:/login";  // Перенаправлення після реєстрації
+        return "redirect:/login";
     }
 }

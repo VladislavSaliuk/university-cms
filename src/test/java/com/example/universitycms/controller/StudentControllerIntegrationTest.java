@@ -42,10 +42,6 @@ public class StudentControllerIntegrationTest {
         studentList.add(new Student("Test login 4" , "Test password 4" , "Test email 4"));
         studentList.add(new Student("Test login 5" , "Test password 5" , "Test email 5"));
 
-        studentList.forEach(student -> {
-            student.setFaculty(faculty);
-            student.setGroup(group);
-        });
 
     }
 

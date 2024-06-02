@@ -43,11 +43,6 @@ public class TeacherControllerIntegrationTest {
         teacherList.add(new Teacher("Test login 5" , "Test password 5" , "Test email 5"));
 
 
-        teacherList.forEach(teacher -> {
-            teacher.setFaculty(faculty);
-            teacher.setGroup(group);
-        });
-
     }
 
     @Test

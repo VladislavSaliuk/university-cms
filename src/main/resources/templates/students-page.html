@@ -44,7 +44,7 @@
                 </ul>
             </div>
         </div>
-        <a href="#" class="login-button">Login</a>
+        <a href="/login" class="login-button">Login</a>
         <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -63,6 +63,7 @@
                 <th scope="col">E-mail</th>
                 <th scope="col">First name</th>
                 <th scope="col">Last name</th>
+                <th scope="col">Role</th>
             </tr>
             </thead>
             <tbody>
@@ -72,6 +73,7 @@
                 <td th:text="${student.getEmail()}"></td>
                 <td th:text="${student.getFirstName()}"></td>
                 <td th:text="${student.getLastName()}"></td>
+                <td th:text="${student.getRole().getRoleName()}"></td>
             </tr>
             </tbody>
         </table>

@@ -1,6 +1,8 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.model.Role;
 import com.example.universitycms.model.Teacher;
+import com.example.universitycms.repository.RoleRepository;
 import com.example.universitycms.repository.TeacherRepository;
 import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,12 @@ public class TeacherService {
     @Autowired
     private TeacherRepository teacherRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public void addTeacher(Teacher teacher) {
+
+        long roleId = 2;
 
         if(teacherRepository.existsByLogin(teacher.getLogin())) {
             throw new IllegalArgumentException("This login exists!");
@@ -28,6 +35,8 @@ public class TeacherService {
             throw new IllegalArgumentException("This E-mail exists!");
         }
 
+        Role role = roleRepository.findRoleByRoleId(roleId);
+        teacher.setRole(role);
 
         teacherRepository.save(teacher);
     }
