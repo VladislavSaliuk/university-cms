@@ -15,7 +15,7 @@ public class SubjectController {
     @GetMapping("/subjects")
     public String showSubjectPage(Model model) {
         model.addAttribute("subjectList", subjectService.getAll());
-        return "subjects_page";
+        return "subjects-page";
     }
 
 }

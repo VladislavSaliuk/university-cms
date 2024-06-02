@@ -15,7 +15,7 @@ public class GroupController {
     @GetMapping("/groups")
     public String showGroupPage(Model model) {
         model.addAttribute("groupList", groupService.getAll());
-        return "groups_page";
+        return "groups-page";
     }
 
 }

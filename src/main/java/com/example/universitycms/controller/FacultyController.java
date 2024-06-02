@@ -15,7 +15,7 @@ public class FacultyController {
     @GetMapping("/faculties")
     public String showFacultyPage(Model model) {
         model.addAttribute("facultyList", facultyService.getAll());
-        return "faculties_page";
+        return "faculties-page";
     }
 
 }

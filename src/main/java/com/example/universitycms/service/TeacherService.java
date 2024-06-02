@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TeacherService implements UserDetailsService {
+public class TeacherService {
 
     @Autowired
     private TeacherRepository teacherRepository;
@@ -71,18 +71,5 @@ public class TeacherService implements UserDetailsService {
         return teacherRepository.findTeacherByTeacherId(teacherId);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Teacher teacher = teacherRepository.findTeacherByLogin(username);
-        if(teacher != null) {
-            return User.builder()
-                    .username(teacher.getLogin())
-                    .password(teacher.getPassword())
-                    .roles("TEACHER")
-                    .build();
-        } else {
-            throw new UsernameNotFoundException(username);
-        }
-    }
 
 }
