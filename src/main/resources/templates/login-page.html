@@ -1,4 +1,5 @@
 <!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,14 +9,11 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
-
         @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
-
         body {
             font-family: "Nunito Sans", sans-serif;
             background-color: #fff;
         }
-
         .bg-holder {
             position: absolute;
             width: 100%;
@@ -26,38 +24,31 @@
             background-position: center;
             background-repeat: no-repeat;
         }
-
         .btn {
             font-size: 0.8rem;
             font-weight: 700;
         }
-
         .btn i {
             vertical-align: text-top;
         }
-
         #brand-label {
             font-weight: 500;
             color: #009970;
             font-size: 24px;
             transition: 0.3s color;
         }
-
         a {
             text-decoration: none;
         }
-
         .btn-outline-custom {
             color: #31374a;
             border-color: #ddd;
         }
-
         .btn-outline-custom:hover {
             color: #31374a;
             border-color: #eee;
             background-color: #eee;
         }
-
         .divider-content-center {
             position: absolute;
             top: 50%;
@@ -70,85 +61,69 @@
             font-weight: 500;
             color: #999;
         }
-
         .divider {
             margin: 2rem 0;
         }
-
     </style>
 
 </head>
 <body>
-    <div class = "row vh-100 g-0">
-
-        <div class="col-lg-6 position-relative d-none d-lg-block">
-            <div class="bg-holder" style="background-image: url(/img/login-bg.jpg)">
-            </div>
+<div class = "row vh-100 g-0">
+    <div class="col-lg-6 position-relative d-none d-lg-block">
+        <div class="bg-holder" style="background-image: url(/img/login-bg.jpg)">
         </div>
-
-        <div class="col-lg-6">
-            <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
-                <div class="col col-sm-6 col-lg-7 col-xl-6">
-
-                    <div class="text-center mb-5">
-                        <a class="fw-bold" id="brand-label">MyCampus</a>
-                        <p class="text-secondary">Get access to your account</p>
-                    </div>
-
-                    <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100 mb-3">
-                        <i class='bx bxl-google text-danger me-1 fs-6'></i>Login with Google
-                    </button>
-
-                    <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100">
-                        <i class='bx bxl-facebook text-primary me-1 fs-6'></i>Login with Facebook
-                    </button>
-
-                    <div class="position-relative">
-                        <hr class="text-secondary divider">
-                        <div class="divider-content-center">or</div>
-                    </div>
-
-                    <form action="/login" method="post">
-                        <div class="input-group mb-3">
+    </div>
+    <div class="col-lg-6">
+        <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
+            <div class="col col-sm-6 col-lg-7 col-xl-6">
+                <div class="text-center mb-5">
+                    <a class="fw-bold" id="brand-label">MyCampus</a>
+                    <p class="text-secondary">Get access to your account</p>
+                </div>
+                <a th:href="@{/oauth2/authorization/google}" class="btn btn-lg btn-outline-secondary btn-outline-custom w-100 mb-3">
+                    <i class='bx bxl-google text-danger me-1 fs-6'></i>Login with Google
+                </a>
+                <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100">
+                    <i class='bx bxl-facebook text-primary me-1 fs-6'></i>Login with Facebook
+                </button>
+                <div class="position-relative">
+                    <hr class="text-secondary divider">
+                    <div class="divider-content-center">or</div>
+                </div>
+                <form action="/login" method="post">
+                    <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-user'></i>
                             </span>
-                            <input name="username" type="text" class="form-control form-control-lg fs-6" placeholder="Login" required>
-                        </div>
-
-                        <div class="input-group mb-3">
+                        <input name="username" type="text" class="form-control form-control-lg fs-6" placeholder="Login" required>
+                    </div>
+                    <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-lock-alt'></i>
                             </span>
-                            <input name="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password" required>
-                        </div>
-
-                        <div class="input-group mb-3 d-flex justify-content-between">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="formCheck">
-                                <label for="formCheck" class="form-check-label text-secondary"><small>Remember me</small></label>
-                            </div>
-                            <div>
-                                <small><a href="#">Forgot password?</a></small>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
-                            Login
-                        </button>
-
-                    </form>
-
-                    <div class="text-center">
-                        <small> Don't have an account?
-                            <a href="/select-role" class="fw-bold">Sign Up</a>
-                        </small>
+                        <input name="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password" required>
                     </div>
-
+                    <div class="input-group mb-3 d-flex justify-content-between">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="formCheck">
+                            <label for="formCheck" class="form-check-label text-secondary"><small>Remember me</small></label>
+                        </div>
+                        <div>
+                            <small><a href="#">Forgot password?</a></small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        Login
+                    </button>
+                </form>
+                <div class="text-center">
+                    <small> Don't have an account?
+                        <a href="/select-role" class="fw-bold">Sign Up</a>
+                    </small>
                 </div>
             </div>
         </div>
-
     </div>
+</div>
 </body>
 </html>
