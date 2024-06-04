@@ -68,32 +68,32 @@
                     <p class="text-secondary">Create your account</p>
                 </div>
 
-                <form action="#">
+                <form th:action="@{/select-role/register-student}" method="post" th:object="${student}">
 
                     <div class="input-group input-group-horizontal mb-3">
-                        <input type="text" class="form-control form-control-lg fs-6" placeholder="First name"  required>
-                        <input type="text" class="form-control form-control-lg fs-6" placeholder="Last name"  required>
+                        <input type="text" class="form-control form-control-lg fs-6" placeholder="First name" th:field="*{firstName}" required>
+                        <input type="text" class="form-control form-control-lg fs-6" placeholder="Last name" th:field="*{lastName}" required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-user'></i>
                             </span>
-                        <input type="text" class="form-control form-control-lg fs-6" placeholder="Login"  required>
+                        <input type="text" class="form-control form-control-lg fs-6" placeholder="Username" th:field="*{userName}" required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bxl-gmail'></i>
                             </span>
-                        <input type="email" class="form-control form-control-lg fs-6" placeholder="E-mail" required>
+                        <input type="email" class="form-control form-control-lg fs-6" placeholder="E-mail" th:field="*{email}" required>
                     </div>
 
                     <div class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class='bx bx-lock-alt'></i>
                             </span>
-                        <input type="password" class="form-control form-control-lg fs-6" placeholder="Password"  required>
+                        <input type="password" class="form-control form-control-lg fs-6" placeholder="Password" th:field="*{password}" required>
                     </div>
 
                     <div class="input-group mb-3">
