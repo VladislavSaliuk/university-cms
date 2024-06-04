@@ -80,9 +80,9 @@
                     <a class="fw-bold" id="brand-label">MyCampus</a>
                     <p class="text-secondary">Get access to your account</p>
                 </div>
-                <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100 mb-3">
-                    <i class='bx bxl-google text-danger me-1 fs-6'></i>Login with Google
-                </button>
+                <a th:href="@{/oauth2/authorization/google}" class="btn btn-lg btn-outline-secondary btn-outline-custom w-100 mb-3">
+                    <i class='bx bxl-google text-danger me-1 fs-6'></i>Continue with Google
+                </a>
                 <button class="btn btn-lg btn-outline-secondary btn-outline-custom w-100">
                     <i class='bx bxl-facebook text-primary me-1 fs-6'></i>Login with Facebook
                 </button>
