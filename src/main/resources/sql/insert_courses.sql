@@ -1,4 +1,3 @@
-
 INSERT INTO public.courses (course_name, course_description) VALUES
 ('Mathematics', 'Study of numbers, quantities, shapes, and patterns.'),
 ('Physics', 'Study of matter, energy, and the fundamental forces of nature.'),
@@ -10,33 +9,3 @@ INSERT INTO public.courses (course_name, course_description) VALUES
 ('Economics', 'Study of production, distribution, and consumption of goods and services.'),
 ('Psychology', 'Study of mind and behavior.'),
 ('Sociology', 'Study of society, social institutions, and social relationships.');
-
-
-INSERT INTO public.faculties (faculty_name) VALUES
-('Engineering'),
-('Science'),
-('Arts'),
-('Business'),
-('Medicine'),
-('Law'),
-('Education'),
-('Computer Science'),
-('Social Sciences'),
-('Health Sciences');
-
-INSERT INTO public.groups (group_name) VALUES
-('AF-17'),
-('EI-21'),
-('FP-09'),
-('LLC-12'),
-('MEC-04'),
-('EF-28'),
-('HEG-33'),
-('ADC-15'),
-('ESC-19'),
-('FLS-06');
-
-INSERT INTO public.roles (role_name) VALUES
-('ADMIN'),
-('TEACHER'),
-('STUDENT')
