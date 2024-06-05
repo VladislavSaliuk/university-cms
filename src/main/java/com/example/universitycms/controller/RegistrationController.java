@@ -33,7 +33,7 @@ public class RegistrationController {
 
     @GetMapping
     public String showSelectRolePage() {
-        return "select-role-page";
+        return "role-management-page";
     }
 
     @GetMapping("/student-registration")
