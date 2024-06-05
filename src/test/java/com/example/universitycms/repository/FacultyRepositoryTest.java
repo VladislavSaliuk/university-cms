@@ -20,13 +20,13 @@ public class FacultyRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_faculties.sql"})
-    void findAll_shouldReturnCorrectFacultyList(){
+    void findAll_shouldReturnFacultyList(){
         List<Faculty> facultyList = facultyRepository.findAll();
         assertEquals(10, facultyList.size());
     }
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_faculties.sql"})
-    void findFacultyByFacultyName_shouldReturnFacultyWithCorrectName_whenInputContainsExistingFacultyName(){
+    void findFacultyByFacultyName_shouldReturnFaculty_whenInputContainsExistingFacultyName(){
         String facultyName = "Arts";
         Faculty faculty = facultyRepository.findFacultyByFacultyName(facultyName);
         assertTrue(faculty.getFacultyName().equals(facultyName));
@@ -34,7 +34,7 @@ public class FacultyRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_faculties.sql"})
-    void findFacultyByFacultyName_shouldReturnFacultyWithCorrectName_whenInputContainsExistingFaculty(){
+    void findFacultyByFacultyName_shouldReturnNull_whenInputContainsNotExistingFacultyName(){
         String facultyName = "Test faculty name";
         Faculty faculty = facultyRepository.findFacultyByFacultyName(facultyName);
         assertNull(faculty);
@@ -49,7 +49,7 @@ public class FacultyRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_faculties.sql"})
-    void findFacultyByFacultyId_shouldReturnFacultyWithCorrectId_whenInputContainsExistingFacultyId(){
+    void findFacultyByFacultyId_shouldReturnFaculty_whenInputContainsExistingFacultyId(){
         long facultyId = 6;
         Faculty faculty = facultyRepository.findFacultyByFacultyId(facultyId);
         assertTrue(faculty.getFacultyId() == facultyId);

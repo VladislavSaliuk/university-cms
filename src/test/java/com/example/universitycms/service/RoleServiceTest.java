@@ -39,7 +39,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void getAll_shouldReturnCorrectRoleList() {
+    void getAll_shouldReturnRoleList() {
         when(roleRepository.findAll()).thenReturn(roleList);
         List<Role> actualRoleList = roleService.getAll();
         assertEquals(roleList, actualRoleList);
@@ -47,7 +47,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void getRoleByRoleName_shouldReturnCorrectRole_whenInputContainsExistingRoleName() {
+    void getRoleByRoleName_shouldReturnRole_whenInputContainsExistingRoleName() {
         String roleName = "ADMIN";
         Role expectedRole = new Role();
         expectedRole.setRoleName(roleList.get(0).getRoleName());
@@ -79,7 +79,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void getRoleByRoleId_shouldReturnCorrectRole_whenInputContainsExistingRoleId(){
+    void getRoleByRoleId_shouldReturnRole_whenInputContainsExistingRoleId(){
         List<Role> roleList = LongStream.range(0, 3)
                 .mapToObj(roleId -> {
                     Role role = new Role();

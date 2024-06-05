@@ -37,7 +37,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    void getAll_shouldReturnCorrectGroupList(){
+    void getAll_shouldReturnGroupList(){
         when(groupRepository.findAll()).thenReturn(groupList);
         List<Group> actualGroupList = groupService.getAll();
         assertEquals(groupList,actualGroupList);
@@ -45,7 +45,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    void getGroupByGroupName_shouldReturnCorrectGroup_whenInputContainsExistingGroupName(){
+    void getGroupByGroupName_shouldReturnGroup_whenInputContainsExistingGroupName(){
         String groupName = "Test group 1";
         Group expetedGroup = new Group();
         expetedGroup.setGroupName(groupList.get(0).getGroupName());
@@ -77,7 +77,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    void getGroupByGroupId_shouldReturnCorrectGroup_whenInputContainsExistingGroupId(){
+    void getGroupByGroupId_shouldReturnGroup_whenInputContainsExistingGroupId(){
         List<Group> groupList = LongStream.range(0, 10)
                 .mapToObj(groupId -> {
                     Group group = new Group();
@@ -106,5 +106,7 @@ public class GroupServiceTest {
         verify(groupRepository).existsByGroupId(groupId);
         verify(groupRepository,never()).findGroupByGroupId(groupId);
     }
+
+
 
 }

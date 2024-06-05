@@ -20,14 +20,14 @@ public class CourseRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findAll_shouldReturnCorrectCourseList() {
+    void findAll_shouldReturnCourseList() {
         List<Course> courseList = courseRepository.findAll();
         assertEquals(10, courseList.size());
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findCourseByCourseName_shouldReturnCourseWithCorrectCourseName_whenInputContainsExistingCourseName() {
+    void findCourseByCourseName_shouldReturnCourse_whenInputContainsExistingCourseName() {
         String courseName = "Computer Science";
         Course course = courseRepository.findCourseByCourseName(courseName);
         assertEquals(course.getCourseName(), courseName);
@@ -50,7 +50,7 @@ public class CourseRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findCourseByCourseId_shouldReturnCourseWithCorrectCourseId_whenInputContainsExistingCourseId() {
+    void findCourseByCourseId_shouldReturnCourse_whenInputContainsExistingCourseId() {
         long courseId = 6;
         Course course = courseRepository.findCourseByCourseId(courseId);
         assertTrue(course.getCourseId() == courseId);

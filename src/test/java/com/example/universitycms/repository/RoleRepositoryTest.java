@@ -21,14 +21,14 @@ public class RoleRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql"})
-    void findAll_shouldReturnCorrectRoleList() {
+    void findAll_shouldReturnRoleList() {
         List<Role> roleList = roleRepository.findAll();
         assertEquals(3, roleList.size());
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql"})
-    void findRoleByRoleName_shouldReturnRoleWithCorrectRoleName_whenInputContainsExistingRole() {
+    void findRoleByRoleName_shouldReturnRole_whenInputContainsExistingRole() {
         String roleName = "ADMIN";
         Role role = roleRepository.findRoleByRoleName(roleName);
         assertEquals(roleName, role.getRoleName());
@@ -49,7 +49,7 @@ public class RoleRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql"})
-    void findRoleByRoleId_shouldReturnRoleWithCorrectRoleId_whenInputContainsExistingRoleId() {
+    void findRoleByRoleId_shouldReturnRole_whenInputContainsExistingRoleId() {
         long roleId = 1;
         Role role = roleRepository.findRoleByRoleId(roleId);
         assertEquals(roleId, role.getRoleId());
@@ -80,7 +80,7 @@ public class RoleRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql"})
-    void existsByRoleName_shouldReturnException_whenInputContainsNull(){
+    void existsByRoleName_shouldReturnFalse_whenInputContainsNull(){
         boolean isRoleNameExists = roleRepository.existsByRoleName(null);
         assertFalse(isRoleNameExists);
     }

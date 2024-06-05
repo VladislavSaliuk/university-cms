@@ -17,7 +17,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public Course getSubjectBySubjectName(String subjectName) {
+    public Course getCourseByCourseName(String subjectName) {
 
         if(subjectName == null) {
             throw new IllegalArgumentException("Input contains null!");
@@ -30,7 +30,7 @@ public class CourseService {
         return courseRepository.findCourseByCourseName(subjectName);
     }
 
-    public Course getSubjectBySubjectId(long subjectId) {
+    public Course getCourseByCourseId(long subjectId) {
 
         if(!courseRepository.existsByCourseId(subjectId)) {
             throw new IllegalArgumentException("Course Id doesn't exists!");

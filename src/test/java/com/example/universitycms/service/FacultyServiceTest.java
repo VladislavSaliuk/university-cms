@@ -35,14 +35,14 @@ public class FacultyServiceTest {
     }
 
     @Test
-    void getAll_shouldReturnCorrectFacultyList(){
+    void getAll_shouldReturnFacultyList(){
         when(facultyRepository.findAll()).thenReturn(facultyList);
         List<Faculty> actualFacultyList = facultyService.getAll();
         assertEquals(facultyList,actualFacultyList);
         verify(facultyRepository).findAll();
     }
     @Test
-    void getFacultyByFacultyName_shouldReturnCorrectFaculty_whenInputContainsExistingFaculty() {
+    void getFacultyByFacultyName_shouldReturnFaculty_whenInputContainsExistingFacultyName() {
         String facultyName = "Faculty name 1";
         Faculty expectedFaculty = facultyList.get(0);
         when(facultyRepository.existsByFacultyName(facultyName)).thenReturn(true);
@@ -60,7 +60,7 @@ public class FacultyServiceTest {
         verify(facultyRepository,never()).findFacultyByFacultyName(null);
     }
     @Test
-    void getFacultyByFacultyName_shouldThrowException_whenInputContainsNotExistingFaculty() {
+    void getFacultyByFacultyName_shouldThrowException_whenInputContainsNotExistingFacultyName() {
         String facultyName = "Test faculty name";
         when(facultyRepository.existsByFacultyName(facultyName)).thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
@@ -71,7 +71,7 @@ public class FacultyServiceTest {
     }
 
     @Test
-    void getFacultyByFacultyId_shouldReturnCorrectFaculty_whenInputContainsExistingFaculty() {
+    void getFacultyByFacultyId_shouldReturnFaculty_whenInputContainsExistingFacultyId() {
         List<Faculty> facultyList = LongStream.range(0, 10)
                 .mapToObj(facultyId -> {
                     Faculty faculty = new Faculty();
@@ -89,7 +89,7 @@ public class FacultyServiceTest {
         verify(facultyRepository).findFacultyByFacultyId(facultyId);
     }
     @Test
-    void getFacultyByFacultyId_shouldThrowException_whenInputContainsNotExistingFaculty() {
+    void getFacultyByFacultyId_shouldThrowException_whenInputContainsNotExistingFacultyId() {
         long facultyId = 100;
         when(facultyRepository.existsByFacultyId(facultyId)).thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);

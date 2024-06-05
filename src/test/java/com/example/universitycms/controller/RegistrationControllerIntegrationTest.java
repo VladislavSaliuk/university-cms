@@ -19,7 +19,7 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void showSelectRolePage_shouldReturnSelectRolePageView() throws Exception {
-        mockMvc.perform(get("/select-role"))
+        mockMvc.perform(get("/role-management"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("select-role-page"))
                 .andReturn();
@@ -27,14 +27,14 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void testShowRegistrationPageForStudent() throws Exception {
-        mockMvc.perform(get("/select-role/register-student"))
+        mockMvc.perform(get("/role-management/student-registration"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration-page"));
     }
 
     @Test
     public void testShowRegistrationPageForTeacher() throws Exception {
-        mockMvc.perform(get("/select-role/register-teacher"))
+        mockMvc.perform(get("/role-management/teacher-registration"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("registration-page"));
     }

@@ -42,7 +42,7 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void save_shouldThrowException_whenInputContainsUserWithAlreadyExistingUserName() {
+    void save_shouldThrowException_whenInputContainsUserWithExistingUserName() {
         Role role = roleRepository.findRoleByRoleId(1);
         User user = new User("john_doe", "$2a$12$C0oG23YPNxAkgNetSRJ/LuEVZt3TT95ulwjrSbAha4qtvvk6hIahS", "Test email", role);
         assertThrows(DataIntegrityViolationException.class, ()-> userRepository.save(user));
@@ -50,7 +50,7 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void save_shouldThrowException_whenInputContainsUserWithAlreadyExistingEmail() {
+    void save_shouldThrowException_whenInputContainsUserWithExistingEmail() {
         Role role = roleRepository.findRoleByRoleId(1);
         User user = new User("Test user name", "$2a$12$C0oG23YPNxAkgNetSRJ/LuEVZt3TT95ulwjrSbAha4qtvvk6hIahS", "alice.jones@example.com", role);
         assertThrows(DataIntegrityViolationException.class, ()-> userRepository.save(user));
@@ -103,7 +103,7 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByUserId_shouldReturnUserWithCorrectUserId_whenInputContainsExistingUserId() {
+    void findUserByUserId_shouldReturnUser_whenInputContainsExistingUserId() {
         long expectedUserId = 1;
         User user = userRepository.findUserByUserId(expectedUserId);
         assertEquals(expectedUserId, user.getUserId());
@@ -119,7 +119,7 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByUserName_shouldReturnUserWithCorrectUserName_whenInputContainsExistingUserName() {
+    void findUserByUserName_shouldReturnUser_whenInputContainsExistingUserName() {
         String expectedUserName = "bob_brown";
         User user = userRepository.findUserByUserName(expectedUserName);
         assertEquals(expectedUserName, user.getUserName());
@@ -142,7 +142,7 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByEmail_shouldReturnUserWithCorrectEmail_whenInputContainsExistingEmail() {
+    void findUserByEmail_shouldReturnUser_whenInputContainsExistingEmail() {
         String expectedEmail = "alice.jones@example.com";
         User user = userRepository.findUserByEmail(expectedEmail);
         assertEquals(expectedEmail, user.getEmail());

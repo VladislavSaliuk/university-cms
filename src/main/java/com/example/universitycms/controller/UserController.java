@@ -11,13 +11,6 @@ public class UserController {
     public String showAdminPage() {
         return "admin-page";
     }
-    @GetMapping("/default")
-    public String redirectSuccessPages(HttpServletRequest request) {
-        if(request.isUserInRole("ADMIN")) {
-            return "redirect:/admin-page";
-        } else {
-            return "redirect:/";
-        }
-    }
+
 
 }

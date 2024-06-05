@@ -1,4 +1,5 @@
 package com.example.universitycms.config;
+
 import com.example.universitycms.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,17 +15,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,21 +34,20 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/img/**", "/select-role/**", "/login", "/oauth2/**").permitAll();
+                    registry.requestMatchers("/", "/img/**", "/role-management/**", "/login", "/oauth2/**").permitAll();
                     registry.requestMatchers("/admin-page").hasRole("ADMIN");
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/default", true)
-                        .permitAll()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/default", true)
-                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/default"))
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler("/login?error"))
-                )
+                .formLogin(httpSecurityFormLoginConfigurer -> {
+                    httpSecurityFormLoginConfigurer.loginPage("/login")
+                            .successHandler(customAuthenticationSuccessHandler)
+                            .permitAll();
+                })
+                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
+                    httpSecurityOAuth2LoginConfigurer.loginPage("/login")
+                            .successHandler(customAuthenticationSuccessHandler)
+                            .permitAll();
+                })
                 .build();
     }
 

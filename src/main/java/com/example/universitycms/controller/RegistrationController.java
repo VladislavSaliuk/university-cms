@@ -8,7 +8,6 @@ import com.example.universitycms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/select-role")
+@RequestMapping("/role-management")
 public class RegistrationController {
 
     private static final long ADMIN_ROLE_ID = 1;
@@ -37,13 +36,13 @@ public class RegistrationController {
         return "select-role-page";
     }
 
-    @GetMapping("/register-student")
+    @GetMapping("/student-registration")
     public String showRegistrationPageForStudent(@ModelAttribute User user, Model model) {
         model.addAttribute("student", user);
         return "student-registration-page";
     }
 
-    @PostMapping("/register-student")
+    @PostMapping("/student-registration")
     public String registerStudent(@ModelAttribute User user) {
         Role role = roleService.getRoleByRoleId(STUDENT_ROLE_ID);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -52,13 +51,13 @@ public class RegistrationController {
         return "redirect:/login";
     }
 
-    @GetMapping("/register-teacher")
+    @GetMapping("/teacher-registration")
     public String showRegistrationPageForTeacher(@ModelAttribute User user, Model model) {
         model.addAttribute("teacher", user);
         return "teacher-registration-page";
     }
 
-    @PostMapping("/register-teacher")
+    @PostMapping("/teacher-registration")
     public String registerTeacher(@ModelAttribute User user) {
         Role role = roleService.getRoleByRoleId(TEACHER_ROLE_ID);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

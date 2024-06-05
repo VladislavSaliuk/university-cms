@@ -20,14 +20,14 @@ public class GroupRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
-    void findAll_shouldReturnCorrectGroupList(){
+    void findAll_shouldReturnGroupList(){
         List<Group> groupList = groupRepository.findAll();
         assertEquals(10, groupList.size());
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
-    void findGroupByGroupName_shouldReturnGroupWithCorrectName_whenInputContainsExistingGroupName(){
+    void findGroupByGroupName_shouldReturnGroup_whenInputContainsExistingGroupName(){
         String groupName = "EI-21";
         Group group = groupRepository.findGroupByGroupName(groupName);
         assertTrue(group.getGroupName().equals(groupName));
@@ -50,7 +50,7 @@ public class GroupRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
-    void findGroupByGroupId_shouldReturnGroupWithCorrectId_whenInputContainsExistingGroupName(){
+    void findGroupByGroupId_shouldReturnGroup_whenInputContainsExistingGroupName(){
         long groupId = 1;
         Group group = groupRepository.findGroupByGroupId(groupId);
         assertTrue(groupId == group.getGroupId());
