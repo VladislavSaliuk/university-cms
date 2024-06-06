@@ -1,43 +1,39 @@
 package com.example.universitycms.controller;
 
-
+import com.example.universitycms.model.User;
+import com.example.universitycms.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RegistrationController.class)
 public class RegistrationControllerIntegrationTest {
 
-
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Test
-    public void showSelectRolePage_shouldReturnSelectRolePageView() throws Exception {
-        mockMvc.perform(get("/role-management"))
+    @WithMockUser
+    public void showRegistrationPage_shouldShowRegisteredStudentPageView() throws Exception {
+        mockMvc.perform(get("/registration/registered-student"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("select-role-page"))
-                .andReturn();
+                .andExpect(view().name("registered-student-page"))
+                .andExpect(model().attributeExists("student"));
     }
 
-    @Test
-    public void testShowRegistrationPageForStudent() throws Exception {
-        mockMvc.perform(get("/role-management/student-registration"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("registration-page"));
-    }
 
-    @Test
-    public void testShowRegistrationPageForTeacher() throws Exception {
-        mockMvc.perform(get("/role-management/teacher-registration"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("registration-page"));
-    }
+
 
 
 }

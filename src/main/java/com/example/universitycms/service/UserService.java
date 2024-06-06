@@ -1,5 +1,6 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

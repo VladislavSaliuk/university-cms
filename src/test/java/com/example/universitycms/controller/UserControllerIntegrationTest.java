@@ -1,6 +1,5 @@
 package com.example.universitycms.controller;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,21 +10,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(HomeController.class)
-public class HomeControllerIntegrationTest {
+@WebMvcTest(UserController.class)
+public class UserControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser
-    public void showHomePage_shouldReturnHomePageView() throws Exception {
-        mockMvc.perform(get("/"))
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void showAdminPage_shouldReturnAdminPageView() throws Exception {
+        mockMvc.perform(get("/admin-page"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home-page"));
+                .andExpect(view().name("admin-page"));
     }
-
-
-
-
 }

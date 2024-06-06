@@ -40,12 +40,20 @@ public class User implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+
     public User(String userName, String password, String email, Role role) {
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.role = role;
     }
+
+    public void setRole(long roleId) {
+        this.role = new Role();
+        role.setRoleId(roleId);
+    }
+
 
 
 }

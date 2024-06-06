@@ -39,6 +39,4 @@ public class RoleService {
         return roleRepository.findRoleByRoleId(roleId);
     }
 
-
-
 }
