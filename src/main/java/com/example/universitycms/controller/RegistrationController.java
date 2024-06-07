@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-
-    private static final long ADMIN_ROLE_ID = 1;
     private static final long TEACHER_ROLE_ID = 2;
     private static final long STUDENT_ROLE_ID = 3;
 
@@ -27,7 +25,7 @@ public class RegistrationController {
     private UserService userService;
 
     @GetMapping
-    public String showSelectRolePage() {
+    public String showRegistrationPage() {
         return "registration-page";
     }
 
