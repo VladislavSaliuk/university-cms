@@ -96,13 +96,14 @@
 
     </style>
 
+
 </head>
 <body>
     <div class="table">
         <div class="table-header">
             <p>Users</p>
             <div>
-                <input placeholder="Search"/>
+                <input id="search-input" placeholder="Search" type="text"/>
             </div>
         </div>
         <div class="table-section">
@@ -117,18 +118,45 @@
                         <th>Role</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>admin</td>
-                        <td>seattlemusic345@gmail.com</td>
-                        <td>Vladislav</td>
-                        <td>Saliuk</td>
-                        <td>ADMIN</td>
-                    </tr>
+                <tbody id="admin-table">
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.getUserId()}"></td>
+                    <td th:text="${user.getUserName()}"></td>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td th:text="${user.getFirstName()}"></td>
+                    <td th:text="${user.getLastName()}"></td>
+                    <td th:text="${user.getRole().getRoleName()}"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById('search-input');
+            const tableRows = document.querySelectorAll('#admin-table tr');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+
+                tableRows.forEach(function(row) {
+                    let found = false;
+                    row.querySelectorAll('td').forEach(function(cell) {
+                        const cellText = cell.textContent.toLowerCase();
+                        if (cellText.includes(searchTerm)) {
+                            found = true;
+                        }
+                    });
+                    if (found) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>
