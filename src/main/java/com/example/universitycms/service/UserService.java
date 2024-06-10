@@ -33,6 +33,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void updateUser(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Input contains null!");
+        }
+
+        if (!userRepository.existsByUserId(user.getUserId())) {
+            throw new IllegalArgumentException("This user Id doesn't exist!");
+        }
+
+        userRepository.save(user);
+    }
+
     public List<User> getAll() {
         return userRepository.findAll();
     }

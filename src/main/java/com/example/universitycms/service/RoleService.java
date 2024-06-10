@@ -17,6 +17,7 @@ public class RoleService {
     public List<Role> getAll() {
         return roleRepository.findAll();
     }
+
     public Role getRoleByRoleName(String roleName) {
 
         if(roleName == null) {
