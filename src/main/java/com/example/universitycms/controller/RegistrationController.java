@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/registration")
 public class RegistrationController {
     private static final long TEACHER_ROLE_ID = 2;
     private static final long STUDENT_ROLE_ID = 3;
@@ -24,18 +23,18 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/registration")
     public String showRegistrationPage() {
         return "registration-page";
     }
 
-    @GetMapping("/registered-student")
+    @GetMapping("/registration/student")
     public String showRegistrationPageForStudent(@ModelAttribute User user, Model model) {
         model.addAttribute("student", user);
-        return "registered-student-page";
+        return "register-student-page";
     }
 
-    @PostMapping("/registered-student")
+    @PostMapping("/registration/student")
     public String registerStudent(@ModelAttribute User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(STUDENT_ROLE_ID);
@@ -43,13 +42,13 @@ public class RegistrationController {
         return "redirect:/login";
     }
 
-    @GetMapping("/registered-teacher")
+    @GetMapping("/registration/teacher")
     public String showRegistrationPageForTeacher(@ModelAttribute User user, Model model) {
         model.addAttribute("teacher", user);
-        return "registered-teacher-page";
+        return "register-teacher-page";
     }
 
-    @PostMapping("/registered-teacher")
+    @PostMapping("/registration/teacher")
     public String registerTeacher(@ModelAttribute User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(TEACHER_ROLE_ID);

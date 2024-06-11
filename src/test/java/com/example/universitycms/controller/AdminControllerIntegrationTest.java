@@ -1,9 +1,10 @@
 package com.example.universitycms.controller;
 
+import com.example.universitycms.service.RoleService;
+import com.example.universitycms.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,11 +20,18 @@ public class AdminControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void showAdminPage_shouldReturnAdminPageView() throws Exception {
-        mockMvc.perform(get("/admin-page"))
+        mockMvc.perform(get("/admin"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin-page"));
     }
+
 }

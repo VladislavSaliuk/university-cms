@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/admin-page")
 public class AdminController {
 
     @Autowired
@@ -19,7 +18,7 @@ public class AdminController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping
+    @GetMapping("/admin")
     public String showAdminPage(Model model) {
         User user = new User();
         model.addAttribute("user", user);
@@ -28,13 +27,13 @@ public class AdminController {
         return "admin-page";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/admin/update-role")
     public String updateRole(@RequestParam long userId, @RequestParam String roleId) {
         long roleIdLong = Long.parseLong(roleId);
         User user = userService.getUserByUserId(userId);
         Role role = roleService.getRoleByRoleId(roleIdLong);
         user.setRole(role.getRoleId());
         userService.updateUser(user);
-        return "redirect:/admin-page";
+        return "redirect:/admin";
     }
 }

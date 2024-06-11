@@ -1,5 +1,6 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +9,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
+
         @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
         body {
@@ -46,52 +48,99 @@
             text-decoration: none;
         }
 
-
     </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let password = document.getElementById("password");
+            let confirm_password = document.getElementById("confirm-password");
+            let message = document.getElementById("message");
+
+            function validatePassword() {
+                if (password.value != confirm_password.value) {
+                    confirm_password.setCustomValidity("Passwords do not match");
+                } else {
+                    confirm_password.setCustomValidity('');
+                }
+            }
+
+            password.onchange = validatePassword;
+            confirm_password.onkeyup = validatePassword;
+        });
+    </script>
+
+
 </head>
 <body>
-<div class="row vh-100 g-0">
+<div class = "row vh-100 g-0">
+
     <div class="col-lg-6 position-relative d-none d-lg-block">
-        <div class="bg-holder" style="background-image: url(/img/registration-bg.jpg)"></div>
+        <div class="bg-holder" style="background-image: url(/img/registration-bg.jpg)">
+        </div>
     </div>
+
     <div class="col-lg-6">
         <div class="row align-items-center justify-content-center h-100 g-0 px-4 px-sm-0">
             <div class="col col-sm-6 col-lg-7 col-xl-6">
+
                 <div class="text-center mb-5">
                     <a class="fw-bold" id="brand-label">Welcome to MyCampus!</a>
                     <p class="text-secondary">Create your account</p>
                 </div>
-                <form id="signup-form" th:action="@{/registration/registered-student}" method="post" th:object="${student}">
+
+                <form th:action="@{/registration/teacher}" method="post" th:object="${teacher}">
+
                     <div class="input-group input-group-horizontal mb-3">
                         <input type="text" class="form-control form-control-lg fs-6" placeholder="First name" th:field="*{firstName}" required>
                         <input type="text" class="form-control form-control-lg fs-6" placeholder="Last name" th:field="*{lastName}" required>
                     </div>
+
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><i class='bx bx-user'></i></span>
+                            <span class="input-group-text">
+                                <i class='bx bx-user'></i>
+                            </span>
                         <input type="text" class="form-control form-control-lg fs-6" placeholder="Username" th:field="*{userName}" required>
                     </div>
+
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><i class='bx bxl-gmail'></i></span>
+                            <span class="input-group-text">
+                                <i class='bx bxl-gmail'></i>
+                            </span>
                         <input type="email" class="form-control form-control-lg fs-6" placeholder="E-mail" th:field="*{email}" required>
                     </div>
+
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><i class='bx bx-lock-alt'></i></span>
-                        <input id="password" type="password" class="form-control form-control-lg fs-6" placeholder="Password" th:field="*{password}" required>
+                            <span class="input-group-text">
+                                <i class='bx bx-lock-alt'></i>
+                            </span>
+                        <input type="password" class="form-control form-control-lg fs-6" placeholder="Password" th:field="*{password}" required>
                     </div>
+
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><i class='bx bx-lock-alt'></i></span>
-                        <input id="confirm-password" type="password" class="form-control form-control-lg fs-6" placeholder="Confirm Password" required>
+                            <span class="input-group-text">
+                                <i class='bx bx-lock-alt'></i>
+                            </span>
+                        <input type="password" class="form-control form-control-lg fs-6" placeholder="Confirm Password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Sign up</button>
+
+                    <p id="message"></p>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        Sign up
+                    </button>
+
                 </form>
+
                 <div class="text-center">
                     <small> Already have an account?
                         <a th:href="@{/login}" class="fw-bold">Login</a>
                     </small>
                 </div>
+
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>
