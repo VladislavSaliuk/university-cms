@@ -18,6 +18,59 @@ public class CourseRepositoryTest {
     @Autowired
     CourseRepository courseRepository;
 
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void save_shouldInsertCourseToDatabase() {
+        Course course = new Course("Test course name", "Test course description");
+        courseRepository.save(course);
+        assertEquals(11, courseRepository.count());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteAll_shouldRemoveAllCourses() {
+        courseRepository.deleteAll();
+        assertEquals(0, courseRepository.count());
+    }
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteCourseByCourseId_shouldDeleteCourse_whenCourseIdExists() {
+        long courseId = 1;
+        courseRepository.deleteCourseByCourseId(courseId);
+        assertEquals(9, courseRepository.count());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteCourseByCourseId_shouldNotDeleteCourse_whenCourseIdDoesNotExist() {
+        long courseId = 1000;
+        courseRepository.deleteCourseByCourseId(courseId);
+        assertEquals(10, courseRepository.count());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteCourseByCourseName_shouldDeleteCourse_whenCourseNameExists() {
+        String courseName = "Computer Science";
+        courseRepository.deleteCourseByCourseName(courseName);
+        assertEquals(9, courseRepository.count());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteCourseByCourseName_shouldNotDeleteCourse_whenCourseNameDoesNotExist() {
+        String courseName = "Test course name";
+        courseRepository.deleteCourseByCourseName(courseName);
+        assertEquals(10, courseRepository.count());
+    }
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void deleteCourseByCourseName_shouldNotDeleteCourse_whenInputContainsNull() {
+        courseRepository.deleteCourseByCourseName(null);
+        assertEquals(10, courseRepository.count());
+    }
+
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
     void findAll_shouldReturnCourseList() {
