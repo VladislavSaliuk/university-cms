@@ -96,6 +96,7 @@
         }
 
         .btn {
+            text-decoration: none;
             padding: 8px 12px;
             border: none;
             border-radius: 5px;
@@ -161,7 +162,7 @@
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search">
     </div>
-    <button class="btn create">Create New Course</button>
+    <a th:href="@{/admin/courses/add-course}" class="btn create">Create New Course</a>
     <div class="table-container">
         <h3>Courses</h3>
         <table id="dataTable">
