@@ -87,7 +87,7 @@
 <body>
 <div class="form-container">
     <h2>Add New Course</h2>
-    <form id="addCourseForm" th:action="@{/admin/courses/add-course}" th:object="${course}" method="post">
+    <form id="addCourseForm" th:object="${course}" method="post">
         <div class="form-group">
             <label for="courseName">Course Name</label>
             <input type="text" th:field="*{courseName}" id="courseName"  required>

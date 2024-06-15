@@ -18,21 +18,28 @@ public class AdminController {
     private CourseService courseService;
 
     @GetMapping("/admin/users")
-    public String showAdminUserPage(Model model) {
+    public String showAdminUserPageView(Model model) {
         model.addAttribute(userService.getAll());
         return "admin-user-page";
     }
 
     @GetMapping("/admin/courses")
-    public String showAdminCoursePage(Model model) {
+    public String showAdminCoursePageView(Model model) {
         model.addAttribute(courseService.getAll());
         return "admin-course-page";
     }
 
-    @GetMapping("/admin/courses/course-form")
-    public String showCourseFormPage(@ModelAttribute Course course, Model model) {
+    @GetMapping("/admin/courses/add-course")
+    public String showAddCoursePageView(@ModelAttribute Course course, Model model) {
         model.addAttribute("course", course);
-        return "course-form-page";
+        return "add-course-page";
+    }
+
+    @GetMapping("/admin/courses/edit-course/{courseId}")
+    public String showEditCoursePageView(@PathVariable long courseId, Model model) {
+        Course course = courseService.getCourseByCourseId(courseId);
+        model.addAttribute("course", course);
+        return "edit-course-page";
     }
 
     @PostMapping("/admin/courses/add-course")
@@ -46,5 +53,12 @@ public class AdminController {
         courseService.removeCourseByCourseId(courseId);
         return "redirect:/admin/courses";
     }
+
+    @PostMapping("/admin/courses/edit-course/{courseId}")
+    public String editCourse(@ModelAttribute Course course) {
+        courseService.updateCourse(course);
+        return "redirect:/admin/courses";
+    }
+
 
 }
