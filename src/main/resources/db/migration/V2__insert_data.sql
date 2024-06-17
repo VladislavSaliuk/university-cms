@@ -12,18 +12,6 @@ INSERT INTO public.courses (course_name, course_description) VALUES
 ('Sociology', 'Study of society, social institutions, and social relationships.');
 
 
-INSERT INTO public.faculties (faculty_name) VALUES
-('Engineering'),
-('Science'),
-('Arts'),
-('Business'),
-('Medicine'),
-('Law'),
-('Education'),
-('Computer Science'),
-('Social Sciences'),
-('Health Sciences');
-
 INSERT INTO public.groups (group_name) VALUES
 ('AF-17'),
 ('EI-21'),

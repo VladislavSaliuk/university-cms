@@ -22,9 +22,9 @@ public class HomeControllerIntegrationTest {
 
     @Test
     public void showHomePage_shouldReturnHomePageView() throws Exception {
-        mockMvc.perform(get("/home"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("home-page"));
+                .andExpect(view().name("index"));
     }
 
 

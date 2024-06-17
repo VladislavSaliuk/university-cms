@@ -26,13 +26,6 @@ public class CourseRepositoryTest {
         courseRepository.save(course);
         assertEquals(11, courseRepository.count());
     }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void deleteAll_shouldRemoveAllCourses() {
-        courseRepository.deleteAll();
-        assertEquals(0, courseRepository.count());
-    }
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
     void deleteCourseByCourseId_shouldDeleteCourse_whenCourseIdExists() {
@@ -51,56 +44,10 @@ public class CourseRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void deleteCourseByCourseName_shouldDeleteCourse_whenCourseNameExists() {
-        String courseName = "Computer Science";
-        courseRepository.deleteCourseByCourseName(courseName);
-        assertEquals(9, courseRepository.count());
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void deleteCourseByCourseName_shouldNotDeleteCourse_whenCourseNameDoesNotExist() {
-        String courseName = "Test course name";
-        courseRepository.deleteCourseByCourseName(courseName);
-        assertEquals(10, courseRepository.count());
-    }
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void deleteCourseByCourseName_shouldNotDeleteCourse_whenInputContainsNull() {
-        courseRepository.deleteCourseByCourseName(null);
-        assertEquals(10, courseRepository.count());
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
     void findAll_shouldReturnCourseList() {
         List<Course> courseList = courseRepository.findAll();
         assertEquals(10, courseList.size());
     }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findCourseByCourseName_shouldReturnCourse_whenInputContainsExistingCourseName() {
-        String courseName = "Computer Science";
-        Course course = courseRepository.findCourseByCourseName(courseName);
-        assertEquals(course.getCourseName(), courseName);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findCourseByCourseName_shouldReturnNull_whenInputContainsNotExistingCourseName() {
-        String courseName = "Test course name";
-        Course course = courseRepository.findCourseByCourseName(courseName);
-        assertNull(course);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
-    void findCourseByCourseName_shouldReturnNull_whenInputContainsNull() {
-        Course course = courseRepository.findCourseByCourseName(null);
-        assertNull(course);
-    }
-
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
     void findCourseByCourseId_shouldReturnCourse_whenInputContainsExistingCourseId() {

@@ -29,9 +29,6 @@ public class CourseServiceTest {
     @MockBean
     CourseRepository courseRepository;
 
-    @Mock
-    Logger logger = LoggerFactory.getLogger(CourseService.class);
-
     static List<Course> courseList = new LinkedList<>();
 
     @BeforeAll
@@ -73,42 +70,6 @@ public class CourseServiceTest {
     }
 
     @Test
-    void deleteAll_shouldRemoveAllCoursesFromDatabase() {
-        courseService.clearAll();
-        verify(courseRepository).deleteAll();
-    }
-
-    @Test
-    void removeCourseByCourseName_shouldRemoveCourse_whenInputContainsExistingCourseName() {
-        String courseName = "Mathematics";
-        when(courseRepository.existsByCourseName(courseName))
-                .thenReturn(true);
-        courseService.removeCourseByCourseName(courseName);
-        verify(courseRepository).existsByCourseName(courseName);
-        verify(courseRepository).deleteCourseByCourseName(courseName);
-    }
-
-    @Test
-    void removeCourseByName_shouldNotRemoveCourse_whenInputContainsNotExistingCourseName() {
-        String courseName = "Test course name";
-        when(courseRepository.existsByCourseName(courseName))
-                .thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.removeCourseByCourseName(courseName));
-        assertEquals(exception.getMessage(), "Course with this name doesn't exist!");
-        verify(courseRepository).existsByCourseName(courseName);
-        verify(courseRepository,never()).deleteCourseByCourseName(courseName);
-    }
-
-    @Test
-    void removeCourseByCourseName_shouldNotRemoveCourse_whenInputContainsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.removeCourseByCourseName(null));
-        assertEquals(exception.getMessage(), "Input contains null!");
-        verify(courseRepository, never()).existsByCourseName(null);
-        verify(courseRepository, never()).save(null);
-    }
-
-    @Test
     void removeCourseByCourseId_shouldRemoveCourse_whenInputContainsExistingCourseId() {
         long courseId = 1;
         when(courseRepository.existsByCourseId(courseId))
@@ -133,23 +94,24 @@ public class CourseServiceTest {
     void updateCourse_shouldUpdateCourse_whenInputContainsExistingCourse() {
         long courseId = 1;
 
-        Course course = new Course();
-        course.setCourseId(courseId);
-        course.setCourseName("Mathematics");
-        course.setCourseDescription("Study of numbers, quantities, shapes, and patterns.");
+        Course existingCourse = new Course();
+        existingCourse.setCourseId(courseId);
+        existingCourse.setCourseName("Mathematics");
+        existingCourse.setCourseDescription("Study of numbers, quantities, shapes, and patterns.");
 
-        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseId(courseId);
+        updatedCourse.setCourseName("Test course name");
+        updatedCourse.setCourseDescription("Test description");
 
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
+        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(existingCourse);
+        when(courseRepository.existsByCourseName(updatedCourse.getCourseName())).thenReturn(false);
 
-        when(courseRepository.existsByCourseName(course.getCourseName())).thenReturn(false);
-
-        courseService.updateCourse(course);
+        courseService.updateCourse(updatedCourse);
 
         verify(courseRepository).findCourseByCourseId(courseId);
-        verify(courseRepository).existsByCourseName(course.getCourseName());
-        verify(courseRepository).save(course);
+        verify(courseRepository).existsByCourseName(updatedCourse.getCourseName());
+        verify(courseRepository).save(existingCourse);
     }
 
     @Test
@@ -198,25 +160,26 @@ public class CourseServiceTest {
     void updateCourse_shouldThrowException_whenUpdatedCourseContainsExistingCourseName() {
         long courseId = 1;
 
-        Course course = new Course();
-        course.setCourseId(courseId);
-        course.setCourseName("Mathematics");
-        course.setCourseDescription("Study of numbers, quantities, shapes, and patterns.");
+        Course existingCourse = new Course();
+        existingCourse.setCourseId(courseId);
+        existingCourse.setCourseName("Mathematics");
+        existingCourse.setCourseDescription("Study of numbers, quantities, shapes, and patterns.");
 
-        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
+        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(existingCourse);
 
-        course.setCourseName("Biology");
-        course.setCourseDescription("Study of living organisms and their interactions.");
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseId(courseId);
+        updatedCourse.setCourseName("Biology");
+        updatedCourse.setCourseDescription("Study of living organisms and their interactions.");
 
-        when(courseRepository.existsByCourseName(course.getCourseName())).thenReturn(true)
-                .thenThrow(IllegalArgumentException.class);
+        when(courseRepository.existsByCourseName(updatedCourse.getCourseName())).thenReturn(true);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse(course));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse(updatedCourse));
 
-        assertEquals(exception.getMessage(), "Course with this name already exists!");
+        assertEquals("Course with this name already exists!", exception.getMessage());
         verify(courseRepository).findCourseByCourseId(courseId);
-        verify(courseRepository).existsByCourseName(course.getCourseName());
-        verify(courseRepository, never()).save(course);
+        verify(courseRepository).existsByCourseName(updatedCourse.getCourseName());
+        verify(courseRepository, never()).save(updatedCourse);
     }
 
 
@@ -226,37 +189,6 @@ public class CourseServiceTest {
         List<Course> actualCourseList = courseService.getAll();
         assertEquals(courseList, actualCourseList);
         verify(courseRepository).findAll();
-    }
-
-    @Test
-    void getCourseByCourseName_shouldReturnCourse_whenInputContainsCourseWithExistingName() {
-        String courseName = "Test course name 1";
-        Course expectedCourse = courseList.get(0);
-        when(courseRepository.existsByCourseName(courseName)).thenReturn(true);
-        when(courseRepository.findCourseByCourseName(courseName)).thenReturn(expectedCourse);
-        Course actualCourse = courseService.getCourseByCourseName(courseName);
-        assertEquals(expectedCourse, actualCourse);
-        verify(courseRepository).existsByCourseName(courseName);
-        verify(courseRepository).findCourseByCourseName(courseName);
-    }
-
-    @Test
-    void getCourseByCourseName_shouldReturnException_whenInputContainsCourseWithNotExistingName() {
-        String courseName = "Test course name ";
-        when(courseRepository.existsByCourseName(courseName)).thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.getCourseByCourseName(courseName));
-        assertEquals("Course name doesn't exists!",exception.getMessage());
-        verify(courseRepository).existsByCourseName(courseName);
-        verify(courseRepository,never()).findCourseByCourseName(courseName);
-    }
-
-    @Test
-    void getCourseByCourseName_shouldReturnException_whenInputContainsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.getCourseByCourseName(null));
-        assertEquals("Input contains null!",exception.getMessage());
-        verify(courseRepository,never()).existsByCourseName(null);
-        verify(courseRepository,never()).findCourseByCourseName(null);
     }
 
     @Test

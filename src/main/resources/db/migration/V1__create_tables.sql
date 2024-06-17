@@ -6,12 +6,6 @@ create table public.courses (
     primary key (course_id)
 );
 
-create table public.faculties (
-    faculty_id bigserial not null,
-    faculty_name varchar(255) not null unique,
-    primary key (faculty_id)
-);
-
 create table public.groups (
     group_id bigserial not null,
     group_name varchar(255) not null unique,

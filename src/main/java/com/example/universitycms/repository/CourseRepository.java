@@ -7,11 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
-    void deleteAll();
     @Transactional
     void deleteCourseByCourseId(long courseId);
-    void deleteCourseByCourseName(String courseName);
-    Course findCourseByCourseName(String courseName);
     Course findCourseByCourseId(long courseId);
     boolean existsByCourseName(String courseName);
     boolean existsByCourseId(long courseId);

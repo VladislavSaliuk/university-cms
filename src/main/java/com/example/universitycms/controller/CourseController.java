@@ -2,30 +2,24 @@ package com.example.universitycms.controller;
 
 import com.example.universitycms.model.Course;
 import com.example.universitycms.service.CourseService;
-import com.example.universitycms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class AdminController {
-
-    @Autowired
-    private UserService userService;
+public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/admin/users")
-    public String showAdminUserPageView(Model model) {
-        model.addAttribute(userService.getAll());
-        return "admin-user-page";
-    }
 
     @GetMapping("/admin/courses")
     public String showAdminCoursePageView(Model model) {
-        model.addAttribute(courseService.getAll());
+        model.addAttribute("courseList",courseService.getAll());
         return "admin-course-page";
     }
 
