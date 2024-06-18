@@ -145,6 +145,37 @@
             border-radius: 5px;
         }
     </style>
+
+    <script>
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput');
+            const filter = searchInput.value.toLowerCase();
+            const table = document.getElementById('dataTable');
+            const trs = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < trs.length; i++) {
+                const tds = trs[i].getElementsByTagName('td');
+                let display = false;
+
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j]) {
+                        const textValue = tds[j].textContent || tds[j].innerText;
+                        if (textValue.toLowerCase().indexOf(filter) > -1) {
+                            display = true;
+                            break;
+                        }
+                    }
+                }
+
+                trs[i].style.display = display ? '' : 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('searchInput').addEventListener('keyup', filterTable);
+        });
+    </script>
+
 </head>
 <body>
 <div class="sidebar">
