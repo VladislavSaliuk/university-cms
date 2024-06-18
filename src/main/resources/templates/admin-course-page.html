@@ -144,38 +144,59 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-    </style>
 
-    <script>
-        function filterTable() {
-            const searchInput = document.getElementById('searchInput');
-            const filter = searchInput.value.toLowerCase();
-            const table = document.getElementById('dataTable');
-            const trs = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < trs.length; i++) {
-                const tds = trs[i].getElementsByTagName('td');
-                let display = false;
-
-                for (let j = 0; j < tds.length; j++) {
-                    if (tds[j]) {
-                        const textValue = tds[j].textContent || tds[j].innerText;
-                        if (textValue.toLowerCase().indexOf(filter) > -1) {
-                            display = true;
-                            break;
-                        }
-                    }
-                }
-
-                trs[i].style.display = display ? '' : 'none';
-            }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('searchInput').addEventListener('keyup', filterTable);
-        });
-    </script>
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
 
+        .modal-header, .modal-body, .modal-footer {
+            margin-bottom: 10px;
+        }
+
+        .modal-header {
+            font-size: 18px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .btn-modal {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-modal.yes {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-modal.no {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <div class="sidebar">
@@ -212,12 +233,75 @@
                 <td th:text="${course.getCourseDescription()}"></td>
                 <td class="actions">
                     <a th:href="@{/admin/courses/edit-course/{courseId}(courseId=${course.getCourseId()})}" class="btn edit">Edit</a>
-                    <a th:href="@{/admin/courses/delete-course/{courseId}(courseId=${course.getCourseId()})}" class="btn delete">Delete</a>
+                    <a href="#" class="btn delete"  th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            Are you sure?
+        </div>
+        <div class="modal-body">
+            Do you really want to delete this course?
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal yes" onclick="confirmDelete()">Yes</button>
+            <button class="btn-modal no" onclick="closeModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let courseIdToDelete = null;
+
+    function showModal(courseId) {
+        courseIdToDelete = courseId;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    function confirmDelete() {
+        if (courseIdToDelete) {
+            window.location.href = `/admin/courses/delete-course/${courseIdToDelete}`;
+        }
+    }
+
+    function filterTable() {
+        const searchInput = document.getElementById('searchInput');
+        const filter = searchInput.value.toLowerCase();
+        const table = document.getElementById('dataTable');
+        const trs = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < trs.length; i++) {
+            const tds = trs[i].getElementsByTagName('td');
+            let display = false;
+
+            for (let j = 0; j < tds.length; j++) {
+                if (tds[j]) {
+                    const textValue = tds[j].textContent || tds[j].innerText;
+                    if (textValue.toLowerCase().indexOf(filter) > -1) {
+                        display = true;
+                        break;
+                    }
+                }
+            }
+
+            trs[i].style.display = display ? '' : 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('searchInput').addEventListener('keyup', filterTable);
+    });
+</script>
+
 </body>
 </html>
