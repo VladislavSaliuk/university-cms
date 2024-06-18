@@ -196,6 +196,32 @@
             background-color: #f44336;
             color: white;
         }
+
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            background-color: #4caf50;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +240,16 @@
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search">
     </div>
+
+    <div th:if="${successMessage}" class="alert success">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${errorMessage}"></span>
+    </div>
+
     <a th:href="@{/admin/courses/add-course}" class="btn create">Create New Course</a>
     <div class="table-container">
         <h3>Courses</h3>
@@ -228,12 +264,12 @@
             </thead>
             <tbody>
             <tr th:each="course : ${courseList}">
-                <td th:text="${course.getCourseId()}"></td>
-                <td th:text="${course.getCourseName()}"></td>
-                <td th:text="${course.getCourseDescription()}"></td>
+                <td th:text="${course.courseId}"></td>
+                <td th:text="${course.courseName}"></td>
+                <td th:text="${course.courseDescription}"></td>
                 <td class="actions">
                     <a th:href="@{/admin/courses/edit-course/{courseId}(courseId=${course.getCourseId()})}" class="btn edit">Edit</a>
-                    <a href="#" class="btn delete"  th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
+                    <a href="#" class="btn delete" th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
                 </td>
             </tr>
             </tbody>

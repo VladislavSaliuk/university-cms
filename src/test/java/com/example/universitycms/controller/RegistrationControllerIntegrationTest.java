@@ -42,9 +42,9 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void showRegistrationPageForStudent_shouldShowRegisteredStudentPageView() throws Exception {
-        mockMvc.perform(get("/registration/registered-student"))
+        mockMvc.perform(get("/registration/student"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("registered-student-page"))
+                .andExpect(view().name("register-student-page"))
                 .andExpect(model().attributeExists("student"));
     }
 
@@ -64,9 +64,9 @@ public class RegistrationControllerIntegrationTest {
 
     @Test
     public void showRegistrationPageForTeacher_shouldShowRegisteredTeacherPageView() throws Exception {
-        mockMvc.perform(get("/registration/registered-teacher"))
+        mockMvc.perform(get("/registration/teacher"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("registered-teacher-page"))
+                .andExpect(view().name("register-teacher-page"))
                 .andExpect(model().attributeExists("teacher"));
     }
 

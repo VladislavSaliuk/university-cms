@@ -1,7 +1,6 @@
 package com.example.universitycms.service;
 
 
-import com.example.universitycms.model.Group;
 import com.example.universitycms.model.Role;
 import com.example.universitycms.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeAll;

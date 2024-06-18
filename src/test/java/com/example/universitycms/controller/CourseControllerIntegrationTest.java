@@ -31,7 +31,7 @@ public class CourseControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    public void showAdminCoursePageView_shouldReturnAdminCoursePageView() throws Exception {
+    public void showAdminCoursePage_shouldReturnAdminCoursePageView() throws Exception {
 
         when(courseService.getAll()).thenReturn(Collections.emptyList());
 
@@ -44,7 +44,7 @@ public class CourseControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    public void showAddCoursePageView_shouldReturnAddCoursePageView() throws Exception {
+    public void showAddCoursePage_shouldReturnAddCoursePageView() throws Exception {
 
         mockMvc.perform(get("/admin/courses/add-course"))
                 .andExpect(status().isOk())
@@ -55,7 +55,7 @@ public class CourseControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    public void showEditCoursePageView_shouldReturnCoursePageView() throws Exception {
+    public void showEditCoursePage_shouldReturnCoursePageView() throws Exception {
 
         Course course = new Course();
 

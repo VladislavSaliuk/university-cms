@@ -2,8 +2,6 @@ package com.example.universitycms.service;
 
 import com.example.universitycms.model.Course;
 import com.example.universitycms.repository.CourseRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
