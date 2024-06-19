@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
 
+
     @Autowired
     private UserService userService;
 
     @GetMapping("/admin/users")
-    public String showAdminUserPageView(Model model) {
+    public String showAdminUserPage(Model model) {
         model.addAttribute(userService.getAll());
         return "admin-user-page";
     }
+
+
 
 }

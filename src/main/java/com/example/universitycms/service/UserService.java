@@ -1,14 +1,17 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -47,6 +50,13 @@ public class UserService implements UserDetailsService {
 
     public List<User> getAll() {
         return userRepository.findAll();
+    }
+
+    public List<User> getUsersByRole(long roleId) {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> user.getRole().getRoleId() == roleId)
+                .collect(Collectors.toList());
     }
 
     @Override
