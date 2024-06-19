@@ -23,7 +23,7 @@ public class RoleRepositoryTest {
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql"})
     void findAll_shouldReturnRoleList() {
         List<Role> roleList = roleRepository.findAll();
-        assertEquals(3, roleList.size());
+        assertEquals(4, roleList.size());
     }
 
     @Test

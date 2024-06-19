@@ -173,6 +173,30 @@ public class UserRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
+    void existsByUserId_shouldReturnFalse_whenInputContainsNotExistingUserId() {
+        long expectedUserId = 100;
+        boolean isUserIdExists = userRepository.existsByUserId(expectedUserId);
+        assertFalse(isUserIdExists);
+    }
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
+    void existsByRole_RoleId_shouldReturnTrue_whenInputContainsExistingRoleId() {
+        long roleId = 1;
+        boolean isUserExists = userRepository.existsByRole_RoleId(roleId);
+        assertTrue(isUserExists);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
+    void existsByRole_RoleId_shouldReturnFalse_whenInputContainsNotExistingRoleId() {
+        long roleId = 100;
+        boolean isUserExists = userRepository.existsByRole_RoleId(roleId);
+        assertFalse(isUserExists);
+    }
+
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
     void findUserByUserId_shouldReturnFalse_whenInputContainsNotExistingUserId() {
         long expectedUserId = 100;
         boolean isUserIdExists = userRepository.existsByUserId(expectedUserId);

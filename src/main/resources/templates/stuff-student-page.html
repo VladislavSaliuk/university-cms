@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stuff Dashboard</title>
+    <title>Stuff Dashboard - Students</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -96,40 +96,11 @@
         }
 
         .btn {
-            text-decoration: none;
             padding: 8px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-        }
-
-        .btn.edit {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .btn.edit:hover {
-            background-color: #45a049;
-        }
-
-        .btn.delete {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn.delete:hover {
-            background-color: #e53935;
-        }
-
-        .btn.create {
-            background-color: #008cba;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        .btn.create:hover {
-            background-color: #007bb5;
         }
 
         .search-container {
@@ -144,200 +115,48 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
-        }
-
-        .modal-header, .modal-body, .modal-footer {
-            margin-bottom: 10px;
-        }
-
-        .modal-header {
-            font-size: 18px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .btn-modal {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn-modal.yes {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .btn-modal.no {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .alert {
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .success {
-            background-color: #4caf50;
-        }
-
-        .closebtn {
-            margin-left: 15px;
-            color: white;
-            font-weight: bold;
-            float: right;
-            font-size: 22px;
-            line-height: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .closebtn:hover {
-            color: black;
-        }
     </style>
 </head>
 <body>
 <div class="sidebar">
-    <h2>Admin Dashboard</h2>
+    <h2>Stuff Dashboard</h2>
     <ul>
-        <li><a href="/admin/users">Users</a></li>
-        <li><a href="/admin/courses">Courses</a></li>
+        <li><a href="/stuff/teachers">Teachers</a></li>
+        <li><a href="/stuff/students">Students</a></li>
+        <li><a href="/stuff/courses">Courses</a></li>
         <li><a href="#">Logout</a></li>
     </ul>
 </div>
 <div class="main-content">
     <div class="header">
-        <h1>Welcome, Admin</h1>
+        <h1>Welcome, Stuff</h1>
     </div>
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search">
     </div>
-
-    <div th:if="${successMessage}" class="alert success">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${errorMessage}" class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${errorMessage}"></span>
-    </div>
-
-    <a th:href="@{/admin/courses/add-course}" class="btn create">Create New Course</a>
     <div class="table-container">
-        <h3>Courses</h3>
+        <h3>Students</h3>
         <table id="dataTable">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Course Name</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <th>Username</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>E-mail</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="course : ${courseList}">
-                <td th:text="${course.courseId}"></td>
-                <td th:text="${course.courseName}"></td>
-                <td th:text="${course.courseDescription}"></td>
-                <td class="actions">
-                    <a th:href="@{/admin/courses/edit-course/{courseId}(courseId=${course.getCourseId()})}" class="btn edit">Edit</a>
-                    <a href="#" class="btn delete" th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
-                </td>
+            <tr th:each="user : ${userList}">
+                <td th:text="${user.getUserId()}"></td>
+                <td th:text="${user.getUserName()}"></td>
+                <td th:text="${user.getFirstName()}"></td>
+                <td th:text="${user.getLastName()}"></td>
+                <td th:text="${user.getEmail()}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
-
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            Are you sure?
-        </div>
-        <div class="modal-body">
-            Do you really want to delete this course?
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal yes" onclick="confirmDelete()">Yes</button>
-            <button class="btn-modal no" onclick="closeModal()">No</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    let courseIdToDelete = null;
-
-    function showModal(courseId) {
-        courseIdToDelete = courseId;
-        document.getElementById('deleteModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('deleteModal').style.display = 'none';
-    }
-
-    function confirmDelete() {
-        if (courseIdToDelete) {
-            window.location.href = `/admin/courses/delete-course/${courseIdToDelete}`;
-        }
-    }
-
-    function filterTable() {
-        const searchInput = document.getElementById('searchInput');
-        const filter = searchInput.value.toLowerCase();
-        const table = document.getElementById('dataTable');
-        const trs = table.getElementsByTagName('tr');
-
-        for (let i = 1; i < trs.length; i++) {
-            const tds = trs[i].getElementsByTagName('td');
-            let display = false;
-
-            for (let j = 0; j < tds.length; j++) {
-                if (tds[j]) {
-                    const textValue = tds[j].textContent || tds[j].innerText;
-                    if (textValue.toLowerCase().indexOf(filter) > -1) {
-                        display = true;
-                        break;
-                    }
-                }
-            }
-
-            trs[i].style.display = display ? '' : 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('searchInput').addEventListener('keyup', filterTable);
-    });
-</script>
-
 </body>
 </html>

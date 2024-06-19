@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListResourceBundle;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
@@ -94,7 +96,44 @@ public class UserServiceTest {
         verify(userRepository).findAll();
     }
 
+    @Test
+    void getUsersByRoleId_shouldReturnUserWithCorrectRole_whenInputContainsExistingRoleId() {
+        Role role = new Role();
+        role.setRoleId(1);
+        role.setRoleName("USER");
 
+        User user = new User();
+        user.setRole(role);
+
+        List<User> userList = Arrays.asList(user);
+
+        when(userRepository.existsByRole_RoleId(role.getRoleId())).thenReturn(true);
+        when(userRepository.findAll()).thenReturn(userList);
+
+        List<User> actualUserList = userService.getUsersByRole(role.getRoleId());
+        assertEquals(userList, actualUserList);
+        verify(userRepository).existsByRole_RoleId(role.getRoleId());
+        verify(userRepository).findAll();
+    }
+
+    @Test
+    void getUsersByRoleId_shouldThrowException_whenInputContainsExistingRoleId() {
+        Role role = new Role();
+        role.setRoleId(100);
+        role.setRoleName("Test user");
+
+        User user = new User();
+        user.setRole(role);
+
+        when(userRepository.existsByRole_RoleId(role.getRoleId()))
+                .thenReturn(false)
+                .thenThrow(IllegalArgumentException.class);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getUsersByRole(role.getRoleId()));
+        assertEquals(exception.getMessage(), "This role doesn't exist!");
+        verify(userRepository).existsByRole_RoleId(role.getRoleId());
+        verify(userRepository, never()).findAll();
+    }
     @Test
     void getUserByUserId_shouldReturnCorrectUser_whenInputContainsExistingUserId() {
         List<User> userList = LongStream.range(0, 10)
