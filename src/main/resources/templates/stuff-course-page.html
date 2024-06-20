@@ -222,6 +222,7 @@
         <li><a href="/stuff/teachers">Teachers</a></li>
         <li><a href="/stuff/students">Students</a></li>
         <li><a href="/stuff/courses">Courses</a></li>
+        <li><a href="/stuff/groups">Groups</a></li>
         <li><a href="#">Logout</a></li>
     </ul>
 </div>
@@ -282,7 +283,7 @@
 
     function confirmDelete() {
         if (courseIdToDelete) {
-            window.location.href = `/admin/courses/delete-course/${courseIdToDelete}`;
+            window.location.href = `/stuff/courses/delete-course/${courseIdToDelete}`;
         }
     }
 

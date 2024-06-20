@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Stuff Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -113,15 +113,6 @@
             background-color: #45a049;
         }
 
-        .btn.delete {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn.delete:hover {
-            background-color: #e53935;
-        }
-
         .btn.create {
             background-color: #008cba;
             color: white;
@@ -226,50 +217,39 @@
 </head>
 <body>
 <div class="sidebar">
-    <h2>Admin Dashboard</h2>
+    <h2>Stuff Dashboard</h2>
     <ul>
-        <li><a href="/admin/users">Users</a></li>
-        <li><a href="/admin/courses">Courses</a></li>
+        <li><a href="/stuff/teachers">Teachers</a></li>
+        <li><a href="/stuff/students">Students</a></li>
+        <li><a href="/stuff/courses">Courses</a></li>
+        <li><a href="/stuff/groups">Groups</a></li>
         <li><a href="#">Logout</a></li>
     </ul>
 </div>
 <div class="main-content">
     <div class="header">
-        <h1>Welcome, Admin</h1>
+        <h1>Welcome, Stuff</h1>
     </div>
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search">
     </div>
 
-    <div th:if="${successMessage}" class="alert success">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${errorMessage}" class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${errorMessage}"></span>
-    </div>
-
-    <a th:href="@{/admin/courses/add-course}" class="btn create">Create New Course</a>
     <div class="table-container">
-        <h3>Courses</h3>
+        <h3>Groups</h3>
         <table id="dataTable">
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Course Name</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <th>Group name</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="course : ${courseList}">
-                <td th:text="${course.courseId}"></td>
-                <td th:text="${course.courseName}"></td>
-                <td th:text="${course.courseDescription}"></td>
+            <tr th:each="group : ${groupList}">
+                <td th:text="${group.getGroupId()}"></td>
+                <td th:text="${group.getGroupName()}"></td>
                 <td class="actions">
-                    <a th:href="@{/admin/courses/edit-course/{courseId}(courseId=${course.getCourseId()})}" class="btn edit">Edit</a>
-                    <a href="#" class="btn delete" th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
+                    <a class="btn assign">Assign course</a>
                 </td>
             </tr>
             </tbody>
@@ -277,38 +257,7 @@
     </div>
 </div>
 
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            Are you sure?
-        </div>
-        <div class="modal-body">
-            Do you really want to delete this course?
-        </div>
-        <div class="modal-footer">
-            <button class="btn-modal yes" onclick="confirmDelete()">Yes</button>
-            <button class="btn-modal no" onclick="closeModal()">No</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    let courseIdToDelete = null;
-
-    function showModal(courseId) {
-        courseIdToDelete = courseId;
-        document.getElementById('deleteModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('deleteModal').style.display = 'none';
-    }
-
-    function confirmDelete() {
-        if (courseIdToDelete) {
-            window.location.href = `/admin/courses/delete-course/${courseIdToDelete}`;
-        }
-    }
 
     function filterTable() {
         const searchInput = document.getElementById('searchInput');

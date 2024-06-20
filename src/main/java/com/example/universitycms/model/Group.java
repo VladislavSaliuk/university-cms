@@ -31,8 +31,7 @@ public class Group implements Serializable {
     )
     private List<Course> courseList;
 
-    public Group(long groupId, String groupName) {
-        this.groupId = groupId;
+    public Group(String groupName) {
         this.groupName = groupName;
     }
 }
