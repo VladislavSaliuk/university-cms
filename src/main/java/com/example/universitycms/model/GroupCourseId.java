@@ -12,7 +12,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class GroupCourseId implements Serializable {
 
-    private long group;
+    private Long group;
 
-    private long course;
+    private Long course;
 }

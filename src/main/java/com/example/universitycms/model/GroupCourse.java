@@ -1,10 +1,7 @@
 package com.example.universitycms.model;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -13,16 +10,15 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "groups_courses")
 @IdClass(GroupCourseId.class)
 public class GroupCourse  implements Serializable {
-
 
     @Id
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
-
 
     @Id
     @ManyToOne
