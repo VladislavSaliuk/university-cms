@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,6 +42,13 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private List<Course> courseList;
 
     public User(String userName, String password, String email, Role role) {
         this.userName = userName;

@@ -32,27 +32,27 @@ INSERT INTO public.roles (role_name) VALUES
 
 -- INSERTING TEACHERS
 INSERT INTO public.users (username, password, email, first_name, last_name, role_id) VALUES
-('jdoe', 'password123', 'jdoe@example.com', 'John', 'Doe', 2),
-('asmith', 'password456', 'asmith@example.com', 'Alice', 'Smith', 2),
-('bjohnson', 'password789', 'bjohnson@example.com', 'Bob', 'Johnson', 2),
-('cmiller', 'password321', 'cmiller@example.com', 'Chris', 'Miller', 2),
-('dlee', 'password654', 'dlee@example.com', 'David', 'Lee', 2),
-('ewilson', 'password987', 'ewilson@example.com', 'Eva', 'Wilson', 2),
-('ffranklin', 'password111', 'ffranklin@example.com', 'Frank', 'Franklin', 2),
-('gmurphy', 'password222', 'gmurphy@example.com', 'Grace', 'Murphy', 2),
-('hclark', 'password333', 'hclark@example.com', 'Henry', 'Clark', 2),
-('ijames', 'password444', 'ijames@example.com', 'Isabella', 'James', 2);
+('jdoe', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'jdoe@example.com', 'John', 'Doe', 2),
+('asmith', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'asmith@example.com', 'Alice', 'Smith', 2),
+('bjohnson', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'bjohnson@example.com', 'Bob', 'Johnson', 2),
+('cmiller', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'cmiller@example.com', 'Chris', 'Miller', 2),
+('dlee', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'dlee@example.com', 'David', 'Lee', 2),
+('ewilson', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'ewilson@example.com', 'Eva', 'Wilson', 2),
+('ffranklin', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'ffranklin@example.com', 'Frank', 'Franklin', 2),
+('gmurphy', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'gmurphy@example.com', 'Grace', 'Murphy', 2),
+('hclark', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'hclark@example.com', 'Henry', 'Clark', 2),
+('ijames', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'ijames@example.com', 'Isabella', 'James', 2);
 
 
 -- INSERTING STUDENTS
 INSERT INTO public.users (username, password, email, first_name, last_name, role_id) VALUES
-('kjones', 'password555', 'kjones@example.com', 'Kyle', 'Jones', 3),
-('lmorris', 'password666', 'lmorris@example.com', 'Linda', 'Morris', 3),
-('mthompson', 'password777', 'mthompson@example.com', 'Michael', 'Thompson', 3),
-('ndavis', 'password888', 'ndavis@example.com', 'Nancy', 'Davis', 3),
-('owhite', 'password999', 'owhite@example.com', 'Oliver', 'White', 3),
-('pphillips', 'password000', 'pphillips@example.com', 'Patricia', 'Phillips', 3),
-('qyoung', 'passwordabc', 'qyoung@example.com', 'Quinn', 'Young', 3),
-('rhill', 'passworddef', 'rhill@example.com', 'Rachel', 'Hill', 3),
-('sscott', 'passwordghi', 'sscott@example.com', 'Steven', 'Scott', 3),
-('tgreen', 'passwordjkl', 'tgreen@example.com', 'Thomas', 'Green', 3);
+('kjones', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'kjones@example.com', 'Kyle', 'Jones', 3),
+('lmorris', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'lmorris@example.com', 'Linda', 'Morris', 3),
+('mthompson', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'mthompson@example.com', 'Michael', 'Thompson', 3),
+('ndavis', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'ndavis@example.com', 'Nancy', 'Davis', 3),
+('owhite', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'owhite@example.com', 'Oliver', 'White', 3),
+('pphillips', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'pphillips@example.com', 'Patricia', 'Phillips', 3),
+('qyoung', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'qyoung@example.com', 'Quinn', 'Young', 3),
+('rhill', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'rhill@example.com', 'Rachel', 'Hill', 3),
+('sscott', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'sscott@example.com', 'Steven', 'Scott', 3),
+('tgreen', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'tgreen@example.com', 'Thomas', 'Green', 3);
