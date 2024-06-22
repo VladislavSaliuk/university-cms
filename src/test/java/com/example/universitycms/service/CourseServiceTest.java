@@ -194,9 +194,9 @@ public class CourseServiceTest {
     @Test
     void getCourseByCourseId_shouldReturnCourse_whenInputContainsCourseWithExistingName() {
         List<Course> courseList = LongStream.range(0, 10)
-                .mapToObj(subjectId -> {
+                .mapToObj(courseId -> {
                     Course course = new Course();
-                    course.setCourseId(subjectId);
+                    course.setCourseId(courseId);
                     return course;
                 })
                 .collect(Collectors.toList());

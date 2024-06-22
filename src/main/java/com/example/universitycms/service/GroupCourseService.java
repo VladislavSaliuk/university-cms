@@ -9,6 +9,9 @@ import com.example.universitycms.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class GroupCourseService {
 
@@ -62,6 +65,30 @@ public class GroupCourseService {
         GroupCourse groupCourse = groupCourseRepository.findByGroupAndCourse(group, course);
 
         groupCourseRepository.delete(groupCourse);
+    }
+
+    public List<Course> getUnassignedCoursesForGroup(long groupId) {
+        List<Course> courseList = courseRepository.findAll();
+
+        List<Course> assignedCourses = groupCourseRepository.findAll()
+                .stream()
+                .filter(groupCourse -> groupCourse.getGroup().getGroupId() == groupId)
+                .map(GroupCourse::getCourse)
+                .collect(Collectors.toList());
+
+        List<Course> unassignedCourses = courseList.stream()
+                .filter(course -> !assignedCourses.contains(course))
+                .collect(Collectors.toList());
+
+        return unassignedCourses;
+    }
+
+    public List<Course> getAssignedCoursesForGroup(long groupId) {
+        return groupCourseRepository.findAll()
+                .stream()
+                .filter(groupCourse -> groupCourse.getGroup().getGroupId() == groupId)
+                .map(GroupCourse::getCourse)
+                .collect(Collectors.toList());
     }
 
 }

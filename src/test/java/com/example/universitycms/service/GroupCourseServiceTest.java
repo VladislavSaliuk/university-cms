@@ -12,6 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -321,6 +328,109 @@ public class GroupCourseServiceTest {
         verify(groupCourseRepository).existsByGroupAndCourse(group, course);
         verify(groupCourseRepository, never()).findByGroupAndCourse(group, course);
         verify(groupCourseRepository, never()).delete(any(GroupCourse.class));
+    }
+
+
+    @Test
+    void getUnassignedCoursesForGroup_shouldReturnCorrectCourseList_whenInputContainsExistingGroupId() {
+
+        List<Course> courseList = LongStream.range(0, 10)
+                .mapToObj(courseId -> {
+                    Course course = new Course();
+                    course.setCourseId(courseId);
+                    return course;
+                })
+                .collect(Collectors.toList());
+
+        Group group = new Group();
+
+        GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
+
+        when(courseRepository.findAll()).thenReturn(courseList);
+        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+
+        List<Course> unassignedCourses = groupCourseService.getUnassignedCoursesForGroup(1);
+
+        assertEquals(10, unassignedCourses.size());
+        assertEquals(2, unassignedCourses.get(2).getCourseId());
+
+        verify(courseRepository).findAll();
+        verify(groupCourseRepository).findAll();
+    }
+
+    @Test
+    void getUnassignedCoursesForGroup_shouldReturnAllCourses_whenInputContainsNotExistingGroupId() {
+
+        List<Course> courseList = LongStream.range(0, 10)
+                .mapToObj(courseId -> {
+                    Course course = new Course();
+                    course.setCourseId(courseId);
+                    return course;
+                })
+                .collect(Collectors.toList());
+
+        Group group = new Group();
+
+        GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
+
+        when(courseRepository.findAll()).thenReturn(courseList);
+        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+
+        List<Course> unassignedCourses = groupCourseService.getUnassignedCoursesForGroup(100);
+
+        assertEquals(10, unassignedCourses.size());
+
+        verify(courseRepository).findAll();
+        verify(groupCourseRepository).findAll();
+    }
+
+    @Test
+    void getAssignedCoursesForGroup_shouldReturnEmptyCourseList_whenInputContainsExistingGroupId() {
+
+        List<Course> courseList = LongStream.range(0, 10)
+                .mapToObj(courseId -> {
+                    Course course = new Course();
+                    course.setCourseId(courseId);
+                    return course;
+                })
+                .collect(Collectors.toList());
+
+        Group group = new Group();
+
+        GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
+
+        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+
+        List<Course> assignedCourses = groupCourseService.getAssignedCoursesForGroup(1);
+
+        assertEquals(0, assignedCourses.size());
+
+        verify(groupCourseRepository).findAll();
+    }
+
+    @Test
+    void getAssignedCoursesForGroup_shouldReturnCorrectCourseList_whenInputContainsNotExistingGroupId() {
+
+        List<Course> courseList = LongStream.range(0, 10)
+                .mapToObj(courseId -> {
+                    Course course = new Course();
+                    course.setCourseId(courseId);
+                    return course;
+                })
+                .collect(Collectors.toList());
+
+        Group group = new Group();
+
+        GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
+
+        when(courseRepository.findAll()).thenReturn(courseList);
+        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+
+        List<Course> unassignedCourses = groupCourseService.getAssignedCoursesForGroup(100);
+
+        assertEquals(0, unassignedCourses.size());
+
+        verify(groupCourseRepository).findAll();
     }
 
 
