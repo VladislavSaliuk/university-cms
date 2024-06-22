@@ -96,11 +96,41 @@
         }
 
         .btn {
+            text-decoration: none;
             padding: 8px 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+        }
+
+        .btn.assign {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn.assign:hover {
+            background-color: #45a049;
+        }
+
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            background-color: #4caf50;
+        }
+
+        .btn.remove {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn.remove:hover {
+            background-color: #e53935;
         }
 
         .search-container {
@@ -135,6 +165,16 @@
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search">
     </div>
+
+    <div th:if="${successMessage}" class="alert success">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${errorMessage}"></span>
+    </div>
+
     <div class="table-container">
         <h3>Teachers</h3>
         <table id="dataTable">
@@ -145,6 +185,7 @@
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>E-mail</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -154,6 +195,10 @@
                 <td th:text="${user.getFirstName()}"></td>
                 <td th:text="${user.getLastName()}"></td>
                 <td th:text="${user.getEmail()}"></td>
+                <td class="actions">
+                    <a th:href="@{/stuff/teachers/assign-teacher-on-course/{userId}(userId=${user.getUserId()})}" class="btn assign">Assign course</a>
+                    <a th:href="@{/stuff/teachers/remove-teacher-from-course/{userId}(userId=${user.getUserId()})}" class="btn remove">Remove course</a>
+                </td>
             </tr>
             </tbody>
         </table>

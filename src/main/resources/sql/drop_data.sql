@@ -7,3 +7,5 @@ truncate table public.courses restart identity cascade;
 truncate table public.users restart identity cascade;
 
 truncate table public.groups_courses restart identity cascade;
+
+truncate table public.users_courses restart identity cascade;
