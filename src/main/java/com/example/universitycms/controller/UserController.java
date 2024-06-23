@@ -21,11 +21,6 @@ public class UserController {
     private final long STUDENT_ROLE_ID = 3;
     private final long STUFF_ROLE_ID = 4;
 
-    @GetMapping("/admin/users")
-    public String showAdminUserPage(Model model) {
-        model.addAttribute(userService.getAll());
-        return "admin-user-page";
-    }
     @GetMapping("/stuff/teachers")
     public String showStuffTeacherPage(Model model) {
         List<User> userList = userService.getUsersByRole(TEACHER_ROLE_ID);

@@ -2,206 +2,294 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stuff Dashboard - Students</title>
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+        * {
             margin: 0;
             padding: 0;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
         }
 
-        .sidebar {
-            width: 250px;
+        body {
+            display: flex;
+        }
+
+        .slidebar {
+            position: sticky;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 115px;
             height: 100vh;
-            position: fixed;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding-top: 20px;
+            padding: 0 1.7rem;
+            color: #fff;
+            overflow: hidden;
+            transition: all 0.5s linear;
+            background: rgb(113, 99, 186, 255);
         }
 
-        .sidebar h2 {
-            text-align: center;
+        .slidebar:hover {
+            width: 240px;
+            transition: 0.5s;
         }
 
-        .sidebar ul {
+        .logo {
+            height: 80px;
+            padding: 16px;
+        }
+
+        .menu {
+            height: 88%;
+            position: relative;
             list-style: none;
             padding: 0;
         }
 
-        .sidebar ul li {
-            padding: 15px;
-            text-align: center;
+        .menu li {
+            padding: 1rem;
+            margin: 8px 0;
+            border-radius: 8px;
+            transition: all 0.5s ease-in-out;
         }
 
-        .sidebar ul li a {
-            color: #ecf0f1;
+        .menu li:hover,
+        .active {
+            background: #e0e0e058;
+        }
+
+        .menu a {
+            color: #fff;
+            font-size: 14px;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .sidebar ul li a:hover {
-            background-color: #34495e;
+        .menu a span{
+            overflow: hidden;
         }
 
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
+        .menu a i {
+            font-size: 1.2rem;
         }
 
-        .header {
+        .logout {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .main--content {
+            position: relative;
+            background: #ebe9e9;
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .header--wrapper {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px 2rem;
+            margin-bottom: 1rem;
         }
 
-        .header h1 {
-            margin: 0;
+
+        .header--title {
+            color: rgba(113, 99, 186, 255)
         }
 
-        .card h3 {
-            margin: 0 0 10px;
+        .user--info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search--box {
+            background: rgb(237, 237, 237);
+            border-radius: 15px;
+            color: rgba(113, 99, 186, 255);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+        }
+
+        .search--box input {
+            background: transparent;
+            padding: 10px;
+        }
+
+        .search--box i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .search--box i:hover {
+            transform: scale(1.2);
+
+        }
+
+        .tabular--wrapper {
+            background: #fff;
+            margin-top: 1rem;
+            border-radius: 10px;
+            padding: 2rem;
         }
 
         .table-container {
-            margin-top: 20px;
-            overflow-x: auto;
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
+        thead {
+            background: rgba(113, 99, 186, 255);
+            color: #fff;
         }
 
         th {
-            background-color: #f8f8f8;
+            padding: 15px;
+            text-align: left;
         }
 
-        .actions {
-            display: flex;
-            gap: 10px;
+        tbody {
+            background: #f2f2f2;
         }
 
-        .btn {
-            text-decoration: none;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
+        td {
+            padding: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        tr:nth-child(even){
+            background: #fff;
+        }
+
+        tfoot {
+            background: rgba(113, 99, 186, 255);
+            font-weight: bold;
+            color: #fff;
+        }
+
+        tfoot td {
+            padding: 15px;
+        }
+
+        .table-container button{
+            color: green;
+            background: none;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        .btn.assign {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .btn.assign:hover {
-            background-color: #45a049;
-        }
-
-        .alert {
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .success {
-            background-color: #4caf50;
-        }
-
-        .btn.remove {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn.remove:hover {
-            background-color: #e53935;
-        }
-
-        .search-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .search-container input {
-            padding: 8px;
-            width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
     </style>
+
+
 </head>
 <body>
-<div class="sidebar">
-    <h2>Stuff Dashboard</h2>
-    <ul>
-        <li><a href="/stuff/teachers">Teachers</a></li>
-        <li><a href="/stuff/students">Students</a></li>
-        <li><a href="/stuff/courses">Courses</a></li>
-        <li><a href="/stuff/groups">Groups</a></li>
-        <li><a href="#">Logout</a></li>
+<div class="slidebar">
+    <div class="logo"></div>
+    <ul class="menu">
+        <li>
+            <a href="#">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="/stuff/teachers">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <span>Teachers</span>
+            </a>
+        </li>
+        <li class="active">
+            <a href="/stuff/students">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>Students</span>
+            </a>
+        </li>
+        <li>
+            <a href="/stuff/courses">
+                <i class="fa-solid fa-book"></i>
+                <span>Courses</span>
+            </a>
+        </li>
+        <li>
+            <a href="/stuff/groups">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Groups</span>
+            </a>
+        </li>
+        <li class="logout">
+            <a href="#">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </li>
     </ul>
 </div>
-<div class="main-content">
-    <div class="header">
-        <h1>Welcome, Stuff</h1>
-    </div>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search">
+
+<div class="main--content">
+    <div class="header--wrapper">
+        <div class="header--title">
+            <span>Stuff</span>
+            <h2>Dashboard</h2>
+        </div>
+        <div class="user--info">
+            <div class="search--box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" placeholder="Search"/>
+            </div>
+        </div>
     </div>
 
-    <div th:if="${successMessage}" class="alert success">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${errorMessage}" class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${errorMessage}"></span>
-    </div>
-
-    <div class="table-container">
-        <h3>Students</h3>
-        <table id="dataTable">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Username</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>E-mail</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${userList}">
-                <td th:text="${user.getUserId()}"></td>
-                <td th:text="${user.getUserName()}"></td>
-                <td th:text="${user.getFirstName()}"></td>
-                <td th:text="${user.getLastName()}"></td>
-                <td th:text="${user.getEmail()}"></td>
-                <td class="actions">
-                    <a th:href="@{/stuff/students/assign-student-on-course/{userId}(userId=${user.getUserId()})}" class="btn assign">Assign course</a>
-                    <a th:href="@{/stuff/students/remove-student-from-course/{userId}(userId=${user.getUserId()})}" class="btn remove">Remove course</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="tabular--wrapper">
+        <h3 class="main--title">Students</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>E-mail</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.getUserId()}"></td>
+                    <td th:text="${user.getUserName()}"></td>
+                    <td th:text="${user.getFirstName()}"></td>
+                    <td th:text="${user.getLastName()}"></td>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td>
+                        <a th:href="@{/stuff/students/assign-student-on-course/{userId}(userId=${user.getUserId()})}">Assign course</a>
+                        <a th:href="@{/stuff/students/remove-student-from-course/{userId}(userId=${user.getUserId()})}">Remove course</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>
