@@ -4,150 +4,259 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remove Course</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+            outline: none;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .search-container {
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
         }
 
-        .search-container input {
-            padding: 8px;
-            width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        .menu li {
+            padding: 1rem;
+            margin: 8px 0;
+            border-radius: 8px;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .menu li:hover,
+        .active {
+            background: #e0e0e058;
+        }
+
+        .menu a {
+            color: #fff;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu a span {
+            overflow: hidden;
+        }
+
+        .menu a i {
+            font-size: 1.2rem;
+        }
+
+        .main--content {
+            position: relative;
+            background: #ebe9e9;
+            width: 100%;
+            padding: 1rem;
+        }
+
+        .header--wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .header--title {
+            color: rgba(113, 99, 186, 255)
+        }
+
+        .user--info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search--box {
+            background: rgb(237, 237, 237);
+            border-radius: 15px;
+            color: rgba(113, 99, 186, 255);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+        }
+
+        .search--box input {
+            background: transparent;
+            padding: 10px;
+        }
+
+        .search--box i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .search--box i:hover {
+            transform: scale(1.2);
+        }
+
+        .tabular--wrapper {
+            background: #fff;
+            margin-top: 1rem;
+            border-radius: 10px;
+            padding: 2rem;
         }
 
         .table-container {
-            overflow-x: auto;
+            width: 100%;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
+        thead {
+            background: rgba(113, 99, 186, 255);
+            color: #fff;
         }
 
         th {
-            background-color: #f8f8f8;
+            padding: 15px;
+            text-align: left;
         }
 
-        .actions {
-            display: flex;
-            gap: 10px;
+        tbody {
+            background: #f2f2f2;
         }
 
-        .btn {
-            padding: 8px 12px;
-            border: none;
+        td {
+            padding: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background: #fff;
+        }
+
+        tfoot {
+            background: rgba(113, 99, 186, 255);
+            font-weight: bold;
+            color: #fff;
+        }
+
+        tfoot td {
+            padding: 15px;
+        }
+
+        .table-container button {
+            color: green;
+            background: none;
+            cursor: pointer;
+        }
+
+        .actions button {
             text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.875rem;
+            transition: background 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .actions button.delete {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .actions button.delete:hover {
+            background: #c82333;
+        }
+
+        .modal-footer button {
+            background: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-        .btn.remove {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .btn.remove:hover {
-            background-color: #e53935;
+        .modal-footer button:hover {
+            background: #218838;
         }
 
 
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Remove Course</h1>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search">
+<div class="main--content">
+    <div class="header--wrapper">
+        <div class="header--title">
+            <h2>Course manager</h2>
+        </div>
+        <div class="user--info">
+            <div class="search--box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" placeholder="Search" id="searchBox" onkeyup="filterTable()"/>
+            </div>
+        </div>
     </div>
-    <div class="table-container">
-        <table id="dataTable">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Course Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="course : ${courseList}">
-                <td th:text="${course.getCourseId()}"></td>
-                <td th:text="${course.getCourseName()}"></td>
-                <td th:text="${course.getCourseDescription()}"></td>
-                <td class="actions">
-                    <form th:action="@{/stuff/teachers/remove-teacher-from-course/{userId}/{courseId}(userId=${userId}, courseId=${course.getCourseId()})}" method="post">
-                        <button type="submit" class="btn remove">Remove</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="tabular--wrapper">
+        <h3 class="main--title">Courses</h3>
+        <div class="table-container">
+            <table id="courseTable">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="course : ${courseList}">
+                    <td th:text="${course.getCourseId()}"></td>
+                    <td th:text="${course.getCourseName()}"></td>
+                    <td th:text="${course.getCourseDescription()}"></td>
+                    <td class="actions">
+                        <form th:action="@{/stuff/teachers/remove-teacher-from-course/{userId}/{courseId}(userId=${userId}, courseId=${course.getCourseId()})}" method="post">
+                            <button type="submit" class="btn delete">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+
 <script>
     function filterTable() {
-        const searchInput = document.getElementById('searchInput');
-        const filter = searchInput.value.toLowerCase();
-        const table = document.getElementById('dataTable');
-        const trs = table.getElementsByTagName('tr');
+        const searchValue = document.getElementById('searchBox').value.toLowerCase();
+        const table = document.getElementById('courseTable');
+        const rows = table.getElementsByTagName('tr');
 
-        for (let i = 1; i < trs.length; i++) {
-            const tds = trs[i].getElementsByTagName('td');
-            let display = false;
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let showRow = false;
 
-            for (let j = 0; j < tds.length; j++) {
-                if (tds[j]) {
-                    const textValue = tds[j].textContent || tds[j].innerText;
-                    if (textValue.toLowerCase().indexOf(filter) > -1) {
-                        display = true;
-                        break;
-                    }
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(searchValue)) {
+                    showRow = true;
+                    break;
                 }
             }
 
-            trs[i].style.display = display ? '' : 'none';
+            rows[i].style.display = showRow ? '' : 'none';
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('searchInput').addEventListener('keyup', filterTable);
-    });
 </script>
 </body>
 </html>

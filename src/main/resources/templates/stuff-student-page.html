@@ -74,7 +74,7 @@
             gap: 1.5rem;
         }
 
-        .menu a span{
+        .menu a span {
             overflow: hidden;
         }
 
@@ -106,7 +106,6 @@
             padding: 10px 2rem;
             margin-bottom: 1rem;
         }
-
 
         .header--title {
             color: rgba(113, 99, 186, 255)
@@ -141,7 +140,6 @@
 
         .search--box i:hover {
             transform: scale(1.2);
-
         }
 
         .tabular--wrapper {
@@ -180,7 +178,7 @@
             color: #333;
         }
 
-        tr:nth-child(even){
+        tr:nth-child(even) {
             background: #fff;
         }
 
@@ -194,11 +192,95 @@
             padding: 15px;
         }
 
-        .table-container button{
+        .table-container button {
             color: green;
             background: none;
             cursor: pointer;
         }
+
+        .create-course-btn {
+            cursor: pointer;
+            display: inline-block;
+            background: #007bff;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: background 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .create-course-btn:hover {
+            background: #0056b3;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.875rem;
+            transition: background 0.3s ease;
+            margin-right: 5px;
+        }
+
+        .actions a.assign{
+            background: #28a745;
+            color: #fff;
+        }
+
+        .actions a.assign:hover {
+            background: #218838;
+        }
+
+        .actions a.delete {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .actions a.delete:hover {
+            background: #c82333;
+        }
+
+        .modal-footer button {
+            background: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-footer button:hover {
+            background: #218838;
+        }
+
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            background-color: #4caf50;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+
 
     </style>
 
@@ -256,15 +338,24 @@
         <div class="user--info">
             <div class="search--box">
                 <i class="fa-solid fa-search"></i>
-                <input type="text" placeholder="Search"/>
+                <input type="text" placeholder="Search" id="searchBox" onkeyup="filterTable()"/>
             </div>
         </div>
+    </div>
+
+    <div th:if="${successMessage}" class="alert success">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <span th:text="${errorMessage}"></span>
     </div>
 
     <div class="tabular--wrapper">
         <h3 class="main--title">Students</h3>
         <div class="table-container">
-            <table>
+            <table id="studentTable">
                 <thead>
                 <tr>
                     <th>Id</th>
@@ -282,9 +373,9 @@
                     <td th:text="${user.getFirstName()}"></td>
                     <td th:text="${user.getLastName()}"></td>
                     <td th:text="${user.getEmail()}"></td>
-                    <td>
-                        <a th:href="@{/stuff/students/assign-student-on-course/{userId}(userId=${user.getUserId()})}">Assign course</a>
-                        <a th:href="@{/stuff/students/remove-student-from-course/{userId}(userId=${user.getUserId()})}">Remove course</a>
+                    <td class="actions">
+                        <a th:href="@{/stuff/students/assign-student-on-course/{userId}(userId=${user.getUserId()})}" class="btn assign">Assign course</a>
+                        <a th:href="@{/stuff/students/remove-student-from-course/{userId}(userId=${user.getUserId()})}" class="btn delete">Remove course</a>
                     </td>
                 </tr>
                 </tbody>
@@ -292,5 +383,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    function filterTable() {
+        const searchValue = document.getElementById('searchBox').value.toLowerCase();
+        const table = document.getElementById('studentTable');
+        const rows = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName('td');
+            let showRow = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(searchValue)) {
+                    showRow = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = showRow ? '' : 'none';
+        }
+    }
+
+</script>
+
+
 </body>
 </html>

@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
-@Disabled
 @SpringBootTest
 public class CourseServiceTest {
 
