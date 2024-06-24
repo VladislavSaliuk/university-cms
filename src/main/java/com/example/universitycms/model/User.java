@@ -42,7 +42,7 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "users_courses",
             joinColumns = @JoinColumn(name = "user_id"),

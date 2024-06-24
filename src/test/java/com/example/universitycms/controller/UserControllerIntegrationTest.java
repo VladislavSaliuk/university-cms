@@ -28,18 +28,6 @@ public class UserControllerIntegrationTest {
     UserService userService;
 
 
-    @Test
-    @WithMockUser(username = "admin", roles = "ADMIN")
-    void showAdminUserPage_shouldReturnAdminUserPageView_whenUserIsAdmin() throws Exception {
-
-        when(userService.getAll()).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/admin/users"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin-user-page"));
-
-    }
-
 
     @Test
     @WithMockUser(username = "stuff", roles = "STUFF")

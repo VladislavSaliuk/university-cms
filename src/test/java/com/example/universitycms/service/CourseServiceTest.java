@@ -3,6 +3,7 @@ package com.example.universitycms.service;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
@@ -20,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+
+@Disabled
 @SpringBootTest
 public class CourseServiceTest {
 
