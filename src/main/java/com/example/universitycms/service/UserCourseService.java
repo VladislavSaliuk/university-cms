@@ -33,12 +33,12 @@ public class UserCourseService {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-
-        if(userCourseRepository.existsByUserAndCourse(user, course)) {
+        if(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)) {
             throw new IllegalArgumentException("This user is already assigned on this course!");
         }
+
+        User user = userRepository.findUserByUserId(userId);
+        Course course = courseRepository.findCourseByCourseId(courseId);
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.save(userCourse);
@@ -54,24 +54,19 @@ public class UserCourseService {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-
-        if(!userCourseRepository.existsByUserAndCourse(user, course)) {
+        if(!userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)) {
             throw new IllegalArgumentException("This user is not assigned on this course!");
         }
 
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, course);
+        UserCourse userCourse = userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId);
         userCourseRepository.delete(userCourse);
     }
     public List<Course> getUnassignedCoursesForUser(long userId) {
 
         List<Course> courseList = courseRepository.findAll();
 
-        List<Course> assignedCourses = userCourseRepository
-                .findAll()
+        List<Course> assignedCourses = userCourseRepository.findByUser_UserId(userId)
                 .stream()
-                .filter(userCourse -> userCourse.getUser().getUserId() == userId)
                 .map(UserCourse::getCourse)
                 .collect(Collectors.toList());
 
@@ -83,9 +78,8 @@ public class UserCourseService {
     }
 
     public List<Course> getAssignedCoursesForUser(long userId) {
-        return userCourseRepository.findAll()
+        return userCourseRepository.findByUser_UserId(userId)
                 .stream()
-                .filter(userCourse -> userCourse.getUser().getUserId() == userId)
                 .map(UserCourse::getCourse)
                 .collect(Collectors.toList());
     }

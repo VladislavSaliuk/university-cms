@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -83,105 +86,72 @@ public class UserCourseRepositoryTest {
     }
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void findByUserAndCourse_shouldReturnUserCourse_whenInputContainsExistingData() {
+    void findByUser_UserIdAndCourse_CourseId_shouldReturnUserCourse_whenInputContainsExistingData() {
         long userId = 1;
         long courseId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, course);
+        UserCourse userCourse = userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertNotNull(userCourse);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void findByUserAndCourse_shouldReturnNull_whenInputContainsNotExistingUser() {
+    void findByUser_UserIdAndCourse_CourseId_shouldReturnNull_whenInputContainsNotExistingUserId() {
         long userId = 100;
         long courseId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, course);
+        UserCourse userCourse = userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertNull(userCourse);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void findByUserAndCourse_shouldReturnNull_whenInputContainsNotExistingCourse() {
+    void findByUser_UserIdAndCourse_CourseId_shouldReturnNull_whenInputContainsNotExistingCourseId() {
         long userId = 1;
         long courseId = 100;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, course);
+        UserCourse userCourse = userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertNull(userCourse);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void findByUserAndCourse_shouldReturnNull_whenInputDoesNotContainUser() {
-        long courseId = 1;
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(null, course);
-        assertNull(userCourse);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void findByUserAndCourse_shouldReturnNull_whenInputDoesNotContainCourse() {
-        long userId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, null);
-        assertNull(userCourse);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void existsByUserAndCourse_shouldReturnTrue_whenInputContainsExistingData() {
+    void existsByUser_UserIdAndCourse_CourseId_shouldReturnTrue_whenInputContainsExistingData() {
         long userId = 1;
         long courseId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        boolean isUserCourseExists = userCourseRepository.existsByUserAndCourse(user, course);
+        boolean isUserCourseExists = userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertTrue(isUserCourseExists);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void existsByUserAndCourse_shouldReturnFalse_whenInputContainsNotExistingUser() {
+    void existsByUser_UserIdAndCourse_CourseId_shouldReturnFalse_whenInputContainsNotExistingUserId() {
         long userId = 100;
         long courseId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        boolean isUserCourseExists = userCourseRepository.existsByUserAndCourse(user, course);
+        boolean isUserCourseExists = userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertFalse(isUserCourseExists);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void existsByUserAndCourse_shouldReturnFalse_whenInputContainsNotExistingCourse() {
+    void existsByUser_UserIdAndCourse_CourseId_shouldReturnFalse_whenInputContainsNotExistingCourseId() {
         long userId = 1;
         long courseId = 100;
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        boolean isUserCourseExists = userCourseRepository.existsByUserAndCourse(user, course);
+        boolean isUserCourseExists = userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         assertFalse(isUserCourseExists);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void existsByUserAndCourse_shouldReturnFalse_whenInputDoesNotContainUser() {
-        long courseId = 1;
-        Course course = courseRepository.findCourseByCourseId(courseId);
-        boolean isUserCourseExists = userCourseRepository.existsByUserAndCourse(null, course);
-        assertFalse(isUserCourseExists);
+    void findByUser_UserId_shouldReturnList_whenInputContainsExistingUserId() {
+        long userId = 4;
+        List<UserCourse> userCourseList = userCourseRepository.findByUser_UserId(userId);
+        assertNotEquals(Collections.emptyList(),userCourseList);
     }
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
-    void existsByUserAndCourse_shouldReturnFalse_whenInputDoesNotContainCourse() {
-        long userId = 1;
-        User user = userRepository.findUserByUserId(userId);
-        boolean isUserCourseExists = userCourseRepository.existsByUserAndCourse(user, null);
-        assertFalse(isUserCourseExists);
+    void findByUser_UserId_shouldReturnEmptyList_whenInputContainsNotExistingUserId() {
+        long userId = 100;
+        List<UserCourse> userCourseList = userCourseRepository.findByUser_UserId(userId);
+        assertEquals(Collections.emptyList(),userCourseList);
     }
-
 
 }

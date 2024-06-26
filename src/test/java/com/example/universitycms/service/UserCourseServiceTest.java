@@ -47,16 +47,14 @@ public class UserCourseServiceTest {
 
         Course course = new Course();
         course.setCourseId(courseId);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test course description");
 
         when(userRepository.existsByUserId(userId)).thenReturn(true);
         when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
+        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(false);
+
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
-
-        when(userCourseRepository.existsByUserAndCourse(user, course)).thenReturn(false);
 
         ArgumentCaptor<UserCourse> userCourseCaptor = ArgumentCaptor.forClass(UserCourse.class);
 
@@ -64,9 +62,9 @@ public class UserCourseServiceTest {
 
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
+        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findCourseByCourseId(courseId);
-        verify(userCourseRepository).existsByUserAndCourse(user, course);
         verify(userCourseRepository).save(userCourseCaptor.capture());
 
         UserCourse capturedUserCourse = userCourseCaptor.getValue();
@@ -97,9 +95,9 @@ public class UserCourseServiceTest {
         assertEquals("User with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository, never()).existsByCourseId(courseId);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userRepository, never()).findUserByUserId(userId);
         verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(userCourseRepository, never()).existsByUserAndCourse(user, course);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -128,9 +126,9 @@ public class UserCourseServiceTest {
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userRepository, never()).findUserByUserId(userId);
         verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(userCourseRepository, never()).existsByUserAndCourse(user, course);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -158,7 +156,7 @@ public class UserCourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(course);
 
-        when(userCourseRepository.existsByUserAndCourse(user, course))
+        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId))
                 .thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
 
@@ -169,9 +167,9 @@ public class UserCourseServiceTest {
 
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(userRepository).findUserByUserId(userId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(userCourseRepository).existsByUserAndCourse(user, course);
+        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userRepository, never()).findUserByUserId(userId);
+        verify(courseRepository, never()).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -193,22 +191,17 @@ public class UserCourseServiceTest {
         when(userRepository.existsByUserId(userId)).thenReturn(true);
         when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
 
-        when(userRepository.findUserByUserId(userId)).thenReturn(user);
-        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
+        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(true);
 
-        when(userCourseRepository.existsByUserAndCourse(user, course)).thenReturn(true);
-
-        when(userCourseRepository.findByUserAndCourse(user, course))
+        when(userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId))
                 .thenReturn(userCourse);
 
         userCourseService.removeUserFromCourse(userId, courseId);
 
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(userRepository).findUserByUserId(userId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(userCourseRepository).existsByUserAndCourse(user, course);
-        verify(userCourseRepository).findByUserAndCourse(user, course);
+        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository).delete(userCourse);
     }
 
@@ -234,10 +227,8 @@ public class UserCourseServiceTest {
         assertEquals("User with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository, never()).existsByCourseId(courseId);
-        verify(userRepository, never()).findUserByUserId(userId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(userCourseRepository, never()).existsByUserAndCourse(user, course);
-        verify(userCourseRepository, never()).findByUserAndCourse(user, course);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).delete(any(UserCourse.class));
     }
 
@@ -265,10 +256,8 @@ public class UserCourseServiceTest {
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(userRepository, never()).findUserByUserId(userId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(userCourseRepository, never()).existsByUserAndCourse(user, course);
-        verify(userCourseRepository, never()).findByUserAndCourse(user, course);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).delete(any(UserCourse.class));
     }
 
@@ -295,7 +284,7 @@ public class UserCourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(course);
 
-        when(userCourseRepository.existsByUserAndCourse(user, course))
+        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId))
                 .thenReturn(false);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
@@ -305,10 +294,8 @@ public class UserCourseServiceTest {
 
         verify(userRepository).existsByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(userRepository).findUserByUserId(userId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(userCourseRepository).existsByUserAndCourse(user, course);
-        verify(userCourseRepository, never()).findByUserAndCourse(user, course);
+        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).delete(any(UserCourse.class));
     }
 
@@ -316,6 +303,8 @@ public class UserCourseServiceTest {
     @Test
     void getUnassignedCoursesForUse_shouldReturnCorrectCourseList_whenInputContainsExistingUserId() {
 
+        long userId = 1;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -329,20 +318,22 @@ public class UserCourseServiceTest {
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(userCourseRepository.findAll()).thenReturn(Collections.singletonList(userCourse));
+        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(1);
+        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(userId);
 
-        assertEquals(10, unassignedCourses.size());
-        assertEquals(2, unassignedCourses.get(2).getCourseId());
+        assertEquals(9, unassignedCourses.size());
+        assertEquals(3, unassignedCourses.get(2).getCourseId());
 
         verify(courseRepository).findAll();
-        verify(userCourseRepository).findAll();
+        verify(userCourseRepository).findByUser_UserId(userId);
     }
 
     @Test
     void getUnassignedCoursesForUser_shouldReturnAllCourses_whenInputContainsNotExistingUserId() {
 
+        long userId = 100;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -356,19 +347,21 @@ public class UserCourseServiceTest {
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(userCourseRepository.findAll()).thenReturn(Collections.singletonList(userCourse));
+        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(100);
+        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(userId);
 
-        assertEquals(10, unassignedCourses.size());
+        assertEquals(9, unassignedCourses.size());
 
         verify(courseRepository).findAll();
-        verify(userCourseRepository).findAll();
+        verify(userCourseRepository).findByUser_UserId(userId);
     }
 
     @Test
     void getAssignedCoursesForUser_shouldReturnEmptyCourseList_whenInputContainsExistingUserId() {
 
+        long userId = 1;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -381,17 +374,19 @@ public class UserCourseServiceTest {
 
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
-        when(userCourseRepository.findAll()).thenReturn(Collections.singletonList(userCourse));
+        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> assignedCourses = userCourseService.getAssignedCoursesForUser(1);
+        List<Course> assignedCourses = userCourseService.getAssignedCoursesForUser(userId);
 
-        assertEquals(0, assignedCourses.size());
+        assertEquals(1, assignedCourses.size());
 
-        verify(userCourseRepository).findAll();
+        verify(userCourseRepository).findByUser_UserId(userId);
     }
 
     @Test
     void getAssignedCoursesForUser_shouldReturnCorrectCourseList_whenInputContainsNotExistingUserId() {
+
+        long userId = 100;
 
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
@@ -406,13 +401,13 @@ public class UserCourseServiceTest {
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(userCourseRepository.findAll()).thenReturn(Collections.singletonList(userCourse));
+        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> unassignedCourses = userCourseService.getAssignedCoursesForUser(100);
+        List<Course> unassignedCourses = userCourseService.getAssignedCoursesForUser(userId);
 
-        assertEquals(0, unassignedCourses.size());
+        assertEquals(1, unassignedCourses.size());
 
-        verify(userCourseRepository).findAll();
+        verify(userCourseRepository).findByUser_UserId(userId);
     }
 
 }

@@ -9,6 +9,7 @@ import com.example.universitycms.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +35,13 @@ public class GroupCourseService {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
-        Group group = groupRepository.findGroupByGroupId(groupId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-
-        if(groupCourseRepository.existsByGroupAndCourse(group, course)) {
+        if(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)) {
             throw new IllegalArgumentException("This group is already assigned on this course!");
         }
+
+        Group group = groupRepository.findGroupByGroupId(groupId);
+
+        Course course = courseRepository.findCourseByCourseId(courseId);
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.save(groupCourse);
@@ -55,14 +57,11 @@ public class GroupCourseService {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
-        Group group = groupRepository.findGroupByGroupId(groupId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
-
-        if(!groupCourseRepository.existsByGroupAndCourse(group, course)) {
+        if(!groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)) {
             throw new IllegalArgumentException("This group is not assigned on this course!");
         }
 
-        GroupCourse groupCourse = groupCourseRepository.findByGroupAndCourse(group, course);
+        GroupCourse groupCourse = groupCourseRepository.findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
 
         groupCourseRepository.delete(groupCourse);
     }
@@ -70,9 +69,8 @@ public class GroupCourseService {
     public List<Course> getUnassignedCoursesForGroup(long groupId) {
         List<Course> courseList = courseRepository.findAll();
 
-        List<Course> assignedCourses = groupCourseRepository.findAll()
+        List<Course> assignedCourses = groupCourseRepository.findByGroup_GroupId(groupId)
                 .stream()
-                .filter(groupCourse -> groupCourse.getGroup().getGroupId() == groupId)
                 .map(GroupCourse::getCourse)
                 .collect(Collectors.toList());
 
@@ -84,9 +82,8 @@ public class GroupCourseService {
     }
 
     public List<Course> getAssignedCoursesForGroup(long groupId) {
-        return groupCourseRepository.findAll()
+        return groupCourseRepository.findByGroup_GroupId(groupId)
                 .stream()
-                .filter(groupCourse -> groupCourse.getGroup().getGroupId() == groupId)
                 .map(GroupCourse::getCourse)
                 .collect(Collectors.toList());
     }

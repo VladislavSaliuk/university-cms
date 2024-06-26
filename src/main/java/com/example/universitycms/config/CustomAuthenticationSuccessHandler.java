@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -20,12 +21,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-        if (roles.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/admin/courses");
-        } else if(roles.contains("ROLE_STUFF")) {
-            response.sendRedirect("/stuff/teachers");
-        } else {
-            response.sendRedirect("/home");
+        String role = roles.stream()
+                .filter(r -> r.equals("ROLE_ADMIN") || r.equals("ROLE_STUFF") || r.equals("ROLE_STUDENT") || r.equals("ROLE_TEACHER"))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No suitable role found"));
+
+        switch (role) {
+            case "ROLE_ADMIN" -> response.sendRedirect("/admin/courses");
+            case "ROLE_STUFF" -> response.sendRedirect("/stuff/teachers");
+            default -> response.sendRedirect("/home");
         }
     }
 }

@@ -217,8 +217,7 @@
                     <th>Description</th>
                     <th>Actions</th>
                 </tr>
-                </thead>
-                <tbody>
+                </thead>               <tbody>
                 <tr th:each="course : ${courseList}">
                     <td th:text="${course.getCourseId()}"></td>
                     <td th:text="${course.getCourseName()}"></td>
@@ -234,6 +233,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
     function filterTable() {
         const searchValue = document.getElementById('searchBox').value.toLowerCase();

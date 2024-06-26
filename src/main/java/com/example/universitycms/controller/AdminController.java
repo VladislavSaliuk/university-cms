@@ -2,6 +2,8 @@ package com.example.universitycms.controller;
 
 import com.example.universitycms.model.Course;
 import com.example.universitycms.service.CourseService;
+import com.example.universitycms.service.GroupService;
+import com.example.universitycms.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,18 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-public class CourseController {
+public class AdminController {
 
     @Autowired
     private CourseService courseService;
 
-    private Logger logger = LoggerFactory.getLogger(CourseController.class);
+    @Autowired
+    private GroupService groupService;
+
+    @Autowired
+    private UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping("/admin/courses")
     public String showAdminCoursePage(Model model) {
@@ -30,22 +38,15 @@ public class CourseController {
         return "admin-course-page";
     }
 
-    @GetMapping("/stuff/courses")
-    public String showStuffCoursePage(Model model) {
-        List<Course> courseList = courseService.getAll();
-        model.addAttribute("courseList", courseList);
-        return "stuff-course-page";
-    }
 
-
-    @GetMapping(value = {"/admin/courses/add-course", "/stuff/courses/add-course"})
+    @GetMapping("/admin/courses/add-course")
     public String showAddCourseForm(Model model) {
         model.addAttribute("course", new Course());
         return "add-course-page";
     }
 
-    @PostMapping(value = {"/admin/courses/add-course", "/stuff/courses/add-course"})
-    public String addCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes, Authentication authentication) {
+    @PostMapping("/admin/courses/add-course")
+    public String addCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
 
         try {
             courseService.createCourse(course);
@@ -55,13 +56,7 @@ public class CourseController {
             logger.error(e.getMessage());
         }
 
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-
-        if (roles.contains("ROLE_ADMIN")) {
-            return "redirect:/admin/courses";
-        } else {
-            return "redirect:/stuff/courses";
-        }
+        return "redirect:/admin/courses";
     }
 
     @GetMapping("/admin/courses/edit-course/{courseId}")
@@ -71,15 +66,8 @@ public class CourseController {
         return "admin-edit-course-page";
     }
 
-    @GetMapping("/stuff/courses/edit-course/{courseId}")
-    public String showStuffEditCourseForm(@PathVariable long courseId, Model model) {
-        Course course = courseService.getCourseByCourseId(courseId);
-        model.addAttribute("course", course);
-        return "stuff-edit-course-page";
-    }
-
-    @PostMapping(value = {"/admin/courses/edit-course/{courseId}", "/stuff/courses/edit-course/{courseId}"})
-    public String editCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes, Authentication authentication) {
+    @PostMapping("/admin/courses/edit-course/{courseId}")
+    public String editCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
         try {
             courseService.updateCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course updated successfully!");
@@ -88,14 +76,7 @@ public class CourseController {
             logger.error(e.getMessage());
         }
 
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-
-        if (roles.contains("ROLE_ADMIN")) {
-            return "redirect:/admin/courses";
-        } else {
-            return "redirect:/stuff/courses";
-        }
-
+        return "redirect:/admin/courses";
     }
 
     @GetMapping("/admin/courses/delete-course/{courseId}")

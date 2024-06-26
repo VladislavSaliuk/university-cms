@@ -47,30 +47,26 @@ public class GroupCourseServiceTest {
 
         Group group = new Group();
         group.setGroupId(groupId);
-        group.setGroupName("Test group name");
 
         Course course = new Course();
         course.setCourseId(courseId);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
 
         GroupCourse groupCourse = new GroupCourse(group, course);
 
         when(groupRepository.existsByGroupId(groupId)).thenReturn(true);
         when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
+        when(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)).thenReturn(false);
 
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(group);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
-
-        when(groupCourseRepository.existsByGroupAndCourse(group, course)).thenReturn(false);
 
         groupCourseService.assignCourseOnGroup(groupId, courseId);
 
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
+        verify(groupCourseRepository).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(courseRepository).findCourseByCourseId(courseId);
-        verify(groupCourseRepository).existsByGroupAndCourse(group, course);
         verify(groupCourseRepository).save(groupCourse);
     }
 
@@ -83,12 +79,8 @@ public class GroupCourseServiceTest {
 
         Group group = new Group();
         group.setGroupId(groupId);
-        group.setGroupName("Test group name");
-
         Course course = new Course();
         course.setCourseId(courseId);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
 
         when(groupRepository.existsByGroupId(groupId))
                 .thenReturn(false)
@@ -99,9 +91,9 @@ public class GroupCourseServiceTest {
         assertEquals("Group with this Id doesn't exist!",exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository, never()).existsByCourseId(courseId);
+        verify(groupCourseRepository, never()).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupRepository, never()).findGroupByGroupId(groupId);
         verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(groupCourseRepository, never()).existsByGroupAndCourse(group, course);
         verify(groupCourseRepository, never()).save(any(GroupCourse.class));
     }
 
@@ -113,12 +105,9 @@ public class GroupCourseServiceTest {
 
         Group group = new Group();
         group.setGroupId(groupId);
-        group.setGroupName("Test group name");
 
         Course course = new Course();
         course.setCourseId(courseId);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
 
         when(groupRepository.existsByGroupId(groupId))
                 .thenReturn(true);
@@ -132,9 +121,9 @@ public class GroupCourseServiceTest {
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
+        verify(groupCourseRepository, never()).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupRepository, never()).findGroupByGroupId(groupId);
         verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(groupCourseRepository, never()).existsByGroupAndCourse(group, course);
         verify(groupCourseRepository, never()).save(any(GroupCourse.class));
     }
 
@@ -158,13 +147,7 @@ public class GroupCourseServiceTest {
         when(courseRepository.existsByCourseId(courseId))
                 .thenReturn(true);
 
-        when(groupRepository.findGroupByGroupId(groupId))
-                .thenReturn(group);
-
-        when(courseRepository.findCourseByCourseId(courseId))
-                .thenReturn(course);
-
-        when(groupCourseRepository.existsByGroupAndCourse(group, course))
+        when(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId))
                 .thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
 
@@ -175,9 +158,9 @@ public class GroupCourseServiceTest {
 
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(groupRepository).findGroupByGroupId(groupId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(groupCourseRepository).existsByGroupAndCourse(group, course);
+        verify(groupCourseRepository).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
+        verify(groupRepository,never()).findGroupByGroupId(groupId);
+        verify(courseRepository,never()).findCourseByCourseId(courseId);
         verify(groupCourseRepository, never()).save(any(GroupCourse.class));
     }
 
@@ -200,24 +183,20 @@ public class GroupCourseServiceTest {
         GroupCourse groupCourse = new GroupCourse(group, course);
 
         when(groupRepository.existsByGroupId(groupId)).thenReturn(true);
+
         when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
 
-        when(groupRepository.findGroupByGroupId(groupId)).thenReturn(group);
-        when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
+        when(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)).thenReturn(true);
 
-        when(groupCourseRepository.existsByGroupAndCourse(group, course)).thenReturn(true);
-
-        when(groupCourseRepository.findByGroupAndCourse(group, course))
+        when(groupCourseRepository.findByGroup_GroupIdAndCourse_CourseId(groupId, courseId))
                 .thenReturn(groupCourse);
 
         groupCourseService.removeCourseFromGroup(groupId, courseId);
 
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(groupRepository).findGroupByGroupId(groupId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(groupCourseRepository).existsByGroupAndCourse(group, course);
-        verify(groupCourseRepository).findByGroupAndCourse(group, course);
+        verify(groupCourseRepository).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
+        verify(groupCourseRepository).findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupCourseRepository).delete(groupCourse);
     }
 
@@ -230,12 +209,9 @@ public class GroupCourseServiceTest {
 
         Group group = new Group();
         group.setGroupId(groupId);
-        group.setGroupName("Test group name");
 
         Course course = new Course();
         course.setCourseId(courseId);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
 
         when(groupRepository.existsByGroupId(groupId))
                 .thenReturn(false)
@@ -246,10 +222,8 @@ public class GroupCourseServiceTest {
         assertEquals("Group with this Id doesn't exist!",exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository, never()).existsByCourseId(courseId);
-        verify(groupRepository, never()).findGroupByGroupId(groupId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(groupCourseRepository, never()).existsByGroupAndCourse(group, course);
-        verify(groupCourseRepository, never()).findByGroupAndCourse(group, course);
+        verify(groupCourseRepository, never()).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
+        verify(groupCourseRepository, never()).findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupCourseRepository, never()).delete(any(GroupCourse.class));
     }
 
@@ -280,10 +254,8 @@ public class GroupCourseServiceTest {
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(groupRepository, never()).findGroupByGroupId(groupId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
-        verify(groupCourseRepository, never()).existsByGroupAndCourse(group, course);
-        verify(groupCourseRepository, never()).findByGroupAndCourse(group, course);
+        verify(groupCourseRepository, never()).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
+        verify(groupCourseRepository, never()).findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupCourseRepository, never()).delete(any(GroupCourse.class));
     }
 
@@ -307,13 +279,7 @@ public class GroupCourseServiceTest {
         when(courseRepository.existsByCourseId(courseId))
                 .thenReturn(true);
 
-        when(groupRepository.findGroupByGroupId(groupId))
-                .thenReturn(group);
-
-        when(courseRepository.findCourseByCourseId(courseId))
-                .thenReturn(course);
-
-        when(groupCourseRepository.existsByGroupAndCourse(group, course))
+        when(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId))
                 .thenReturn(false);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
@@ -323,10 +289,8 @@ public class GroupCourseServiceTest {
 
         verify(groupRepository).existsByGroupId(groupId);
         verify(courseRepository).existsByCourseId(courseId);
-        verify(groupRepository).findGroupByGroupId(groupId);
-        verify(courseRepository).findCourseByCourseId(courseId);
-        verify(groupCourseRepository).existsByGroupAndCourse(group, course);
-        verify(groupCourseRepository, never()).findByGroupAndCourse(group, course);
+        verify(groupCourseRepository).existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
+        verify(groupCourseRepository, never()).findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);
         verify(groupCourseRepository, never()).delete(any(GroupCourse.class));
     }
 
@@ -334,6 +298,8 @@ public class GroupCourseServiceTest {
     @Test
     void getUnassignedCoursesForGroup_shouldReturnCorrectCourseList_whenInputContainsExistingGroupId() {
 
+        long groupId = 3;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -347,20 +313,22 @@ public class GroupCourseServiceTest {
         GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+        when(groupCourseRepository.findByGroup_GroupId(groupId)).thenReturn(Collections.singletonList(groupCourse));
 
-        List<Course> unassignedCourses = groupCourseService.getUnassignedCoursesForGroup(1);
+        List<Course> unassignedCourses = groupCourseService.getUnassignedCoursesForGroup(groupId);
 
-        assertEquals(10, unassignedCourses.size());
-        assertEquals(2, unassignedCourses.get(2).getCourseId());
+        assertEquals(9, unassignedCourses.size());
+        assertEquals(3, unassignedCourses.get(2).getCourseId());
 
         verify(courseRepository).findAll();
-        verify(groupCourseRepository).findAll();
+        verify(groupCourseRepository).findByGroup_GroupId(groupId);
     }
 
     @Test
     void getUnassignedCoursesForGroup_shouldReturnAllCourses_whenInputContainsNotExistingGroupId() {
 
+        long groupId = 100;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -374,19 +342,21 @@ public class GroupCourseServiceTest {
         GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+        when(groupCourseRepository.findByGroup_GroupId(groupId)).thenReturn(Collections.singletonList(groupCourse));
 
         List<Course> unassignedCourses = groupCourseService.getUnassignedCoursesForGroup(100);
 
-        assertEquals(10, unassignedCourses.size());
+        assertEquals(9, unassignedCourses.size());
 
         verify(courseRepository).findAll();
-        verify(groupCourseRepository).findAll();
+        verify(groupCourseRepository).findByGroup_GroupId(groupId);
     }
 
     @Test
     void getAssignedCoursesForGroup_shouldReturnEmptyCourseList_whenInputContainsExistingGroupId() {
 
+        long groupId = 3;
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -399,17 +369,19 @@ public class GroupCourseServiceTest {
 
         GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
 
-        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+        when(groupCourseRepository.findByGroup_GroupId(groupId)).thenReturn(Collections.singletonList(groupCourse));
 
-        List<Course> assignedCourses = groupCourseService.getAssignedCoursesForGroup(1);
+        List<Course> assignedCourses = groupCourseService.getAssignedCoursesForGroup(groupId);
 
-        assertEquals(0, assignedCourses.size());
+        assertEquals(1, assignedCourses.size());
 
-        verify(groupCourseRepository).findAll();
+        verify(groupCourseRepository).findByGroup_GroupId(groupId);
     }
 
     @Test
     void getAssignedCoursesForGroup_shouldReturnCorrectCourseList_whenInputContainsNotExistingGroupId() {
+
+        long groupId = 100;
 
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
@@ -424,13 +396,13 @@ public class GroupCourseServiceTest {
         GroupCourse groupCourse = new GroupCourse(group, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
-        when(groupCourseRepository.findAll()).thenReturn(Collections.singletonList(groupCourse));
+        when(groupCourseRepository.findByGroup_GroupId(100)).thenReturn(Collections.singletonList(groupCourse));
 
-        List<Course> unassignedCourses = groupCourseService.getAssignedCoursesForGroup(100);
+        List<Course> unassignedCourses = groupCourseService.getAssignedCoursesForGroup(groupId);
 
-        assertEquals(0, unassignedCourses.size());
+        assertEquals(1, unassignedCourses.size());
 
-        verify(groupCourseRepository).findAll();
+        verify(groupCourseRepository).findByGroup_GroupId(groupId);
     }
 
 

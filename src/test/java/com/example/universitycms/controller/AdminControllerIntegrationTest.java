@@ -21,10 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@Disabled
+
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CourseControllerIntegrationTest {
+public class AdminControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,35 +45,12 @@ public class CourseControllerIntegrationTest {
 
     }
 
-    @Test
-    @WithMockUser(username = "stuff", roles = "STUFF")
-    public void showStuffCoursePage_shouldReturnStuffCoursePageView() throws Exception {
-
-        when(courseService.getAll()).thenReturn(Collections.emptyList());
-
-        mockMvc.perform(get("/stuff/courses"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("stuff-course-page"))
-                .andExpect(model().attributeExists("courseList"));
-
-    }
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void showAddCoursePage_shouldReturnAddCoursePageView_whenUserIsAdmin() throws Exception {
 
         mockMvc.perform(get("/admin/courses/add-course"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("add-course-page"))
-                .andExpect(model().attributeExists("course"));
-
-    }
-
-    @Test
-    @WithMockUser(username = "stuff", roles = "STUFF")
-    public void showAddCoursePage_shouldReturnAddCoursePageView_whenUserIsStuff() throws Exception {
-
-        mockMvc.perform(get("/stuff/courses/add-course"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add-course-page"))
                 .andExpect(model().attributeExists("course"));
@@ -100,26 +77,6 @@ public class CourseControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "stuff", roles = "STUFF")
-    public void showStuffEditCoursePage_shouldReturnStuffCoursePageView() throws Exception {
-
-        Course course = new Course();
-
-        course.setCourseId(1);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Test description");
-
-        when(courseService.getCourseByCourseId(1)).thenReturn(course);
-
-        mockMvc.perform(get("/stuff/courses/edit-course/{courseId}", 1))
-                .andExpect(status().isOk())
-                .andExpect(view().name("stuff-edit-course-page"))
-                .andExpect(model().attributeExists("course"));
-
-    }
-
-
-    @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void createCourse_shouldSaveCourse_whenUserIsAdmin() throws Exception {
 
@@ -129,19 +86,6 @@ public class CourseControllerIntegrationTest {
                         .param("courseName", "Test course name")
                         .param("courseDescription", "Test course description"))
                 .andExpect(redirectedUrl("/admin/courses"));
-
-    }
-
-    @Test
-    @WithMockUser(username = "stuff", roles = "STUFF")
-    public void createCourse_shouldSaveCourse_whenUserIsStuff() throws Exception {
-
-        doNothing().when(courseService).createCourse(any(Course.class));
-
-        mockMvc.perform(post("/stuff/courses/add-course")
-                        .param("courseName", "Test course name")
-                        .param("courseDescription", "Test course description"))
-                .andExpect(redirectedUrl("/stuff/courses"));
 
     }
 
@@ -174,22 +118,6 @@ public class CourseControllerIntegrationTest {
 
         mockMvc.perform(post("/admin/courses/edit-course/" + course.getCourseId()))
                 .andExpect(redirectedUrl("/admin/courses"));
-
-    }
-
-    @Test
-    @WithMockUser(username = "stuff", roles = "STUFF")
-    public void editCourse_shouldUpdateCourse_whenUserIsStuff() throws Exception {
-
-        Course course = new Course();
-        course.setCourseId(1);
-        course.setCourseName("Test course name");
-        course.setCourseDescription("Course description");
-
-        doNothing().when(courseService).updateCourse(course);
-
-        mockMvc.perform(post("/stuff/courses/edit-course/" + course.getCourseId()))
-                .andExpect(redirectedUrl("/stuff/courses"));
 
     }
 
