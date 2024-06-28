@@ -23,7 +23,7 @@ import java.util.stream.LongStream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@Disabled
+
 @SpringBootTest
 public class UserServiceTest {
 

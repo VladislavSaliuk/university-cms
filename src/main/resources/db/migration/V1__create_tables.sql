@@ -14,19 +14,19 @@ create table public.courses (
 
 create table public.groups (
     group_id bigserial not null,
-    group_name varchar(255)
-    not null unique,
+    group_name varchar(255) not null unique,
     primary key (group_id)
 );
 
 create table public.users (
+    group_id bigint,
+    role_id bigint not null,
     user_id bigserial not null,
-    username varchar(255) not null unique,
-    password varchar(255) not null,
     email varchar(255) not null unique,
     first_name varchar(255),
     last_name varchar(255),
-    role_id bigint not null,
+    password varchar(255) not null,
+    username varchar(255) not null unique,
     primary key (user_id)
 );
 
@@ -45,6 +45,10 @@ create table public.users_courses (
 alter table if exists public.users
     add constraint Fk_users_role_id foreign key (role_id)
     references public.roles;
+
+alter table if exists public.users
+    add constraint Fk_users_group_id foreign key (group_id)
+    references public.groups;
 
 alter table if exists public.groups_courses
     add constraint Fk_groups_courses_course_id foreign key (course_id)

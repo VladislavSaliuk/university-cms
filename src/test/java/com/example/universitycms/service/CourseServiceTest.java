@@ -42,7 +42,6 @@ public class CourseServiceTest {
         courseList.add(new Course("Test course name 5", "description"));
     }
 
-
     @Test
     void createCourse_shouldInsertCourseToDatabase_whenCourseNameDoesNotExist() {
         Course course = new Course("Test course" , "Test description");

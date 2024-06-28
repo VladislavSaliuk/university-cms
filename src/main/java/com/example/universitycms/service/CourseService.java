@@ -63,13 +63,13 @@ public class CourseService {
     }
 
 
-    public Course getCourseByCourseId(long subjectId) {
+    public Course getCourseByCourseId(long courseId) {
 
-        if (!courseRepository.existsByCourseId(subjectId)) {
+        if (!courseRepository.existsByCourseId(courseId)) {
             throw new IllegalArgumentException("Course with this Id doesn't exists!");
         }
 
-        return courseRepository.findCourseByCourseId(subjectId);
+        return courseRepository.findCourseByCourseId(courseId);
     }
 
 }

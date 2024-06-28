@@ -30,7 +30,6 @@ INSERT INTO public.roles (role_name) VALUES
 ('STUFF');
 
 
--- INSERTING TEACHERS
 INSERT INTO public.users (username, password, email, first_name, last_name, role_id) VALUES
 ('jdoe', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'jdoe@example.com', 'John', 'Doe', 2),
 ('asmith', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'asmith@example.com', 'Alice', 'Smith', 2),
@@ -44,7 +43,6 @@ INSERT INTO public.users (username, password, email, first_name, last_name, role
 ('ijames', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'ijames@example.com', 'Isabella', 'James', 2);
 
 
--- INSERTING STUDENTS
 INSERT INTO public.users (username, password, email, first_name, last_name, role_id) VALUES
 ('kjones', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'kjones@example.com', 'Kyle', 'Jones', 3),
 ('lmorris', '$2a$12$M9Gq6/YRvOWXh1LZk/Rse./QziNsISOKDi.A986LPMuk7Haz17dCK', 'lmorris@example.com', 'Linda', 'Morris', 3),

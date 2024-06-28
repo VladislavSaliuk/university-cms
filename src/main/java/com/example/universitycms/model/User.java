@@ -50,6 +50,11 @@ public class User implements Serializable {
     )
     private List<Course> courseList;
 
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
+
     public User(String userName, String password, String email, Role role) {
         this.userName = userName;
         this.password = password;

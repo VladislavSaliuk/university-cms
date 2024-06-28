@@ -21,6 +21,28 @@ public class GroupRepositoryTest {
 
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
+    void save_shouldInsertGroupToDataBase() {
+        Group group = new Group("Test group");
+        groupRepository.save(group);
+        assertEquals(11, groupRepository.count());
+    }
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
+    void deleteByGroupId_shouldDeleteGroup_whenGroupIdExists() {
+        long groupId = 5;
+        groupRepository.deleteByGroupId(groupId);
+        assertEquals(9, groupRepository.count());
+    }
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
+    void deleteByGroupId_shouldNotDeleteGroup_whenGroupIdDoesNotExist() {
+        long groupId = 15;
+        groupRepository.deleteByGroupId(groupId);
+        assertEquals(10, groupRepository.count());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
     void findAll_shouldReturnGroupList() {
         List<Group> groupList = groupRepository.findAll();
         assertEquals(10, groupList.size());
@@ -40,6 +62,22 @@ public class GroupRepositoryTest {
         long groupId = 100;
         Group group = groupRepository.findGroupByGroupId(groupId);
         assertNull(group);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
+    void existsByGroupName_shouldReturnTrue_whenGroupExists() {
+        String groupName = "EC-24";
+        boolean isGroupExists = groupRepository.existsByGroupName(groupName);
+        assertTrue(isGroupExists);
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql"})
+    void existsBtGroupName_shouldReturnFalse_whenGroupDoesNotExist() {
+        String groupName = "Test group name";
+        boolean isGroupNameExists = groupRepository.existsByGroupName(groupName);
+        assertFalse(isGroupNameExists);
     }
 
     @Test
