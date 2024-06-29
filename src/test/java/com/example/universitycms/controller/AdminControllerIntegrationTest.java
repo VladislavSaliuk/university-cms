@@ -1,7 +1,9 @@
 package com.example.universitycms.controller;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.Group;
 import com.example.universitycms.service.CourseService;
+import com.example.universitycms.service.GroupService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Collections;
 
@@ -31,6 +34,9 @@ public class AdminControllerIntegrationTest {
 
     @MockBean
     CourseService courseService;
+
+    @MockBean
+    GroupService groupService;
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
@@ -78,7 +84,7 @@ public class AdminControllerIntegrationTest {
 
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
-    public void createCourse_shouldSaveCourse_whenUserIsAdmin() throws Exception {
+    public void addCourse_shouldSaveCourse_whenUserIsAdmin() throws Exception {
 
         doNothing().when(courseService).createCourse(any(Course.class));
 
@@ -120,5 +126,88 @@ public class AdminControllerIntegrationTest {
                 .andExpect(redirectedUrl("/admin/courses"));
 
     }
+
+    @Test
+    @WithMockUser(username = "admin", roles="ADMIN")
+    public void showGroupPage_shouldReturnAdminGroupPageView() throws Exception {
+
+         mockMvc.perform(get("/admin/groups"))
+                 .andExpect(status().isOk())
+                 .andExpect(view().name("admin-group-page"))
+                 .andExpect(model().attributeExists("groupList"));
+
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void showAddGroupPage_shouldReturnAddGroupPageView() throws Exception {
+
+        mockMvc.perform(get("/admin/groups/add-group"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("add-group-page"))
+                .andExpect(model().attributeExists("group"));
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void addGroup_shouldSaveGroup_whenUserIsAdmin() throws Exception {
+
+        doNothing().when(groupService).createGroup(any(Group.class));
+
+        mockMvc.perform(post("/admin/groups/add-group")
+                        .param("groupName", "Test group name"))
+                .andExpect(redirectedUrl("/admin/groups"));
+
+    }
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void showAdminEditGroupPage_shouldReturnAdminEditGroupPageView() throws Exception {
+
+        Group group = new Group();
+
+        group.setGroupId(1);
+        group.setGroupName("Test group name");
+
+        when(groupService.getGroupByGroupId(group.getGroupId())).thenReturn(group);
+
+        mockMvc.perform(get("/admin/groups/edit-group/{groupId}", group.getGroupId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin-edit-group-page"))
+                .andExpect(model().attributeExists("group"));
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void deleteGroup_shouldRemoveGroup() throws Exception {
+
+        Group group = new Group();
+        group.setGroupId(1);
+        group.setGroupName("Test group name");
+
+        doNothing().when(groupService).removeGroupByGroupId(group.getGroupId());
+
+        mockMvc.perform(get("/admin/groups/delete-group/" + group.getGroupId()))
+                .andExpect(redirectedUrl("/admin/groups"));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
+    public void editGroup_shouldUpdateGroup_whenUserIsAdmin() throws Exception {
+
+        Group group = new Group();
+        group.setGroupId(1);
+        group.setGroupName("Test group name");
+
+        doNothing().when(groupService).updateGroup(group);
+
+        mockMvc.perform(post("/admin/groups/edit-group/" + group.getGroupId()))
+                .andExpect(redirectedUrl("/admin/groups"));
+
+    }
+
+
 
 }

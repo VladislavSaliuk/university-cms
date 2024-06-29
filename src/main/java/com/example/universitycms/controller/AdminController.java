@@ -92,4 +92,61 @@ public class AdminController {
         return "redirect:/admin/courses";
     }
 
+    @GetMapping("/admin/groups")
+    public String showAdminGroupPage(Model model) {
+        model.addAttribute("groupList", groupService.getAll());
+        return "admin-group-page";
+    }
+
+    @GetMapping("/admin/groups/add-group")
+    public String showAddGroupPage(Model model) {
+        model.addAttribute("group", new Group());
+        return "add-group-page";
+    }
+
+    @PostMapping("/admin/groups/add-group")
+    public String addGroup(@ModelAttribute Group group, RedirectAttributes redirectAttributes) {
+        try {
+            groupService.createGroup(group);
+            redirectAttributes.addFlashAttribute("successMessage", "Group added successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+
+        return "redirect:/admin/groups";
+    }
+
+    @GetMapping("/admin/groups/edit-group/{groupId}")
+    public String showAdminEditGroupPage(@PathVariable long groupId, Model model) {
+        Group group = groupService.getGroupByGroupId(groupId);
+        model.addAttribute("group", group);
+        return "admin-edit-group-page";
+    }
+
+    @PostMapping("/admin/groups/edit-group/{groupId}")
+    public String editGroup(@ModelAttribute Group group, RedirectAttributes redirectAttributes) {
+        try {
+            groupService.updateGroup(group);
+            redirectAttributes.addFlashAttribute("successMessage", "Group updated successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+
+        return "redirect:/admin/groups";
+    }
+
+    @GetMapping("/admin/groups/delete-group/{groupId}")
+    public String deleteGroup(@PathVariable long groupId, RedirectAttributes redirectAttributes) {
+        try {
+            groupService.removeGroupByGroupId(groupId);
+            redirectAttributes.addFlashAttribute("successMessage", "Group deleted successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return "redirect:/admin/groups";
+    }
+
 }

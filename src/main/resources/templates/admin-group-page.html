@@ -224,12 +224,12 @@
             margin-right: 5px;
         }
 
-        .actions a.assign{
+        .actions a.edit {
             background: #28a745;
             color: #fff;
         }
 
-        .actions a.assign:hover {
+        .actions a.edit:hover {
             background: #218838;
         }
 
@@ -253,6 +253,58 @@
 
         .modal-footer button:hover {
             background: #218838;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            margin-bottom: 10px;
+        }
+
+        .modal-header {
+            font-size: 18px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .btn-modal {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-modal.yes {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-modal.no {
+            background-color: #f44336;
+            color: white;
         }
 
         .alert {
@@ -281,10 +333,7 @@
             color: black;
         }
 
-
     </style>
-
-
 </head>
 <body>
 <div class="slidebar">
@@ -297,25 +346,13 @@
             </a>
         </li>
         <li>
-            <a href="/stuff/teachers">
-                <i class="fa-solid fa-chalkboard-user"></i>
-                <span>Teachers</span>
-            </a>
-        </li>
-        <li>
-            <a href="/stuff/students">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <span>Students</span>
-            </a>
-        </li>
-        <li>
-            <a href="/stuff/courses">
-                <i class="fa-solid fa-book"></i>
+            <a href="/admin/courses">
+                <i class="fas fa-book"></i>
                 <span>Courses</span>
             </a>
         </li>
         <li class="active">
-            <a href="/stuff/groups">
+            <a href="/admin/groups">
                 <i class="fa-solid fa-user-group"></i>
                 <span>Groups</span>
             </a>
@@ -332,13 +369,13 @@
 <div class="main--content">
     <div class="header--wrapper">
         <div class="header--title">
-            <span>Stuff</span>
+            <span>Admin</span>
             <h2>Dashboard</h2>
         </div>
         <div class="user--info">
             <div class="search--box">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" placeholder="Search" id="searchBox" onkeyup="filterTable()"/>
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search" id="searchBox" onkeyup="filterTable()">
             </div>
         </div>
     </div>
@@ -354,22 +391,25 @@
 
     <div class="tabular--wrapper">
         <h3 class="main--title">Groups</h3>
+        <a th:href="@{/admin/groups/add-group}" class="create-group-btn">Create Group</a>
         <div class="table-container">
             <table id="groupTable">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Group</th>
+                    <th>Group name</th>
+                    <th>User Count</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each=" group : ${groupList}">
-                    <td th:text="${group.getGroupId()}"></td>
-                    <td th:text="${group.getGroupName()}"></td>
+                <tr th:each="group : ${groupList}">
+                    <td th:text="${group.groupId}"></td>
+                    <td th:text="${group.groupName}"></td>
+                    <td th:text="${group.getUserSet().size()}"></td>
                     <td class="actions">
-                        <a th:href="@{/stuff/groups/assign-course-on-group/{groupId}(groupId=${group.groupId})}" class="btn assign">Assign course</a>
-                        <a th:href="@{/stuff/groups/remove-course-from-group/{groupId}(groupId=${group.groupId})}" class="btn delete">Remove course</a>
+                        <a th:href="@{/admin/groups/edit-group/{groupId}(groupId=${group.getGroupId()})}" class="btn edit">Edit</a>
+                        <a href="#" class="btn delete" th:onclick="'showModal(' + ${group.groupId} + ')'">Delete</a>
                     </td>
                 </tr>
                 </tbody>
@@ -378,7 +418,39 @@
     </div>
 </div>
 
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            Are you sure?
+        </div>
+        <div class="modal-body">
+            Do you really want to delete this group?
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal yes" onclick="confirmDelete()">Yes</button>
+            <button class="btn-modal no" onclick="closeModal()">No</button>
+        </div>
+    </div>
+</div>
+
 <script>
+
+    let courseIdToDelete = null;
+
+    function showModal(courseId) {
+        courseIdToDelete = courseId;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    function confirmDelete() {
+        if (courseIdToDelete) {
+            window.location.href = `/admin/groups/delete-group/${courseIdToDelete}`;
+        }
+    }
     function filterTable() {
         const searchValue = document.getElementById('searchBox').value.toLowerCase();
         const table = document.getElementById('groupTable');
@@ -400,7 +472,6 @@
     }
 
 </script>
-
 
 </body>
 </html>
