@@ -168,7 +168,7 @@ public class StuffController {
     }
 
     @GetMapping("/stuff/students/assign-student-on-course/{userId}" )
-    public String showAssignStudentOnCoursePage(@PathVariable long userId, Model model) {
+    public String showStuffAssignStudentOnCoursePage(@PathVariable long userId, Model model) {
         model.addAttribute("courseList", userCourseService.getUnassignedCoursesForUser(userId));
         return "stuff-assign-student-on-course-page";
     }
@@ -218,6 +218,86 @@ public class StuffController {
         }
 
         return "redirect:/stuff/students";
+    }
+
+    @GetMapping("/stuff/groups/assign-user-on-group/{groupId}")
+    public String showAssignUserOnGroupPage(@PathVariable long groupId, Model model) {
+        model.addAttribute("userList", groupService.getUnassignedUsersToGroup(groupId));
+        return "stuff-assign-user-on-group-page";
+    }
+
+    @GetMapping("/stuff/groups/remove-user-from-group/{groupId}")
+    public String showRemoveUserFromGroupPage(@PathVariable long groupId, Model model) {
+        model.addAttribute("userList", groupService.getAssignedUsersToGroup(groupId));
+        return "stuff-remove-user-from-group-page";
+    }
+
+    @PostMapping("/stuff/groups/assign-user-on-group/{groupId}/{userId}")
+    public String assignUserOnGroup(@PathVariable long groupId, @PathVariable long userId, RedirectAttributes redirectAttributes) {
+
+        try {
+            groupService.assignUserToGroup(groupId, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "User assigned successfully!");
+        } catch (IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+            logger.error(exception.getMessage());
+        }
+
+        return "redirect:/stuff/groups";
+
+    }
+
+    @PostMapping("/stuff/groups/remove-user-from-group/{groupId}/{userId}")
+    public String removeUserFromGroup(@PathVariable long groupId, @PathVariable long userId, RedirectAttributes redirectAttributes) {
+
+        try {
+            groupService.removeUserFromGroup(groupId, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "User removed successfully!");
+        } catch (IllegalArgumentException exception) {
+            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+            logger.error(exception.getMessage());
+        }
+
+        return "redirect:/stuff/groups";
+    }
+
+    @GetMapping("/stuff/groups/add-group")
+    public String showAddGroupPage(Model model) {
+        model.addAttribute("group", new Group());
+        return "add-group-page";
+    }
+
+    @PostMapping("/stuff/groups/add-group")
+    public String addGroup(@ModelAttribute Group group, RedirectAttributes redirectAttributes) {
+        try {
+            groupService.createGroup(group);
+            redirectAttributes.addFlashAttribute("successMessage", "Group added successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+
+        return "redirect:/stuff/groups";
+    }
+
+    @GetMapping("/stuff/groups/edit-group/{groupId}")
+    public String showStuffEditGroupPage(@PathVariable long groupId, Model model) {
+        Group group = groupService.getGroupByGroupId(groupId);
+        model.addAttribute("group", group);
+        return "stuff-edit-group-page";
+    }
+
+    @PostMapping("/stuff/groups/edit-group/{groupId}")
+    public String editGroup(@ModelAttribute Group group, RedirectAttributes redirectAttributes) {
+        try {
+            groupService.updateGroup(group);
+            redirectAttributes.addFlashAttribute("successMessage", "Group updated successfully!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+
+        return "redirect:/stuff/groups";
     }
 
 }

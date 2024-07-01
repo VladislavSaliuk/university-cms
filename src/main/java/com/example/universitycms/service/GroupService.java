@@ -60,7 +60,7 @@ public class GroupService {
             throw new IllegalArgumentException("Group must contains name!");
         }
 
-        if (!existingGroup.getGroupName().equals(group.getGroupName()) && groupRepository.existsByGroupName(group.getGroupName())) {
+        if (groupRepository.existsByGroupName(group.getGroupName())) {
             throw new IllegalArgumentException("Group with this name already exists!");
         }
 
@@ -78,6 +78,7 @@ public class GroupService {
         return groupRepository.findGroupByGroupId(groupId);
     }
 
+    @Transactional
     public void assignUserToGroup(long groupId, long userId) {
 
         Group group = groupRepository.findGroupByGroupId(groupId);
@@ -97,8 +98,11 @@ public class GroupService {
         }
 
         group.getUserSet().add(user);
+        user.setGroup(group);
+        groupRepository.save(group);
     }
 
+    @Transactional
     public void removeUserFromGroup(long groupId, long userId) {
 
         Group group = groupRepository.findGroupByGroupId(groupId);
@@ -117,12 +121,15 @@ public class GroupService {
         }
 
         group.getUserSet().remove(user);
+        user.setGroup(null);
+        groupRepository.save(group);
     }
 
     public List<User> getUnassignedUsersToGroup(long groupId) {
         return userRepository.findAll()
                 .stream()
-                .filter(user -> user.getGroup().getGroupId() != groupId)
+                .filter(user -> user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3)
+                .filter(user -> user.getGroup() == null || user.getGroup().getGroupId() != (groupId))
                 .collect(Collectors.toList());
 
     }
@@ -130,7 +137,8 @@ public class GroupService {
     public List<User> getAssignedUsersToGroup(long groupId) {
         return userRepository.findAll()
                 .stream()
-                .filter(user -> user.getGroup().getGroupId() == groupId)
+                .filter(user -> user.getGroup() != null)
+                .filter(user -> user.getGroup().getGroupId() == (groupId))
                 .collect(Collectors.toList());
 
     }

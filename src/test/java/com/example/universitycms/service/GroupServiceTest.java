@@ -1,10 +1,7 @@
 package com.example.universitycms.service;
 
 
-import com.example.universitycms.model.Course;
-import com.example.universitycms.model.Group;
-import com.example.universitycms.model.GroupCourseId;
-import com.example.universitycms.model.User;
+import com.example.universitycms.model.*;
 import com.example.universitycms.repository.GroupRepository;
 import com.example.universitycms.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -111,13 +108,16 @@ public class GroupServiceTest {
         updatedGroup.setGroupId(groupId);
         updatedGroup.setGroupName("Test group name");
 
-        when(groupRepository.findGroupByGroupId(groupId)).thenReturn(existingGroup);
-        when(groupRepository.existsByGroupName(updatedGroup.getGroupName())).thenReturn(false);
+        when(groupRepository.findGroupByGroupId(groupId))
+                .thenReturn(existingGroup);
+
+        when(groupRepository.existsByGroupName(existingGroup.getGroupName()))
+                .thenReturn(true);
 
         groupService.updateGroup(updatedGroup);
 
         verify(groupRepository).findGroupByGroupId(groupId);
-        verify(groupRepository).existsByGroupName(updatedGroup.getGroupName());
+        verify(groupRepository).existsByGroupName(existingGroup.getGroupName());
         verify(groupRepository).save(existingGroup);
     }
 
@@ -245,6 +245,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 1);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository).save(group);
     }
 
     @Test
@@ -271,6 +272,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 0);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
     }
 
     @Test
@@ -297,6 +299,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 0);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
     }
 
     @Test
@@ -325,6 +328,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 1);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
 
     }
 
@@ -353,6 +357,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 0);
         verify(userRepository).findUserByUserId(userId);
         verify(groupRepository).findGroupByGroupId(groupId);
+        verify(groupRepository).save(group);
     }
 
     @Test
@@ -381,6 +386,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 1);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
 
     }
 
@@ -410,6 +416,7 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 1);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
     }
 
     @Test
@@ -436,11 +443,16 @@ public class GroupServiceTest {
         assertEquals(group.getUserSet().size(), 0);
         verify(groupRepository).findGroupByGroupId(groupId);
         verify(userRepository).findUserByUserId(userId);
+        verify(groupRepository, never()).save(group);
 
     }
 
     @Test
     void getUnassignedUsersToGroup_shouldReturnUserList_whenInputContainsExistingGroupId() {
+
+        Role role = new Role();
+        role.setRoleId(2);
+        role.setRoleName("Test role");
 
         long groupId = 1;
 
@@ -451,6 +463,7 @@ public class GroupServiceTest {
                 .mapToObj(userId -> {
                     User user = new User();
                     user.setUserId(userId);
+                    user.setRole(role);
                     user.setGroup(group);
                     return user;
                 })
@@ -468,6 +481,10 @@ public class GroupServiceTest {
     @Test
     void getUnassignedUsersToGroup_shouldReturnEmptyList_whenInputContainsNotExistingGroupId() {
 
+        Role role = new Role();
+        role.setRoleId(2);
+        role.setRoleName("Test role");
+
         long groupId = 1;
 
         Group group = new Group();
@@ -477,6 +494,7 @@ public class GroupServiceTest {
                 .mapToObj(userId -> {
                     User user = new User();
                     user.setUserId(userId);
+                    user.setRole(role);
                     user.setGroup(group);
                     return user;
                 })
@@ -494,6 +512,10 @@ public class GroupServiceTest {
     @Test
     void getAssignedUsersToGroup_shouldReturnUserList_whenInputContainsExistingGroupId() {
 
+        Role role = new Role();
+        role.setRoleId(2);
+        role.setRoleName("Test role");
+
         long groupId = 1;
 
         Group group = new Group();
@@ -503,6 +525,7 @@ public class GroupServiceTest {
                 .mapToObj(userId -> {
                     User user = new User();
                     user.setUserId(userId);
+                    user.setRole(role);
                     user.setGroup(group);
                     return user;
                 })
@@ -520,6 +543,10 @@ public class GroupServiceTest {
     @Test
     void getAssignedUsersToGroup_shouldReturnEmptyList_whenInputContainsNotExistingGroupId() {
 
+        Role role = new Role();
+        role.setRoleId(2);
+        role.setRoleName("Test role");
+
         long groupId = 1;
 
         Group group = new Group();
@@ -529,6 +556,7 @@ public class GroupServiceTest {
                 .mapToObj(userId -> {
                     User user = new User();
                     user.setUserId(userId);
+                    user.setRole(role);
                     user.setGroup(group);
                     return user;
                 })

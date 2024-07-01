@@ -354,22 +354,36 @@
 
     <div class="tabular--wrapper">
         <h3 class="main--title">Groups</h3>
+        <a th:href="@{/stuff/groups/add-group}" class="create-group-btn">Create Group</a>
         <div class="table-container">
             <table id="groupTable">
                 <thead>
                 <tr>
                     <th>Id</th>
                     <th>Group</th>
-                    <th>Actions</th>
+                    <th>User Count</th>
+                    <th>User Actions</th>
+                    <th>Course Count</th>
+                    <th>Course Actions</th>
+                    <th>Edit</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each=" group : ${groupList}">
                     <td th:text="${group.getGroupId()}"></td>
                     <td th:text="${group.getGroupName()}"></td>
+                    <td th:text="${group.getUserSet().size()}"></td>
+                    <td class="actions">
+                        <a th:href="@{/stuff/groups/assign-user-on-group/{groupId}(groupId=${group.groupId})}" class="btn assign">Assign user</a>
+                        <a th:href="@{/stuff/groups/remove-user-from-group/{groupId}(groupId=${group.groupId})}" class="btn delete">Remove user</a>
+                    </td>
+                    <td th:text="${group.getCourseList().size()}"></td>
                     <td class="actions">
                         <a th:href="@{/stuff/groups/assign-course-on-group/{groupId}(groupId=${group.groupId})}" class="btn assign">Assign course</a>
                         <a th:href="@{/stuff/groups/remove-course-from-group/{groupId}(groupId=${group.groupId})}" class="btn delete">Remove course</a>
+                    </td>
+                    <td class="actions">
+                        <a th:href="@{/stuff/groups/edit-group/{groupId}(groupId=${group.groupId})}" class="btn assign">Edit</a>
                     </td>
                 </tr>
                 </tbody>

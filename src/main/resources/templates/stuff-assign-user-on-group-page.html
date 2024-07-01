@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assign Course</title>
+    <title>Assign user</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
@@ -197,7 +197,7 @@
 <div class="main--content">
     <div class="header--wrapper">
         <div class="header--title">
-            <h2>Course manager</h2>
+            <h2>User manager</h2>
         </div>
         <div class="user--info">
             <div class="search--box">
@@ -207,24 +207,30 @@
         </div>
     </div>
     <div class="tabular--wrapper">
-        <h3 class="main--title">Courses</h3>
+        <h3 class="main--title">Users</h3>
         <div class="table-container">
-            <table id="courseTable">
+            <table id="userTable">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Course Name</th>
-                    <th>Description</th>
-                    <th>Actions</th>
+                    <th>Username</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>E-mail</th>
+                    <th>Role</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="course : ${courseList}">
-                    <td th:text="${course.getCourseId()}"></td>
-                    <td th:text="${course.getCourseName()}"></td>
-                    <td th:text="${course.getCourseDescription()}"></td>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.getUserId()}"></td>
+                    <td th:text="${user.getUserName()}"></td>
+                    <td th:text="${user.getFirstName()}"></td>
+                    <td th:text="${user.getLastName()}"></td>
+                    <td th:text="${user.getEmail()}"></td>
+                    <td th:text="${user.getRole().getRoleName()}"></td>
                     <td class="actions">
-                        <form th:action="@{/stuff/students/assign-student-on-course/{userId}/{courseId}(userId=${userId}, courseId=${course.getCourseId()})}" method="post">
+                        <form th:action="@{/stuff/groups/assign-user-on-group/{groupId}/{userId}(groupId=${groupId}, userId=${user.getUserId()})}" method="post">
                             <button type="submit" class="btn assign">Assign</button>
                         </form>
                     </td>
@@ -237,7 +243,7 @@
 <script>
     function filterTable() {
         const searchValue = document.getElementById('searchBox').value.toLowerCase();
-        const table = document.getElementById('courseTable');
+        const table = document.getElementById('userTable');
         const rows = table.getElementsByTagName('tr');
 
         for (let i = 1; i < rows.length; i++) {
