@@ -139,30 +139,6 @@ public class UserRepositoryTest {
         User user = userRepository.findUserByUserName(null);
         assertNull(user);
     }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByEmail_shouldReturnUser_whenInputContainsExistingEmail() {
-        String expectedEmail = "alice.jones@example.com";
-        User user = userRepository.findUserByEmail(expectedEmail);
-        assertEquals(expectedEmail, user.getEmail());
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByEmail_shouldReturnNull_whenInputContainsNotExistingEmail() {
-        String email = "Test E-mail";
-        User user = userRepository.findUserByEmail(email);
-        assertNull(user);
-    }
-
-    @Test
-    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
-    void findUserByEmail_shouldReturnNull_whenInputContainsNull() {
-        User user = userRepository.findUserByEmail(null);
-        assertNull(user);
-    }
-
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_roles.sql", "/sql/insert_users.sql"})
     void existsByUserId_shouldReturnTrue_whenInputContainsExistingUserId() {

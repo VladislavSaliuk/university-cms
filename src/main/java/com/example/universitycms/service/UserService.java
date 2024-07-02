@@ -66,27 +66,6 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User getUserByUserId(long userId) {
-
-        if(!userRepository.existsByUserId(userId)) {
-            throw new IllegalArgumentException("This user Id doesn't exist!");
-        }
-
-        return userRepository.findUserByUserId(userId);
-    }
-
-    public User getUserByEmail(String email) {
-
-        if(email == null) {
-            throw new IllegalArgumentException("Input contains null!");
-        }
-
-        if(!userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("This email doesn't exist!");
-        }
-
-        return userRepository.findUserByEmail(email);
-    }
 
 
 }
