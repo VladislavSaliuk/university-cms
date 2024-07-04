@@ -1,6 +1,7 @@
 package com.example.universitycms.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.io.Serializable;
 @Setter
 @Table(name = "courses")
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Course implements Serializable {
 
     @Id

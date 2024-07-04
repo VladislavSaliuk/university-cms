@@ -1,5 +1,7 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.controller.StudentTeacherController;
+import com.example.universitycms.model.Course;
 import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -66,6 +69,48 @@ public class UserService implements UserDetailsService {
         }
     }
 
+
+    public User getUserByUsername(String username) {
+
+        User user = userRepository.findUserByUserName(username);
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this name doesn't exist!");
+        }
+
+        return user;
+    }
+
+    public List<User> getTeachersByUserId(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this Id doesn't exist!");
+        }
+
+        if(user.getRole().getRoleId() != 3) {
+            throw new IllegalArgumentException("Your user is not a student!");
+        }
+
+        return user.getGroup().getUserSet()
+                .stream().filter(teacher -> teacher.getRole().getRoleId() == 2)
+                .collect(Collectors.toList());
+    }
+
+    public List<Course> getAllCoursesByUserId(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this Id doesn't exist!");
+        }
+
+        return Stream.concat(user.getCourseList().stream(), user.getGroup().getCourseList().stream())
+                .sorted((c1, c2) -> c1.getCourseName().compareTo(c2.getCourseName()))
+                .collect(Collectors.toList());
+
+    }
 
 
 }

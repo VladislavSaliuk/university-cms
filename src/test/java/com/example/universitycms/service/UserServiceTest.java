@@ -1,10 +1,13 @@
 package com.example.universitycms.service;
 
 
+import com.example.universitycms.model.Course;
+import com.example.universitycms.model.Group;
 import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
 import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
+import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -15,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,5 +142,61 @@ public class UserServiceTest {
         verify(userRepository).existsByRole_RoleId(role.getRoleId());
         verify(userRepository, never()).findAll();
     }
+
+    @Test
+    void getAllCoursesByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
+
+        List<User> userList = LongStream.range(0, 10)
+                .mapToObj(userId -> {
+                    User user = new User();
+                    user.setUserId(userId);
+                    Group group = new Group();
+                    group.setCourseList(Collections.emptyList());
+                    user.setGroup(group);
+                    user.setCourseList(List.of(new Course()));
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        long userId = 4;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(userList.get((int)userId));
+
+        List<Course> courseList = userService.getAllCoursesByUserId(userId);
+
+        assertTrue(courseList.equals(List.of(new Course())));
+        verify(userRepository).findUserByUserId(userId);
+    }
+
+    @Test
+    void getAllCoursesByUserId_shouldThrowException_whenInputContainsNotExistingUserId() {
+
+        List<User> userList = LongStream.range(0, 10)
+                .mapToObj(userId -> {
+                    User user = new User();
+                    user.setUserId(userId);
+                    Group group = new Group();
+                    group.setCourseList(Collections.emptyList());
+                    user.setGroup(group);
+                    user.setCourseList(List.of(new Course()));
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        long userId = 100;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesByUserId(userId));
+
+        assertEquals(exception.getMessage(), "User with this Id doesn't exist!");
+        verify(userRepository).findUserByUserId(userId);
+    }
+
+
+
 
 }

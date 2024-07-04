@@ -191,7 +191,6 @@ public class CourseServiceTest {
         assertEquals(courseList, actualCourseList);
         verify(courseRepository).findAll();
     }
-
     @Test
     void getCourseByCourseId_shouldReturnCourse_whenInputContainsCourseWithExistingName() {
         List<Course> courseList = LongStream.range(0, 10)
