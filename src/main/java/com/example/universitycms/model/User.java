@@ -71,6 +71,8 @@ public class User implements Serializable {
         this.role = role;
     }
 
-
+    public boolean isUserInGroup(long groupId) {
+        return group != null && group.getGroupId() == groupId;
+    }
 
 }

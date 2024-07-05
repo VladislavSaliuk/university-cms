@@ -22,6 +22,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    private final int TEACHER_ROLE_ID = 2;
+    private final int STUDENT_ROLE_ID = 3;
+
     public void registerUser(User user) {
 
         if(user == null) {
@@ -89,12 +92,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User with this Id doesn't exist!");
         }
 
-        if(user.getRole().getRoleId() != 3) {
+        if(user.getRole().getRoleId() != STUDENT_ROLE_ID) {
             throw new IllegalArgumentException("Your user is not a student!");
         }
 
         return user.getGroup().getUserSet()
-                .stream().filter(teacher -> teacher.getRole().getRoleId() == 2)
+                .stream().filter(teacher -> teacher.getRole().getRoleId() == TEACHER_ROLE_ID)
                 .collect(Collectors.toList());
     }
 

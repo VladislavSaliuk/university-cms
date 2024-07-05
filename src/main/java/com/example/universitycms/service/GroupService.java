@@ -137,10 +137,10 @@ public class GroupService {
     public List<User> getAssignedUsersToGroup(long groupId) {
         return userRepository.findAll()
                 .stream()
-                .filter(user -> user.getGroup() != null)
-                .filter(user -> user.getGroup().getGroupId() == (groupId))
+                .filter(user -> user.isUserInGroup(groupId))
                 .collect(Collectors.toList());
 
     }
+
 
 }
