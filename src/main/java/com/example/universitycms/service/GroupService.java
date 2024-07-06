@@ -125,13 +125,13 @@ public class GroupService {
         groupRepository.save(group);
     }
 
+
+
     public List<User> getUnassignedUsersToGroup(long groupId) {
         return userRepository.findAll()
                 .stream()
-                .filter(user -> user.getRole().getRoleId() == 2 || user.getRole().getRoleId() == 3)
-                .filter(user -> user.getGroup() == null || user.getGroup().getGroupId() != (groupId))
+                .filter(user -> user.isUnassignedToGroup(groupId))
                 .collect(Collectors.toList());
-
     }
 
     public List<User> getAssignedUsersToGroup(long groupId) {

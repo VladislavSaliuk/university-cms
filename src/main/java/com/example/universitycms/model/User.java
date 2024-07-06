@@ -18,6 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 public class User implements Serializable {
 
+    private int ROLE_TEACHER_ID = 2;
+
+    private int ROLE_STUDENT_ID = 3;
+
     @Id
     @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,6 +77,11 @@ public class User implements Serializable {
 
     public boolean isUserInGroup(long groupId) {
         return group != null && group.getGroupId() == groupId;
+    }
+
+    public boolean isUnassignedToGroup(long groupId) {
+        return (this.getRole().getRoleId() == ROLE_TEACHER_ID || this.getRole().getRoleId() == ROLE_STUDENT_ID)
+                && (this.getGroup() == null || this.getGroup().getGroupId() != groupId);
     }
 
 }
