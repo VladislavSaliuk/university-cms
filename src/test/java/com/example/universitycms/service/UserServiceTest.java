@@ -6,16 +6,11 @@ import com.example.universitycms.model.Group;
 import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
-import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -144,7 +139,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void getAllCoursesByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
+    void getAllCoursesForStudentByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
 
         List<User> userList = LongStream.range(0, 10)
                 .mapToObj(userId -> {
@@ -163,14 +158,36 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(userList.get((int)userId));
 
-        List<Course> courseList = userService.getAllCoursesByUserId(userId);
+        List<Course> courseList = userService.getAllCoursesForStudentByUserId(userId);
 
-        assertTrue(courseList.equals(List.of(new Course())));
+        assertTrue(courseList.equals(Collections.emptyList()));
         verify(userRepository).findUserByUserId(userId);
     }
 
     @Test
-    void getAllCoursesByUserId_shouldThrowException_whenInputContainsNotExistingUserId() {
+    void getAllCoursesForStudentByUserId_shouldReturnEmptyCourseList_whenInputContainsUserWithOutGroup() {
+
+        List<User> userList = LongStream.range(0, 10)
+                .mapToObj(userId -> {
+                    User user = new User();
+                    user.setUserId(userId);
+                    user.setCourseList(List.of(new Course()));
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        long userId = 4;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(userList.get((int)userId));
+
+        List<Course> courseList = userService.getAllCoursesForStudentByUserId(userId);
+
+        assertTrue(courseList.equals(Collections.emptyList()));
+        verify(userRepository).findUserByUserId(userId);
+    }
+    @Test
+    void getAllCoursesForStudentByUserId_shouldThrowException_whenInputContainsNotExistingUserId() {
 
         List<User> userList = LongStream.range(0, 10)
                 .mapToObj(userId -> {
@@ -190,13 +207,58 @@ public class UserServiceTest {
                 .thenReturn(null);
 
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesByUserId(userId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesForStudentByUserId(userId));
 
         assertEquals(exception.getMessage(), "User with this Id doesn't exist!");
         verify(userRepository).findUserByUserId(userId);
     }
 
 
+    @Test
+    void getAllCoursesForTeacherByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
+
+        List<User> userList = LongStream.range(0, 10)
+                .mapToObj(userId -> {
+                    User user = new User();
+                    user.setUserId(userId);
+                    user.setCourseList(List.of(new Course()));
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        long userId = 4;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(userList.get((int)userId));
+
+        List<Course> courseList = userService.getAllCoursesForTeacherByUserId(userId);
+
+        assertTrue(courseList.equals(List.of(new Course())));
+        verify(userRepository).findUserByUserId(userId);
+    }
+    @Test
+    void getAllCoursesForTeacherByUserId_shouldThrowException_whenInputContainsNotExistingUserId() {
+
+        List<User> userList = LongStream.range(0, 10)
+                .mapToObj(userId -> {
+                    User user = new User();
+                    user.setUserId(userId);
+                    user.setCourseList(List.of(new Course()));
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        long userId = 100;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesForTeacherByUserId(userId));
+
+        assertEquals(exception.getMessage(), "User with this Id doesn't exist!");
+        verify(userRepository).findUserByUserId(userId);
+    }
 
 
 }

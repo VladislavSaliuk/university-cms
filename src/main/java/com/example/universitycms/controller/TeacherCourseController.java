@@ -1,5 +1,6 @@
 package com.example.universitycms.controller;
 
+
 import com.example.universitycms.model.Course;
 import com.example.universitycms.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -11,19 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @Controller
-public class StudentCourseController {
+public class TeacherCourseController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/student/courses")
-    public String showStudentCoursePage(HttpSession session, Model model) {
+    @GetMapping("/teacher/courses")
+    public String showTeacherCoursePage(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-        List<Course> courseList = userService.getAllCoursesForStudentByUserId(userId);
+        List<Course> courseList = userService.getAllCoursesForTeacherByUserId(userId);
         model.addAttribute("courseList", courseList);
-        return "student-course-page";
+        return "teacher-course-page";
     }
-
 
 
 }

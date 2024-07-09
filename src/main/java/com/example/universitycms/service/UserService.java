@@ -1,17 +1,15 @@
 package com.example.universitycms.service;
 
-import com.example.universitycms.controller.StudentTeacherController;
 import com.example.universitycms.model.Course;
-import com.example.universitycms.model.Role;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,18 +99,32 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public List<Course> getAllCoursesByUserId(long userId) {
+    public List<Course> getAllCoursesForStudentByUserId(long userId) {
 
         User user = userRepository.findUserByUserId(userId);
+
 
         if(user == null) {
             throw new IllegalArgumentException("User with this Id doesn't exist!");
         }
 
-        return Stream.concat(user.getCourseList().stream(), user.getGroup().getCourseList().stream())
-                .sorted((c1, c2) -> c1.getCourseName().compareTo(c2.getCourseName()))
-                .collect(Collectors.toList());
+        if(user.getGroup() == null) {
+            return new LinkedList<>();
+        }
 
+        return user.getGroup().getCourseList();
+    }
+
+    public List<Course> getAllCoursesForTeacherByUserId(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this Id doesn't exist!");
+        }
+
+        return user.getCourseList();
     }
 
 

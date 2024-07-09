@@ -18,8 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 public class User implements Serializable {
 
+    @Transient
     private int ROLE_TEACHER_ID = 2;
 
+    @Transient
     private int ROLE_STUDENT_ID = 3;
 
     @Id
