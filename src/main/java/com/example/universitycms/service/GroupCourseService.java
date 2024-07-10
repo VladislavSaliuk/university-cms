@@ -27,21 +27,21 @@ public class GroupCourseService {
 
     public void assignCourseOnGroup(long groupId, long courseId) {
 
-        if(!groupRepository.existsByGroupId(groupId)) {
+        Group group = groupRepository.findGroupByGroupId(groupId);
+
+        Course course = courseRepository.findCourseByCourseId(courseId);
+
+        if(group == null) {
             throw new IllegalArgumentException("Group with this Id doesn't exist!");
         }
 
-        if(!courseRepository.existsByCourseId(courseId)) {
+        if(course == null) {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
         if(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)) {
             throw new IllegalArgumentException("This group is already assigned on this course!");
         }
-
-        Group group = groupRepository.findGroupByGroupId(groupId);
-
-        Course course = courseRepository.findCourseByCourseId(courseId);
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.save(groupCourse);
@@ -65,6 +65,7 @@ public class GroupCourseService {
 
         groupCourseRepository.delete(groupCourse);
     }
+
 
     public List<Course> getUnassignedCoursesForGroup(long groupId) {
         List<Course> courseList = courseRepository.findAll();

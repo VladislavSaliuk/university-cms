@@ -25,20 +25,20 @@ public class UserCourseService {
     private UserCourseRepository userCourseRepository;
     public void assignUserOnCourse(long userId, long courseId) {
 
-        if(!userRepository.existsByUserId(userId)) {
+        User user = userRepository.findUserByUserId(userId);
+        Course course = courseRepository.findCourseByCourseId(courseId);
+
+        if(user == null) {
             throw new IllegalArgumentException("User with this Id doesn't exist!");
         }
 
-        if(!courseRepository.existsByCourseId(courseId)) {
+        if(course == null) {
             throw new IllegalArgumentException("Course with this Id doesn't exist!");
         }
 
         if(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)) {
             throw new IllegalArgumentException("This user is already assigned on this course!");
         }
-
-        User user = userRepository.findUserByUserId(userId);
-        Course course = courseRepository.findCourseByCourseId(courseId);
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.save(userCourse);

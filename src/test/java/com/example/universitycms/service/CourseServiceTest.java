@@ -202,23 +202,22 @@ public class CourseServiceTest {
                 .collect(Collectors.toList());
         long courseId = 1;
         Course expectedCourse = courseList.get(0);
-        when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(expectedCourse);
         Course actualCourse = courseService.getCourseByCourseId(courseId);
         assertEquals(expectedCourse, actualCourse);
-        verify(courseRepository).existsByCourseId(courseId);
         verify(courseRepository).findCourseByCourseId(courseId);
     }
 
     @Test
     void getCourseByCourseId_shouldThrowException_whenInputContainsCourseWithNotExistingCourseId() {
         long courseId = 100;
-        when(courseRepository.existsByCourseId(courseId)).thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
+
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(null);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.getCourseByCourseId(courseId));
         assertEquals("Course with this Id doesn't exists!",exception.getMessage());
-        verify(courseRepository).existsByCourseId(courseId);
-        verify(courseRepository,never()).findCourseByCourseId(courseId);
+        verify(courseRepository).findCourseByCourseId(courseId);
     }
 
 

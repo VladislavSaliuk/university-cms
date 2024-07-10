@@ -1,6 +1,7 @@
 package com.example.universitycms.service;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.RoleId;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,6 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
-    private final int TEACHER_ROLE_ID = 2;
-    private final int STUDENT_ROLE_ID = 3;
 
     public void registerUser(User user) {
 
@@ -90,12 +88,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User with this Id doesn't exist!");
         }
 
-        if(user.getRole().getRoleId() != STUDENT_ROLE_ID) {
+        if(user.getRole().getRoleId() != RoleId.STUDENT.getRoleId()) {
             throw new IllegalArgumentException("Your user is not a student!");
         }
 
         return user.getGroup().getUserSet()
-                .stream().filter(teacher -> teacher.getRole().getRoleId() == TEACHER_ROLE_ID)
+                .stream().filter(teacher -> teacher.getRole().getRoleId() == RoleId.TEACHER.getRoleId())
                 .collect(Collectors.toList());
     }
 

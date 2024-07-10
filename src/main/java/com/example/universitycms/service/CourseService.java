@@ -71,11 +71,13 @@ public class CourseService {
 
     public Course getCourseByCourseId(long courseId) {
 
-        if (!courseRepository.existsByCourseId(courseId)) {
+        Course course = courseRepository.findCourseByCourseId(courseId);
+
+        if(course == null) {
             throw new IllegalArgumentException("Course with this Id doesn't exists!");
         }
 
-        return courseRepository.findCourseByCourseId(courseId);
+        return course;
     }
 
 }

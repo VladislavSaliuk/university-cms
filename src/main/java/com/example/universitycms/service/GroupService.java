@@ -71,14 +71,15 @@ public class GroupService {
 
     public Group getGroupByGroupId(long groupId) {
 
-        if (!groupRepository.existsByGroupId(groupId)) {
+        Group group = groupRepository.findGroupByGroupId(groupId);
+
+        if (group == null) {
             throw new IllegalArgumentException("Group with this Id doesn't exists!");
         }
 
-        return groupRepository.findGroupByGroupId(groupId);
+        return group;
     }
 
-    @Transactional
     public void assignUserToGroup(long groupId, long userId) {
 
         Group group = groupRepository.findGroupByGroupId(groupId);

@@ -202,24 +202,25 @@ public class GroupServiceTest {
                 })
                 .collect(Collectors.toList());
         long groupId = 1;
+
         Group expectedGroup = groupList.get(0);
-        when(groupRepository.existsByGroupId(groupId)).thenReturn(true);
+
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(expectedGroup);
         Group actualGroup = groupService.getGroupByGroupId(groupId);
         assertEquals(expectedGroup, actualGroup);
-        verify(groupRepository).existsByGroupId(groupId);
+
         verify(groupRepository).findGroupByGroupId(groupId);
     }
 
     @Test
     void getGroupByGroupId_shouldThrowException_whenInputContainsGroupWithNotExistingGroupId() {
         long groupId = 100;
-        when(groupRepository.existsByGroupId(groupId)).thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
+
+        when(groupRepository.findGroupByGroupId(groupId)).thenReturn(null);
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.getGroupByGroupId(groupId));
         assertEquals("Group with this Id doesn't exists!",exception.getMessage());
-        verify(groupRepository).existsByGroupId(groupId);
-        verify(groupRepository,never()).findGroupByGroupId(groupId);
+
+        verify(groupRepository).findGroupByGroupId(groupId);
     }
 
 

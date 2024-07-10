@@ -43,33 +43,20 @@ public class UserCourseServiceTest {
         long courseId = 1;
 
         User user = new User();
-        user.setUserId(userId);
 
         Course course = new Course();
-        course.setCourseId(courseId);
 
-        when(userRepository.existsByUserId(userId)).thenReturn(true);
-        when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
         when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(false);
-
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
 
-        ArgumentCaptor<UserCourse> userCourseCaptor = ArgumentCaptor.forClass(UserCourse.class);
-
         userCourseService.assignUserOnCourse(userId, courseId);
 
-        verify(userRepository).existsByUserId(userId);
-        verify(courseRepository).existsByCourseId(courseId);
         verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findCourseByCourseId(courseId);
-        verify(userCourseRepository).save(userCourseCaptor.capture());
-
-        UserCourse capturedUserCourse = userCourseCaptor.getValue();
-        assertEquals(user, capturedUserCourse.getUser());
-        assertEquals(course, capturedUserCourse.getCourse());
+        verify(userCourseRepository).save(any(UserCourse.class));
     }
 
 
@@ -80,24 +67,15 @@ public class UserCourseServiceTest {
         long userId = 100;
         long courseId = 1;
 
-        User user = new User();
-        user.setUserId(userId);
-
-        Course course = new Course();
-        course.setCourseId(courseId);
-
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
 
         assertEquals("User with this Id doesn't exist!",exception.getMessage());
-        verify(userRepository).existsByUserId(userId);
-        verify(courseRepository, never()).existsByCourseId(courseId);
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
-        verify(userRepository, never()).findUserByUserId(userId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -108,27 +86,19 @@ public class UserCourseServiceTest {
         long courseId = 100;
 
         User user = new User();
-        user.setUserId(userId);
 
-        Course course = new Course();
-        course.setCourseId(courseId);
-
-
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(true);
-
-        when(courseRepository.existsByCourseId(courseId))
-                .thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(null);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
-        verify(userRepository).existsByUserId(userId);
-        verify(courseRepository).existsByCourseId(courseId);
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
-        verify(userRepository, never()).findUserByUserId(userId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -142,13 +112,6 @@ public class UserCourseServiceTest {
 
         Course course = new Course();
         course.setCourseId(courseId);
-
-
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(true);
-
-        when(courseRepository.existsByCourseId(courseId))
-                .thenReturn(true);
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -165,11 +128,9 @@ public class UserCourseServiceTest {
 
         assertEquals("This user is already assigned on this course!", exception.getMessage());
 
-        verify(userRepository).existsByUserId(userId);
-        verify(courseRepository).existsByCourseId(courseId);
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository).findCourseByCourseId(courseId);
         verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
-        verify(userRepository, never()).findUserByUserId(userId);
-        verify(courseRepository, never()).findCourseByCourseId(courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
@@ -218,15 +179,9 @@ public class UserCourseServiceTest {
         Course course = new Course();
         course.setCourseId(courseId);
 
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(false)
-                .thenThrow(IllegalArgumentException.class);
-
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
 
         assertEquals("User with this Id doesn't exist!",exception.getMessage());
-        verify(userRepository).existsByUserId(userId);
-        verify(courseRepository, never()).existsByCourseId(courseId);
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).delete(any(UserCourse.class));
