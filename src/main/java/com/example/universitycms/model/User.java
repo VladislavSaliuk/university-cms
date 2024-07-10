@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.beans.ConstructorProperties;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,12 +16,6 @@ import java.util.List;
 @Table(name = "users")
 @NoArgsConstructor
 public class User implements Serializable {
-
-    @Transient
-    private int ROLE_TEACHER_ID = 2;
-
-    @Transient
-    private int ROLE_STUDENT_ID = 3;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -82,7 +75,8 @@ public class User implements Serializable {
     }
 
     public boolean isUnassignedToGroup(long groupId) {
-        return (this.getRole().getRoleId() == ROLE_TEACHER_ID || this.getRole().getRoleId() == ROLE_STUDENT_ID)
+        long roleId = this.getRole().getRoleId();
+        return (roleId == RoleValue.TEACHER.getRoleId()|| roleId == RoleValue.TEACHER.getRoleId())
                 && (this.getGroup() == null || this.getGroup().getGroupId() != groupId);
     }
 

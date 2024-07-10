@@ -102,7 +102,6 @@ public class GroupService {
         groupRepository.save(group);
     }
 
-    @Transactional
     public void removeUserFromGroup(long groupId, long userId) {
 
         Group group = groupRepository.findGroupByGroupId(groupId);
