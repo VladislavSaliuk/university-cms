@@ -40,7 +40,10 @@ public class UserCourseRepositoryTest {
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.save(userCourse);
+
         assertEquals(11, userCourseRepository.count());
+        assertEquals(10, userRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -54,7 +57,10 @@ public class UserCourseRepositoryTest {
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.save(userCourse);
+
         assertEquals(10, userCourseRepository.count());
+        assertEquals(10, userRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -68,7 +74,10 @@ public class UserCourseRepositoryTest {
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.delete(userCourse);
+
         assertEquals(9, userCourseRepository.count());
+        assertEquals(10, userRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -82,7 +91,10 @@ public class UserCourseRepositoryTest {
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.delete(userCourse);
+
         assertEquals(10, userCourseRepository.count());
+        assertEquals(10, userRepository.count());
+        assertEquals(10, courseRepository.count());
     }
     @Test
     @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})

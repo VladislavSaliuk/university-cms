@@ -36,13 +36,13 @@ public class StuffStudentController {
 
     @GetMapping("/stuff/students/assign-student-on-course/{userId}" )
     public String showStuffAssignStudentOnCoursePage(@PathVariable long userId, Model model) {
-        model.addAttribute("courseList", userCourseService.getUnassignedCoursesForUser(userId));
+        model.addAttribute("courseList", userCourseService.getUnassignedCoursesForTeacher(userId));
         return "stuff-assign-student-on-course-page";
     }
 
     @GetMapping("/stuff/students/remove-student-from-course/{userId}")
     public String showStuffRemoveStudentFromCoursePage(@PathVariable long userId, Model model) {
-        model.addAttribute("courseList", userCourseService.getAssignedCoursesForUser(userId));
+        model.addAttribute("courseList", userCourseService.getAssignedCoursesForTeacher(userId));
         return "stuff-remove-student-from-course-page";
     }
 
@@ -50,7 +50,7 @@ public class StuffStudentController {
     public String assignStudentOnCourse(@PathVariable long userId, @PathVariable long courseId, RedirectAttributes redirectAttributes) {
 
         try {
-            userCourseService.assignUserOnCourse(userId, courseId);
+            userCourseService.assignTeacherOnCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course assigned successfully!");
         } catch (IllegalArgumentException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
@@ -64,7 +64,7 @@ public class StuffStudentController {
     public String removeStudentFromCourse(@PathVariable long userId, @PathVariable long courseId, RedirectAttributes redirectAttributes) {
 
         try {
-            userCourseService.removeUserFromCourse(userId, courseId);
+            userCourseService.removeTeacherFromCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course removed successfully!");
         } catch (IllegalArgumentException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());

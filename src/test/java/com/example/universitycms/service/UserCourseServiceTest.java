@@ -4,7 +4,6 @@ package com.example.universitycms.service;
 import com.example.universitycms.model.*;
 import com.example.universitycms.repository.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,32 +36,33 @@ public class UserCourseServiceTest {
 
 
     @Test
-    void assignUserOnCourse_shouldInsertUserCourseToDataBase_whenInputContainsExistingData() {
+    void assignTeacherOnCourse_shouldInsertUserCourseToDataBase_whenInputContainsExistingData() {
 
         long userId = 1;
         long courseId = 1;
 
         User user = new User();
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
-
-        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(false);
 
         when(userRepository.findUserByUserId(userId)).thenReturn(user);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(course);
 
-        userCourseService.assignUserOnCourse(userId, courseId);
+        when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(false);
 
-        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        userCourseService.assignTeacherOnCourse(userId, courseId);
+
         verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findCourseByCourseId(courseId);
+        verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository).save(any(UserCourse.class));
     }
 
 
 
     @Test
-    void assignUserOnCourse_shouldThrowException_whenInputContainsNotExistingUserId() {
+    void assignTeacherOnCourse_shouldThrowException_whenInputContainsNotExistingUserId() {
 
         long userId = 100;
         long courseId = 1;
@@ -70,29 +70,56 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
-        assertEquals("User with this Id doesn't exist!",exception.getMessage());
+        assertEquals("Teacher with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findCourseByCourseId(courseId);
+
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
 
     @Test
-    void assignUserOnCourse_shouldThrowException_whenInputContainsNotExistingCourseId() {
+    void assignTeacherOnCourse_shouldThrowException_whenInputContainsUserIdNotBelongTeacher() {
 
         long userId = 1;
         long courseId = 100;
 
         User user = new User();
+        user.setRole(RoleId.STUDENT.getRoleId());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
+
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+
+        assertEquals("This user is not a teacher!",exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository).findCourseByCourseId(courseId);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).save(any(UserCourse.class));
+    }
+    @Test
+    void assignTeacherOnCourse_shouldThrowException_whenInputContainsNotExistingCourseId() {
+
+        long userId = 1;
+        long courseId = 100;
+
+        User user = new User();
+        user.setRole(RoleId.TEACHER.getRoleId());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
 
@@ -101,14 +128,14 @@ public class UserCourseServiceTest {
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).save(any(UserCourse.class));
     }
-
     @Test
-    void assignUserOnCourse_shouldThrowException_whenCourseIsAlreadyAssigned() {
+    void assignTeacherOnCourse_shouldThrowException_whenCourseIsAlreadyAssigned() {
         long userId = 4;
         long courseId = 4;
 
         User user = new User();
         user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -124,9 +151,9 @@ public class UserCourseServiceTest {
                 .thenThrow(IllegalArgumentException.class);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                userCourseService.assignUserOnCourse(userId, courseId));
+                userCourseService.assignTeacherOnCourse(userId, courseId));
 
-        assertEquals("This user is already assigned on this course!", exception.getMessage());
+        assertEquals("This teacher is already assigned on this course!", exception.getMessage());
 
         verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findCourseByCourseId(courseId);
@@ -136,20 +163,23 @@ public class UserCourseServiceTest {
 
 
     @Test
-    void removeUserFromCourse_shouldDeleteUserCourse_whenInputContainsExistingData() {
+    void removeTeacherFromCourse_shouldDeleteUserCourse_whenInputContainsExistingData() {
 
         long userId = 1;
         long courseId = 1;
 
         User user = new User();
         user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
         course.setCourseId(courseId);
 
         UserCourse userCourse = new UserCourse(user ,course);
 
-        when(userRepository.existsByUserId(userId)).thenReturn(true);
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
         when(courseRepository.existsByCourseId(courseId)).thenReturn(true);
 
         when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)).thenReturn(true);
@@ -157,9 +187,9 @@ public class UserCourseServiceTest {
         when(userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId))
                 .thenReturn(userCourse);
 
-        userCourseService.removeUserFromCourse(userId, courseId);
+        userCourseService.removeTeacherFromCourse(userId, courseId);
 
-        verify(userRepository).existsByUserId(userId);
+        verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
         verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository).findByUser_UserIdAndCourse_CourseId(userId, courseId);
@@ -168,48 +198,84 @@ public class UserCourseServiceTest {
 
 
     @Test
-    void removeUserFromCourse_shouldThrowException_whenInputContainsNotExistingUserId() {
+    void removeTeacherFromCourse_shouldThrowException_whenInputContainsNotExistingUserId() {
 
         long userId = 100;
         long courseId = 1;
 
         User user = new User();
         user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
         course.setCourseId(courseId);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignUserOnCourse(userId, courseId));
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
 
-        assertEquals("User with this Id doesn't exist!",exception.getMessage());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+
+        assertEquals("Teacher with this Id doesn't exist!",exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository,never()).existsByCourseId(courseId);
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).delete(any(UserCourse.class));
     }
 
     @Test
-    void removeUserFromCourse_shouldThrowException_whenInputContainsNotExistingCourseId() {
+    void removeTeacherFromCourse_shouldThrowException_whenInputContainsUserIdNotBelongTeacher() {
+
+        long userId = 100;
+        long courseId = 1;
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.STUDENT.getRoleId());
+
+        Course course = new Course();
+        course.setCourseId(courseId);
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+
+        assertEquals("This user is not a teacher!",exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository,never()).existsByCourseId(courseId);
+        verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
+        verify(userCourseRepository, never()).delete(any(UserCourse.class));
+    }
+
+    @Test
+    void removeTeacherFromCourse_shouldThrowException_whenInputContainsNotExistingCourseId() {
 
         long userId = 1;
         long courseId = 100;
 
         User user = new User();
         user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
         course.setCourseId(courseId);
 
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(true);
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
 
         when(courseRepository.existsByCourseId(courseId))
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.removeUserFromCourse(userId, courseId));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.removeTeacherFromCourse(userId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
-        verify(userRepository).existsByUserId(userId);
+
+        verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
         verify(userCourseRepository, never()).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
@@ -217,24 +283,22 @@ public class UserCourseServiceTest {
     }
 
     @Test
-    void removeUserFromCourse_shouldThrowException_whenCourseIsNotAssigned() {
+    void removeTeacherFromCourse_shouldThrowException_whenCourseIsNotAssigned() {
         long userId = 1;
         long courseId = 2;
 
         User user = new User();
         user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         Course course = new Course();
         course.setCourseId(courseId);
 
-        when(userRepository.existsByUserId(userId))
-                .thenReturn(true);
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
 
         when(courseRepository.existsByCourseId(courseId))
                 .thenReturn(true);
-
-        when(userRepository.findUserByUserId(userId))
-                .thenReturn(user);
 
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(course);
@@ -243,11 +307,11 @@ public class UserCourseServiceTest {
                 .thenReturn(false);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                userCourseService.removeUserFromCourse(userId, courseId));
+                userCourseService.removeTeacherFromCourse(userId, courseId));
 
-        assertEquals("This user is not assigned on this course!", exception.getMessage());
+        assertEquals("This teacher is not assigned on this course!", exception.getMessage());
 
-        verify(userRepository).existsByUserId(userId);
+        verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).existsByCourseId(courseId);
         verify(userCourseRepository).existsByUser_UserIdAndCourse_CourseId(userId, courseId);
         verify(userCourseRepository, never()).findByUser_UserIdAndCourse_CourseId(userId, courseId);
@@ -260,6 +324,13 @@ public class UserCourseServiceTest {
 
         long userId = 1;
 
+        User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
         List<Course> courseList = LongStream.range(0, 10)
                 .mapToObj(courseId -> {
                     Course course = new Course();
@@ -268,50 +339,62 @@ public class UserCourseServiceTest {
                 })
                 .collect(Collectors.toList());
 
-        User user = new User();
 
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
         when(courseRepository.findAll()).thenReturn(courseList);
         when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(userId);
+        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForTeacher(userId);
 
         assertEquals(9, unassignedCourses.size());
         assertEquals(3, unassignedCourses.get(2).getCourseId());
 
+        verify(userRepository).findUserByUserId(userId);
         verify(courseRepository).findAll();
         verify(userCourseRepository).findByUser_UserId(userId);
     }
 
     @Test
-    void getUnassignedCoursesForUser_shouldReturnAllCourses_whenInputContainsNotExistingUserId() {
+    void getUnassignedCoursesForUse_shouldThrowException_whenInputContainsUserIdDoesNotExist() {
 
         long userId = 100;
 
-        List<Course> courseList = LongStream.range(0, 10)
-                .mapToObj(courseId -> {
-                    Course course = new Course();
-                    course.setCourseId(courseId);
-                    return course;
-                })
-                .collect(Collectors.toList());
+        User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
+
+        assertEquals("Teacher with this Id doesn't exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository,never()).findAll();
+        verify(userCourseRepository,never()).findByUser_UserId(userId);
+    }
+    @Test
+    void getUnassignedCoursesForUse_shouldThrowException_whenInputContainsUserIdNotBelongTeacher() {
+
+        long userId = 1;
 
         User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.STUDENT.getRoleId());
 
-        UserCourse userCourse = new UserCourse(user, courseList.get(2));
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
 
-        when(courseRepository.findAll()).thenReturn(courseList);
-        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
 
-        List<Course> unassignedCourses = userCourseService.getUnassignedCoursesForUser(userId);
+        assertEquals("This user is not a teacher!", exception.getMessage());
 
-        assertEquals(9, unassignedCourses.size());
-
-        verify(courseRepository).findAll();
-        verify(userCourseRepository).findByUser_UserId(userId);
+        verify(userRepository).findUserByUserId(userId);
+        verify(courseRepository,never()).findAll();
+        verify(userCourseRepository,never()).findByUser_UserId(userId);
     }
-
     @Test
     void getAssignedCoursesForUser_shouldReturnEmptyCourseList_whenInputContainsExistingUserId() {
 
@@ -326,43 +409,61 @@ public class UserCourseServiceTest {
                 .collect(Collectors.toList());
 
         User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.TEACHER.getRoleId());
 
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
         when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
 
-        List<Course> assignedCourses = userCourseService.getAssignedCoursesForUser(userId);
+        List<Course> assignedCourses = userCourseService.getAssignedCoursesForTeacher(userId);
 
         assertEquals(1, assignedCourses.size());
 
+        verify(userRepository).findUserByUserId(userId);
         verify(userCourseRepository).findByUser_UserId(userId);
     }
 
     @Test
-    void getAssignedCoursesForUser_shouldReturnCorrectCourseList_whenInputContainsNotExistingUserId() {
+    void getAssignedCoursesForUser_shouldThrowException_whenInputContainsNotExistingUserId() {
 
-        long userId = 100;
-
-        List<Course> courseList = LongStream.range(0, 10)
-                .mapToObj(courseId -> {
-                    Course course = new Course();
-                    course.setCourseId(courseId);
-                    return course;
-                })
-                .collect(Collectors.toList());
+        long userId = 1;
 
         User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.STUDENT.getRoleId());
 
-        UserCourse userCourse = new UserCourse(user, courseList.get(2));
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
 
-        when(courseRepository.findAll()).thenReturn(courseList);
-        when(userCourseRepository.findByUser_UserId(userId)).thenReturn(Collections.singletonList(userCourse));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getAssignedCoursesForTeacher(userId));
 
-        List<Course> unassignedCourses = userCourseService.getAssignedCoursesForUser(userId);
+        assertEquals("This user is not a teacher!", exception.getMessage());
 
-        assertEquals(1, unassignedCourses.size());
+        verify(userRepository).findUserByUserId(userId);
+        verify(userCourseRepository,never()).findByUser_UserId(userId);
+    }
+    @Test
+    void getAssignedCoursesForUser_shouldThrowException_whenInputContainsUserIdNotBelongTeacher() {
 
-        verify(userCourseRepository).findByUser_UserId(userId);
+        long userId = 1;
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setRole(RoleId.STUDENT.getRoleId());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getAssignedCoursesForTeacher(userId));
+
+        assertEquals("This user is not a teacher!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userCourseRepository,never()).findByUser_UserId(userId);
     }
 
 }

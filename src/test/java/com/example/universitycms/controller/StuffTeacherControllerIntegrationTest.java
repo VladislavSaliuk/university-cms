@@ -52,7 +52,7 @@ public class StuffTeacherControllerIntegrationTest {
     void showAssignTeacherOnCoursePage_shouldReturnStuffAssignTeacherOnCoursePageView() throws Exception {
         long userId = 1;
 
-        when(userCourseService.getUnassignedCoursesForUser(userId)).thenReturn(Collections.emptyList());
+        when(userCourseService.getUnassignedCoursesForTeacher(userId)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/stuff/teachers/assign-teacher-on-course/{userId}", userId))
                 .andExpect(status().isOk())
@@ -68,7 +68,7 @@ public class StuffTeacherControllerIntegrationTest {
         long userId = 1;
         long courseId = 1;
 
-        doNothing().when(userCourseService).removeUserFromCourse(userId, courseId);
+        doNothing().when(userCourseService).removeTeacherFromCourse(userId, courseId);
 
         mockMvc.perform(post("/stuff/teachers/remove-teacher-from-course/" + userId + "/" + courseId))
                 .andExpect(redirectedUrl("/stuff/teachers"));
@@ -81,7 +81,7 @@ public class StuffTeacherControllerIntegrationTest {
 
         long userId = 1;
 
-        when(userCourseService.getAssignedCoursesForUser(userId)).thenReturn(Collections.emptyList());
+        when(userCourseService.getAssignedCoursesForTeacher(userId)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/stuff/teachers/remove-teacher-from-course/{userid}", userId))
                 .andExpect(status().isOk())
@@ -97,7 +97,7 @@ public class StuffTeacherControllerIntegrationTest {
         long userId = 1;
         long courseId = 1;
 
-        doNothing().when(userCourseService).assignUserOnCourse(userId, courseId);
+        doNothing().when(userCourseService).assignTeacherOnCourse(userId, courseId);
 
         mockMvc.perform(post("/stuff/teachers/assign-teacher-on-course/" + userId + "/" + courseId))
                 .andExpect(redirectedUrl("/stuff/teachers"));

@@ -38,7 +38,10 @@ public class GroupCourseRepositoryTest {
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.save(groupCourse);
+
         assertEquals(11, groupCourseRepository.count());
+        assertEquals(10, groupRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -52,7 +55,10 @@ public class GroupCourseRepositoryTest {
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.save(groupCourse);
+
         assertEquals(10, groupCourseRepository.count());
+        assertEquals(10, groupRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -66,7 +72,10 @@ public class GroupCourseRepositoryTest {
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.delete(groupCourse);
+
         assertEquals(9, groupCourseRepository.count());
+        assertEquals(10, groupRepository.count());
+        assertEquals(10, courseRepository.count());
     }
 
     @Test
@@ -80,7 +89,10 @@ public class GroupCourseRepositoryTest {
 
         GroupCourse groupCourse = new GroupCourse(group, course);
         groupCourseRepository.delete(groupCourse);
+
         assertEquals(10, groupCourseRepository.count());
+        assertEquals(10, groupRepository.count());
+        assertEquals(10, courseRepository.count());
     }
     @Test
     @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_groups.sql", "/sql/insert_courses.sql", "/sql/insert_groups_courses.sql"})

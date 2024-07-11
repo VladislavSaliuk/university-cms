@@ -1,6 +1,7 @@
 package com.example.universitycms.service;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.RoleId;
 import com.example.universitycms.model.User;
 import com.example.universitycms.model.UserCourse;
 import com.example.universitycms.repository.CourseRepository;
@@ -23,13 +24,17 @@ public class UserCourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository;
-    public void assignUserOnCourse(long userId, long courseId) {
+    public void assignTeacherOnCourse(long userId, long courseId) {
 
         User user = userRepository.findUserByUserId(userId);
         Course course = courseRepository.findCourseByCourseId(courseId);
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
+            throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
+        }
+
+        if(user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+            throw new IllegalArgumentException("This user is not a teacher!");
         }
 
         if(course == null) {
@@ -37,17 +42,23 @@ public class UserCourseService {
         }
 
         if(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)) {
-            throw new IllegalArgumentException("This user is already assigned on this course!");
+            throw new IllegalArgumentException("This teacher is already assigned on this course!");
         }
 
         UserCourse userCourse = new UserCourse(user, course);
         userCourseRepository.save(userCourse);
     }
 
-    public void removeUserFromCourse(long userId, long courseId) {
+    public void removeTeacherFromCourse(long userId, long courseId) {
 
-        if(!userRepository.existsByUserId(userId)) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
+        }
+
+        if(user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+            throw new IllegalArgumentException("This user is not a teacher!");
         }
 
         if(!courseRepository.existsByCourseId(courseId)) {
@@ -55,13 +66,23 @@ public class UserCourseService {
         }
 
         if(!userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId)) {
-            throw new IllegalArgumentException("This user is not assigned on this course!");
+            throw new IllegalArgumentException("This teacher is not assigned on this course!");
         }
 
         UserCourse userCourse = userCourseRepository.findByUser_UserIdAndCourse_CourseId(userId, courseId);
         userCourseRepository.delete(userCourse);
     }
-    public List<Course> getUnassignedCoursesForUser(long userId) {
+    public List<Course> getUnassignedCoursesForTeacher(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if (user == null) {
+            throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
+        }
+
+        if (user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+            throw new IllegalArgumentException("This user is not a teacher!");
+        }
 
         List<Course> courseList = courseRepository.findAll();
 
@@ -77,12 +98,23 @@ public class UserCourseService {
         return unassignedCourses;
     }
 
-    public List<Course> getAssignedCoursesForUser(long userId) {
+
+    public List<Course> getAssignedCoursesForTeacher(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("This user is not a teacher!");
+        }
+
+        if (user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+            throw new IllegalArgumentException("This user is not a teacher!");
+        }
+
         return userCourseRepository.findByUser_UserId(userId)
                 .stream()
                 .map(UserCourse::getCourse)
                 .collect(Collectors.toList());
     }
-
 
 }

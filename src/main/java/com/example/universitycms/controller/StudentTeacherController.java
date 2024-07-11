@@ -22,11 +22,6 @@ public class StudentTeacherController {
     @GetMapping("/student/teachers")
     public String showStudentTeacherPage(HttpSession session, Model model) {
         Long userId = (Long) session.getAttribute("userId");
-
-        if (userId == null) {
-            return "redirect:/login";
-        }
-
         List<User> userList = userService.getTeachersByUserId(userId);
         model.addAttribute("userList", userList);
         return "student-teacher-page";

@@ -76,7 +76,7 @@ public class User implements Serializable {
 
     public boolean isUnassignedToGroup(long groupId) {
         long roleId = this.getRole().getRoleId();
-        return (roleId == RoleId.TEACHER.getRoleId()|| roleId == RoleId.TEACHER.getRoleId())
+        return (roleId == RoleId.TEACHER.getRoleId()|| roleId == RoleId.STUDENT.getRoleId())
                 && (this.getGroup() == null || this.getGroup().getGroupId() != groupId);
     }
 

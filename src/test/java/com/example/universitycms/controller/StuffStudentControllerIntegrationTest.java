@@ -1,7 +1,5 @@
 package com.example.universitycms.controller;
 
-import com.example.universitycms.model.Course;
-import com.example.universitycms.model.Group;
 import com.example.universitycms.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +51,7 @@ public class StuffStudentControllerIntegrationTest {
     void showStuffAssignStudentOnCoursePage_shouldReturnStuffAssignStudentOnCoursePageView() throws Exception {
         long userId = 1;
 
-        when(userCourseService.getUnassignedCoursesForUser(userId)).thenReturn(Collections.emptyList());
+        when(userCourseService.getUnassignedCoursesForTeacher(userId)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/stuff/students/assign-student-on-course/{userId}", userId))
                 .andExpect(status().isOk())
@@ -69,7 +67,7 @@ public class StuffStudentControllerIntegrationTest {
 
         long userId = 1;
 
-        when(userCourseService.getAssignedCoursesForUser(userId)).thenReturn(Collections.emptyList());
+        when(userCourseService.getAssignedCoursesForTeacher(userId)).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/stuff/students/remove-student-from-course/{userid}", userId))
                 .andExpect(status().isOk())
@@ -86,7 +84,7 @@ public class StuffStudentControllerIntegrationTest {
         long userId = 1;
         long courseId = 1;
 
-        doNothing().when(userCourseService).assignUserOnCourse(userId, courseId);
+        doNothing().when(userCourseService).assignTeacherOnCourse(userId, courseId);
 
         mockMvc.perform(post("/stuff/students/assign-student-on-course/" + userId + "/" + courseId))
                 .andExpect(redirectedUrl("/stuff/students"));
@@ -101,7 +99,7 @@ public class StuffStudentControllerIntegrationTest {
         long userId = 1;
         long courseId = 1;
 
-        doNothing().when(userCourseService).removeUserFromCourse(userId, courseId);
+        doNothing().when(userCourseService).removeTeacherFromCourse(userId, courseId);
 
         mockMvc.perform(post("/stuff/students/remove-student-from-course/" + userId + "/" + courseId))
                 .andExpect(redirectedUrl("/stuff/students"));
