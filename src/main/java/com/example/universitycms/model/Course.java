@@ -8,6 +8,7 @@ import lombok.Setter;
 
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -30,6 +31,12 @@ public class Course implements Serializable {
 
     @Column(name = "day_of_week")
     private String dayOfWeek;
+
+    @Column(name = "start_course_time")
+    private LocalTime startCourseTime;
+
+    @Column(name = "end_course_time")
+    private LocalTime endCourseTime;
 
     public Course(String courseName, String courseDescription) {
         this.courseName = courseName;

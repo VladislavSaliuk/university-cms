@@ -6,6 +6,8 @@ create table public.roles (
 );
 
 create table public.courses (
+    end_course_time time(6),
+    start_course_time time(6),
     course_id bigserial not null,
     course_description varchar(255) not null,
     course_name varchar(255) not null unique,
