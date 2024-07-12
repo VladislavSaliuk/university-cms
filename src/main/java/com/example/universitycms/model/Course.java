@@ -28,8 +28,17 @@ public class Course implements Serializable {
     @Column(name = "course_description", nullable = false)
     private String courseDescription;
 
+    @Column(name = "day_of_week")
+    private String dayOfWeek;
+
     public Course(String courseName, String courseDescription) {
         this.courseName = courseName;
         this.courseDescription = courseDescription;
     }
+    public Course(String courseName, String courseDescription, String dayOfWeek) {
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+        this.dayOfWeek = dayOfWeek;
+    }
+
 }

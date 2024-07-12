@@ -7,8 +7,9 @@ create table public.roles (
 
 create table public.courses (
     course_id bigserial not null,
-    course_name varchar(255) not null unique,
     course_description varchar(255) not null,
+    course_name varchar(255) not null unique,
+    day_of_week varchar(255),
     primary key (course_id)
 );
 
