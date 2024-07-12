@@ -33,7 +33,7 @@ public class UserCourseService {
             throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
         }
 
-        if(user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+        if(user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
             throw new IllegalArgumentException("This user is not a teacher!");
         }
 
@@ -57,7 +57,7 @@ public class UserCourseService {
             throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
         }
 
-        if(user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+        if(user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
             throw new IllegalArgumentException("This user is not a teacher!");
         }
 
@@ -80,7 +80,7 @@ public class UserCourseService {
             throw new IllegalArgumentException("Teacher with this Id doesn't exist!");
         }
 
-        if (user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+        if (user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
             throw new IllegalArgumentException("This user is not a teacher!");
         }
 
@@ -107,7 +107,7 @@ public class UserCourseService {
             throw new IllegalArgumentException("This user is not a teacher!");
         }
 
-        if (user.getRole().getRoleId() != RoleId.TEACHER.getRoleId()) {
+        if (user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
             throw new IllegalArgumentException("This user is not a teacher!");
         }
 

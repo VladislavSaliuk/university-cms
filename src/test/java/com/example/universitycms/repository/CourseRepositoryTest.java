@@ -1,12 +1,14 @@
 package com.example.universitycms.repository;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.DayOfWeek;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,4 +104,24 @@ public class CourseRepositoryTest {
         boolean isCourseIdExists = courseRepository.existsByCourseId(courseId);
         assertFalse(isCourseIdExists);
     }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void findAllByDayOfWeek_shouldReturnCorrectCourseList_whenInputContainsCorrectDayOfWeek() {
+        List<Course> courseList = courseRepository.findAllByDayOfWeek(DayOfWeek.MONDAY.getValue());
+        assertNotNull(courseList);
+        assertEquals(2, courseList.size());
+    }
+
+    @Test
+    @Sql(scripts = {"/sql/drop_data.sql", "/sql/insert_courses.sql"})
+    void findAllByDayOfWeek_shouldReturnEmptyList_whenInputContainsIncorrectDayOfWeek() {
+        String dayOfWeek = "Test day of week";
+        List<Course> courseList = courseRepository.findAllByDayOfWeek(dayOfWeek);
+        assertEquals(Collections.emptyList(), courseList);
+        assertEquals(0, courseList.size());
+    }
+
+
+
 }

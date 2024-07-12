@@ -6,12 +6,12 @@ public enum RoleId {
     TEACHER(2),
     STUDENT(3),
     STUFF(4);
-    private final long roleId;
-    RoleId(long roleId) {
-        this.roleId = roleId;
+    private final long value;
+    RoleId(long value) {
+        this.value = value;
     }
 
-    public long getRoleId() {
-        return roleId;
+    public long getValue() {
+        return value;
     }
 }

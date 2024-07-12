@@ -42,7 +42,7 @@ public class UserCourseServiceTest {
         long courseId = 1;
 
         User user = new User();
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
 
@@ -87,7 +87,7 @@ public class UserCourseServiceTest {
         long courseId = 100;
 
         User user = new User();
-        user.setRole(RoleId.STUDENT.getRoleId());
+        user.setRole(RoleId.STUDENT.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -111,7 +111,7 @@ public class UserCourseServiceTest {
         long courseId = 100;
 
         User user = new User();
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -135,7 +135,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -170,7 +170,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -205,7 +205,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -232,7 +232,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.STUDENT.getRoleId());
+        user.setRole(RoleId.STUDENT.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -259,7 +259,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -289,7 +289,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         Course course = new Course();
         course.setCourseId(courseId);
@@ -326,7 +326,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -362,7 +362,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
@@ -382,7 +382,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.STUDENT.getRoleId());
+        user.setRole(RoleId.STUDENT.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -410,7 +410,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.TEACHER.getRoleId());
+        user.setRole(RoleId.TEACHER.getValue());
 
         UserCourse userCourse = new UserCourse(user, courseList.get(2));
 
@@ -434,7 +434,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.STUDENT.getRoleId());
+        user.setRole(RoleId.STUDENT.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -453,7 +453,7 @@ public class UserCourseServiceTest {
 
         User user = new User();
         user.setUserId(userId);
-        user.setRole(RoleId.STUDENT.getRoleId());
+        user.setRole(RoleId.STUDENT.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);

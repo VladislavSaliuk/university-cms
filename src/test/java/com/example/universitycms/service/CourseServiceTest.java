@@ -1,6 +1,7 @@
 package com.example.universitycms.service;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.DayOfWeek;
 import com.example.universitycms.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -219,6 +220,7 @@ public class CourseServiceTest {
         assertEquals("Course with this Id doesn't exists!",exception.getMessage());
         verify(courseRepository).findCourseByCourseId(courseId);
     }
+
 
 
 }

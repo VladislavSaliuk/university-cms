@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -88,12 +87,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User with this Id doesn't exist!");
         }
 
-        if(user.getRole().getRoleId() != RoleId.STUDENT.getRoleId()) {
+        if(user.getRole().getRoleId() != RoleId.STUDENT.getValue()) {
             throw new IllegalArgumentException("Your user is not a student!");
         }
 
         return user.getGroup().getUserSet()
-                .stream().filter(teacher -> teacher.getRole().getRoleId() == RoleId.TEACHER.getRoleId())
+                .stream().filter(teacher -> teacher.getRole().getRoleId() == RoleId.TEACHER.getValue())
                 .collect(Collectors.toList());
     }
 
