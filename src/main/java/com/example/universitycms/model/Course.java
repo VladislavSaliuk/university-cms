@@ -48,4 +48,11 @@ public class Course implements Serializable {
         this.dayOfWeek = dayOfWeek;
     }
 
+    public Course(String courseName, String courseDescription, String dayOfWeek, LocalTime startCourseTime, LocalTime endCourseTime) {
+        this.courseName = courseName;
+        this.courseDescription = courseDescription;
+        this.dayOfWeek = dayOfWeek;
+        this.startCourseTime = startCourseTime;
+        this.endCourseTime = endCourseTime;
+    }
 }

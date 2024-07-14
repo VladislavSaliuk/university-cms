@@ -106,16 +106,16 @@ public class CourseService {
 
     }
 
-    private boolean isTimeAvailableForCourse(Course course) {
+    protected boolean isTimeAvailableForCourse(Course course) {
+
+        if (course.getStartCourseTime().isAfter(course.getEndCourseTime())) {
+            return false;
+        }
 
         List<Course> allCoursesByDayOfWeek = courseRepository.findAllByDayOfWeek(course.getDayOfWeek())
                 .stream()
                 .sorted((c1, c2) -> c1.getStartCourseTime().compareTo(c2.getStartCourseTime()))
                 .collect(Collectors.toList());
-
-        if (course.getStartCourseTime().compareTo(course.getEndCourseTime()) >= 0) {
-            return false;
-        }
 
         if (allCoursesByDayOfWeek.isEmpty()) {
             return true;

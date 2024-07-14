@@ -4,22 +4,22 @@ import com.example.universitycms.model.Course;
 import com.example.universitycms.model.DayOfWeek;
 import com.example.universitycms.repository.CourseRepository;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -33,14 +33,13 @@ public class CourseServiceTest {
     CourseRepository courseRepository;
 
     static List<Course> courseList = new LinkedList<>();
-
     @BeforeAll
     static void init() {
-        courseList.add(new Course("Test course name 1", "description"));
-        courseList.add(new Course("Test course name 2", "description"));
-        courseList.add(new Course("Test course name 3", "description"));
-        courseList.add(new Course("Test course name 4", "description"));
-        courseList.add(new Course("Test course name 5", "description"));
+        courseList.add(new Course("Test course name 1", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("08:30"), LocalTime.parse("10:00")));
+        courseList.add(new Course("Test course name 2", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("10:30"), LocalTime.parse("12:00")));
+        courseList.add(new Course("Test course name 3", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("12:30"), LocalTime.parse("14:00")));
+        courseList.add(new Course("Test course name 4", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("14:30"), LocalTime.parse("16:00")));
+        courseList.add(new Course("Test course name 5", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("16:30"), LocalTime.parse("18:00")));
     }
 
     @Test
@@ -104,7 +103,7 @@ public class CourseServiceTest {
         Course updatedCourse = new Course();
         updatedCourse.setCourseId(courseId);
         updatedCourse.setCourseName("Test course name");
-        updatedCourse.setCourseDescription("Test description");
+        updatedCourse.setCourseDescription("Test course description");
 
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(existingCourse);
         when(courseRepository.existsByCourseName(updatedCourse.getCourseName())).thenReturn(false);
@@ -222,5 +221,233 @@ public class CourseServiceTest {
     }
 
 
+    @Test
+    void isTimeAvailableForCourse_shouldReturnFalse_whenStartCourseTimeIsBiggerThanEnd() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        Method method = CourseService.class.getDeclaredMethod("isTimeAvailableForCourse", Course.class);
+        method.setAccessible(true);
+
+        Course course = new Course();
+
+        course.setCourseId(1);
+        course.setCourseName("Test course name");
+        course.setCourseDescription("Test course description");
+        course.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("14:00");
+        LocalTime endCourseTime = LocalTime.parse("12:00");
+
+        course.setStartCourseTime(startCourseTime);
+        course.setEndCourseTime(endCourseTime);
+
+        boolean isTimeAvailableForCourse= (Boolean) method.invoke(courseService,course);
+
+        assertFalse(isTimeAvailableForCourse);
+        verify(courseRepository, never()).findAllByDayOfWeek(course.getDayOfWeek());
+    }
+
+
+    @Test
+    void isTimeAvailableForCourse_shouldReturnFalse_shouldReturnTrue_whenDayOfWeekDoesHaveAnyCourses() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        Method method = CourseService.class.getDeclaredMethod("isTimeAvailableForCourse", Course.class);
+        method.setAccessible(true);
+
+        Course course = new Course();
+
+        course.setCourseId(1);
+        course.setCourseName("Test course name");
+        course.setCourseDescription("Test course description");
+        course.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("08:30");
+        LocalTime endCourseTime = LocalTime.parse("10:00");
+
+        course.setStartCourseTime(startCourseTime);
+        course.setEndCourseTime(endCourseTime);
+
+        when(courseRepository.findAllByDayOfWeek(course.getDayOfWeek()))
+                .thenReturn(Collections.emptyList());
+
+        boolean isTimeAvailableForCourse= (Boolean) method.invoke(courseService,course);
+
+        assertTrue(isTimeAvailableForCourse);
+        verify(courseRepository).findAllByDayOfWeek(course.getDayOfWeek());
+
+    }
+
+    @Test
+    void isTimeAvailableForCourse_shouldReturnFalse_whenCourseInterspersedWithAnotherDate() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        Method method = CourseService.class.getDeclaredMethod("isTimeAvailableForCourse", Course.class);
+        method.setAccessible(true);
+
+        Course course = new Course();
+
+        course.setCourseId(1);
+        course.setCourseName("Test course name");
+        course.setCourseDescription("Test course description");
+        course.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("09:00");
+        LocalTime endCourseTime = LocalTime.parse("11:30");
+
+        course.setStartCourseTime(startCourseTime);
+        course.setEndCourseTime(endCourseTime);
+
+        when(courseRepository.findAllByDayOfWeek(course.getDayOfWeek()))
+                .thenReturn(courseList);
+
+        boolean isTimeAvailableForCourse= (Boolean) method.invoke(courseService,course);
+
+        assertFalse(isTimeAvailableForCourse);
+        verify(courseRepository).findAllByDayOfWeek(course.getDayOfWeek());
+
+    }
+
+    @Test
+    void isTimeAvailableForCourse_shouldReturnTrue_whenCourseIsNotInterspersedWithAnotherDate() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        Method method = CourseService.class.getDeclaredMethod("isTimeAvailableForCourse", Course.class);
+        method.setAccessible(true);
+
+        Course course = new Course();
+
+        course.setCourseId(1);
+        course.setCourseName("Test course name");
+        course.setCourseDescription("Test course description");
+        course.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("18:30");
+        LocalTime endCourseTime = LocalTime.parse("20:00");
+
+        course.setStartCourseTime(startCourseTime);
+        course.setEndCourseTime(endCourseTime);
+
+        when(courseRepository.findAllByDayOfWeek(course.getDayOfWeek()))
+                .thenReturn(courseList);
+
+        boolean isTimeAvailableForCourse= (Boolean) method.invoke(courseService,course);
+
+        assertTrue(isTimeAvailableForCourse);
+        verify(courseRepository).findAllByDayOfWeek(course.getDayOfWeek());
+
+    }
+
+    @Test
+    void setScheduleTimeForCourse_shouldThrowException_whenInputContainsNotExistingCourse() {
+
+        Course course = new Course();
+        course.setCourseId(100);
+        course.setCourseName("Test course name");
+
+        when(courseRepository.findCourseByCourseId(course.getCourseId()))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.setScheduleTimeForCourse(course));
+
+        assertEquals("This course doesn't exist!", exception.getMessage());
+
+        verify(courseRepository).findCourseByCourseId(course.getCourseId());
+        verify(courseRepository, never()).save(course);
+    }
+
+    @Test
+    void setScheduleTimeForCourse_shouldThrowException_whenInputContainsCourseWithOutDayOfWeek() {
+
+        long courseId = 1;
+
+        Course existingCourse = new Course();
+        existingCourse.setCourseId(courseId);
+        existingCourse.setCourseName("Test course name");
+        existingCourse.setCourseDescription("Test course description");
+
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseId(courseId);
+        updatedCourse.setCourseName("Test course name");
+        updatedCourse.setCourseDescription("Test course description");
+
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(existingCourse);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.setScheduleTimeForCourse(updatedCourse));
+
+        assertEquals("Day of week is not set!" , exception.getMessage());
+
+        verify(courseRepository).findCourseByCourseId(courseId);
+        verify(courseRepository,never()).save(updatedCourse);
+    }
+
+    @Test
+    void setScheduleTimeForCourse_shouldThrowException_whenCourseTimeIsNotAvailable() {
+
+        long courseId = 1;
+
+        Course existingCourse = new Course();
+        existingCourse.setCourseId(courseId);
+        existingCourse.setCourseName("Test course name");
+        existingCourse.setCourseDescription("Test course description");
+
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseId(courseId);
+        updatedCourse.setCourseName("Test course name");
+        updatedCourse.setCourseDescription("Test course description");
+        updatedCourse.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("10:20");
+        LocalTime endCourseTime = LocalTime.parse("11:50");
+
+        updatedCourse.setStartCourseTime(startCourseTime);
+        updatedCourse.setEndCourseTime(endCourseTime);
+
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(existingCourse);
+
+        CourseService spyCourseService = spy(courseService);
+        doReturn(false).when(spyCourseService).isTimeAvailableForCourse(any(Course.class));
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> spyCourseService.setScheduleTimeForCourse(updatedCourse));
+
+        assertEquals("This time is not available.Set another time range or day of the week!", exception.getMessage());
+
+        verify(courseRepository).findCourseByCourseId(courseId);
+        verify(courseRepository, never()).save(updatedCourse);
+
+    }
+
+    @Test
+    void setScheduleTimeForCourse_shouldUpdateCourse_whenCourseTimeIsAvailable() {
+
+        long courseId = 1;
+
+        Course existingCourse = new Course();
+        existingCourse.setCourseId(courseId);
+        existingCourse.setCourseName("Test course name");
+        existingCourse.setCourseDescription("Test course description");
+
+        Course updatedCourse = new Course();
+        updatedCourse.setCourseId(courseId);
+        updatedCourse.setCourseName("Test course name");
+        updatedCourse.setCourseDescription("Test course description");
+        updatedCourse.setDayOfWeek(DayOfWeek.MONDAY.getValue());
+
+        LocalTime startCourseTime = LocalTime.parse("18:30");
+        LocalTime endCourseTime = LocalTime.parse("20:00");
+
+        updatedCourse.setStartCourseTime(startCourseTime);
+        updatedCourse.setEndCourseTime(endCourseTime);
+
+        when(courseRepository.findCourseByCourseId(courseId))
+                .thenReturn(existingCourse);
+
+        CourseService spyCourseService = spy(courseService);
+        doReturn(true).when(spyCourseService).isTimeAvailableForCourse(any(Course.class));
+
+        spyCourseService.setScheduleTimeForCourse(updatedCourse);
+
+        verify(courseRepository).findCourseByCourseId(courseId);
+        verify(courseRepository).save(updatedCourse);
+
+    }
 
 }
