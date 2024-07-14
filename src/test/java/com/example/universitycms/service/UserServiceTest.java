@@ -1,17 +1,16 @@
 package com.example.universitycms.service;
 
 
-import com.example.universitycms.model.Course;
-import com.example.universitycms.model.Group;
-import com.example.universitycms.model.Role;
-import com.example.universitycms.model.User;
+import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
+import org.hibernate.sql.model.internal.MutationOperationGroupFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -260,5 +259,150 @@ public class UserServiceTest {
         verify(userRepository).findUserByUserId(userId);
     }
 
+
+    @Test
+    void getScheduleForStudent_shouldThrowException_whenInputContainsNotExistingUserId() {
+
+        long userId = 100;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForStudent(userId));
+
+        assertEquals("User with this Id does not exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+    }
+
+    @Test
+    void getScheduleForStudent_shouldThrowException_whenInputContainsUserIdNotBelongStudent() {
+
+        long userId = 5;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.TEACHER.getValue());
+
+        when(userRepository.findUserByUserId(user.getUserId()))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForStudent(user.getUserId()));
+
+        assertEquals("Your user is not a student!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(user.getUserId());
+    }
+
+    @Test
+    void getScheduleForStudent_shouldReturnCourseList_whenInputContainsUserId() {
+
+        List<Course> allCourses = new LinkedList<>();
+
+        allCourses.add(new Course("Test course name 1", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("08:30"), LocalTime.parse("10:00")));
+        allCourses.add(new Course("Test course name 2", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("10:30"), LocalTime.parse("12:00")));
+        allCourses.add(new Course("Test course name 3", "description"));
+        allCourses.add(new Course("Test course name 4", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("14:30"), LocalTime.parse("16:00")));
+        allCourses.add(new Course("Test course name 5", "description"));
+
+        Group group = new Group();
+        group.setGroupName("Test group name");
+        group.setCourseList(allCourses);
+
+        long userId = 5;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.STUDENT.getValue());
+        user.setGroup(group);
+
+        when(userRepository.findUserByUserId(user.getUserId()))
+                .thenReturn(user);
+
+        List<Course> scheduleCourseList = userService.getScheduleForStudent(user.getUserId());
+
+        assertFalse(scheduleCourseList.isEmpty());
+        assertEquals(3, scheduleCourseList.size());
+
+        verify(userRepository).findUserByUserId(user.getUserId());
+    }
+
+    @Test
+    void getScheduleForTeacher_shouldThrowException_whenInputContainsNotExistingUserId() {
+
+        long userId = 100;
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForTeacher(userId));
+
+        assertEquals("User with this Id does not exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+    }
+
+    @Test
+    void getScheduleForTeacher_shouldThrowException_whenInputContainsUserIdNotBelongTeacher() {
+
+        long userId = 5;
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.STUDENT.getValue());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForTeacher(user.getUserId()));
+
+        assertEquals("Your user is not a teacher!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(user.getUserId());
+    }
+
+    @Test
+    void getScheduleForTeacher_shouldReturnCourseList_whenInputContainsUserId() {
+
+        List<Course> allCourses = new LinkedList<>();
+
+        allCourses.add(new Course("Test course name 1", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("08:30"), LocalTime.parse("10:00")));
+        allCourses.add(new Course("Test course name 2", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("10:30"), LocalTime.parse("12:00")));
+        allCourses.add(new Course("Test course name 3", "description"));
+        allCourses.add(new Course("Test course name 4", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("14:30"), LocalTime.parse("16:00")));
+        allCourses.add(new Course("Test course name 5", "description", DayOfWeek.MONDAY.getValue(), LocalTime.parse("16:30"), LocalTime.parse("18:00")));
+
+        long userId = 5;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.TEACHER.getValue());
+        user.setCourseList(allCourses);
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        List<Course> scheduleCourseList = userService.getScheduleForTeacher(user.getUserId());
+
+        assertFalse(scheduleCourseList.isEmpty());
+        assertEquals(4, scheduleCourseList.size());
+
+        verify(userRepository).findUserByUserId(userId);
+    }
 
 }

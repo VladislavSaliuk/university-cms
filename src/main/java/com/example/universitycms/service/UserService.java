@@ -124,5 +124,47 @@ public class UserService implements UserDetailsService {
         return user.getCourseList();
     }
 
+    public List<Course> getScheduleForStudent(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this Id does not exist!");
+        }
+
+        if(user.getRole().getRoleId() != RoleId.STUDENT.getValue()) {
+            throw new IllegalArgumentException("Your user is not a student!");
+        }
+
+        List<Course> coursesSetInSchedule = user
+                .getGroup()
+                .getCourseList()
+                .stream()
+                .filter(course -> course.getDayOfWeek() != null && course.getStartCourseTime() != null && course.getEndCourseTime() != null)
+                .collect(Collectors.toList());
+
+        return coursesSetInSchedule;
+    }
+
+    public List<Course> getScheduleForTeacher(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new IllegalArgumentException("User with this Id does not exist!");
+        }
+
+        if(user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
+            throw new IllegalArgumentException("Your user is not a teacher!");
+        }
+
+        List<Course> coursesSetInSchedule = user
+                .getCourseList()
+                .stream()
+                .filter(course -> course.getDayOfWeek() != null && course.getStartCourseTime() != null && course.getEndCourseTime() != null)
+                .collect(Collectors.toList());
+
+        return coursesSetInSchedule;
+    }
 
 }
