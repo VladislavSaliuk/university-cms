@@ -41,6 +41,10 @@ public class User implements Serializable {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_status_id", nullable = false)
+    private UserStatus userStatus;
+
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "users_courses",
@@ -61,12 +65,29 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public User(String userName, String password, String email, Role role, UserStatus userStatus) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.userStatus = userStatus;
+    }
+
     public User(String userName, String password, String email, long roleId) {
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.role = new Role();
         role.setRoleId(roleId);
+    }
+
+    public User(String userName, String password, String email, long roleId, long userStatusId) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.role = new Role();
+        role.setRoleId(roleId);
+        userStatus.setUserStatusId(userStatusId);
     }
 
     public void setRole(long roleId) {

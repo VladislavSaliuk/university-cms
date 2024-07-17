@@ -21,10 +21,17 @@ create table public.groups (
     primary key (group_id)
 );
 
+create table public.user_statuses (
+    user_status_id bigserial not null,
+    user_status_name varchar(255) not null unique,
+    primary key (user_status_id)
+);
+
 create table public.users (
     group_id bigint,
     role_id bigint not null,
     user_id bigserial not null,
+    user_status_id bigint not null,
     email varchar(255) not null unique,
     first_name varchar(255),
     last_name varchar(255),
@@ -48,6 +55,10 @@ create table public.users_courses (
 alter table if exists public.users
     add constraint Fk_users_role_id foreign key (role_id)
     references public.roles;
+
+alter table if exists public.users
+    add constraint Fk_users_user_status_id foreign key (user_status_id)
+    references public.user_statuses;
 
 alter table if exists public.users
     add constraint Fk_users_group_id foreign key (group_id)
