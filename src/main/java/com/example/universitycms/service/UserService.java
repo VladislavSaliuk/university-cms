@@ -1,10 +1,9 @@
 package com.example.universitycms.service;
 
-import com.example.universitycms.model.Course;
-import com.example.universitycms.model.Role;
-import com.example.universitycms.model.RoleId;
-import com.example.universitycms.model.User;
+import com.example.universitycms.exceptions.UserStatusException;
+import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -58,6 +57,11 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUserName(username);
         if(user != null) {
+
+            if(user.getUserStatus().getUserStatusId() == UserStatusId.BANNED.getValue()) {
+                throw new UserStatusException("User is banned!");
+            }
+
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getUserName())
                     .password(user.getPassword())
@@ -96,6 +100,26 @@ public class UserService implements UserDetailsService {
         existingUser.setRole(newRole);
 
         userRepository.save(existingUser);
+    }
+
+    public User updateUserStatus(User user) {
+
+        User existingUser = userRepository.findUserByUserId(user.getUserId());
+
+        if(existingUser == null) {
+            throw new IllegalArgumentException("User with this Id doesn't exist!");
+        }
+
+        if(existingUser.getUserStatus() == null) {
+            throw new IllegalArgumentException("This user doesn't have user status!");
+        }
+
+        UserStatus newUserStatus = user.getUserStatus();
+        existingUser.setUserStatus(newUserStatus);
+
+        userRepository.save(existingUser);
+
+        return existingUser;
     }
 
     public List<User> getTeachersByUserId(long userId) {

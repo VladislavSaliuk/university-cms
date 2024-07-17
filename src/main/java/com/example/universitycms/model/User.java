@@ -1,10 +1,7 @@
 package com.example.universitycms.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @ToString
 @Table(name = "users")
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User implements Serializable {
 
     @Id
@@ -97,6 +95,14 @@ public class User implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+    public void setUserStatus(long userStatusId) {
+        this.userStatus = new UserStatus();
+        userStatus.setUserStatusId(userStatusId);
     }
 
     public boolean isUserInGroup(long groupId) {

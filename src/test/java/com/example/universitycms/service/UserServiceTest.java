@@ -189,6 +189,7 @@ public class UserServiceTest {
         user.setPassword("Test password");
         user.setEmail("Test E-mail");
         user.setRole(RoleId.STUDENT.getValue());
+        user.setUserStatus(UserStatusId.ACTIVE.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
@@ -213,6 +214,7 @@ public class UserServiceTest {
         user.setPassword("Test password");
         user.setEmail("Test E-mail");
         user.setRole(null);
+        user.setUserStatus(UserStatusId.ACTIVE.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
@@ -238,6 +240,7 @@ public class UserServiceTest {
         existingUser.setPassword("Test password");
         existingUser.setEmail("Test E-mail");
         existingUser.setRole(RoleId.ADMIN.getValue());
+        existingUser.setUserStatus(UserStatusId.ACTIVE.getValue());
 
 
         User updatedUser = new User();
@@ -255,6 +258,75 @@ public class UserServiceTest {
 
         verify(userRepository).findUserByUserId(userId);
         verify(userRepository).save(existingUser);
+    }
+
+    @Test
+    void updateUserStatus_shouldThrowException_whenInputContainsNotExistingUser() {
+
+        long userId = 1;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.ADMIN.getValue());
+        user.setUserStatus(UserStatusId.ACTIVE.getValue());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateUserStatus(user));
+
+        assertEquals("User with this Id doesn't exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository, never()).save(user);
+    }
+
+    @Test
+    void updateUserStatus_shouldThrowException_whenInputContainsUserWithoutUserStatus() {
+
+        long userId = 1;
+
+        User user = new User();
+        user.setUserId(userId);
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateUserStatus(user));
+
+        assertEquals("This user doesn't have user status!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository, never()).save(user);
+    }
+
+    @Test
+    void updateUserStatus_shouldReturnUserStatus_whenInputContainsCorrectUser() {
+
+        long userId = 1;
+
+        User existingUser = new User();
+        existingUser.setUserId(userId);
+        existingUser.setUserStatus(UserStatusId.ACTIVE.getValue());
+
+        User expectedUser = new User();
+        expectedUser.setUserId(userId);
+        expectedUser.setUserStatus(UserStatusId.BANNED.getValue());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(existingUser);
+
+        User actualUser = userService.updateUserStatus(expectedUser);
+
+        assertNotNull(actualUser);
+        assertEquals(expectedUser, actualUser);
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository).save(expectedUser);
     }
 
     @Test

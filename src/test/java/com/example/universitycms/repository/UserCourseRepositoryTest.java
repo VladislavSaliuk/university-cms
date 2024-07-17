@@ -30,7 +30,7 @@ public class UserCourseRepositoryTest {
 
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void save_shouldInsertUserCourseToDatabase_whenUserCourseDoesNotExist() {
         long userId = 1;
         long courseId = 3;
@@ -47,7 +47,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void save_shouldNotInsertUserCourseToDatabase_whenUserCourseExists() {
         long userId = 1;
         long courseId = 1;
@@ -64,7 +64,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void delete_shouldDeleteUserCourse_whenInputContainsExistingUserCourse() {
         long userId = 1;
         long courseId = 1;
@@ -81,7 +81,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void delete_shouldNotDeleteUserCourse_whenInputContainsNotExistingUserCourse() {
         long userId = 1;
         long courseId = 10;
@@ -97,7 +97,7 @@ public class UserCourseRepositoryTest {
         assertEquals(10, courseRepository.count());
     }
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void findByUser_UserIdAndCourse_CourseId_shouldReturnUserCourse_whenInputContainsExistingData() {
         long userId = 1;
         long courseId = 1;
@@ -106,7 +106,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void findByUser_UserIdAndCourse_CourseId_shouldReturnNull_whenInputContainsNotExistingUserId() {
         long userId = 100;
         long courseId = 1;
@@ -115,7 +115,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void findByUser_UserIdAndCourse_CourseId_shouldReturnNull_whenInputContainsNotExistingCourseId() {
         long userId = 1;
         long courseId = 100;
@@ -124,7 +124,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void existsByUser_UserIdAndCourse_CourseId_shouldReturnTrue_whenInputContainsExistingData() {
         long userId = 1;
         long courseId = 1;
@@ -133,7 +133,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void existsByUser_UserIdAndCourse_CourseId_shouldReturnFalse_whenInputContainsNotExistingUserId() {
         long userId = 100;
         long courseId = 1;
@@ -142,7 +142,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void existsByUser_UserIdAndCourse_CourseId_shouldReturnFalse_whenInputContainsNotExistingCourseId() {
         long userId = 1;
         long courseId = 100;
@@ -151,7 +151,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void findByUser_UserId_shouldReturnList_whenInputContainsExistingUserId() {
         long userId = 4;
         List<UserCourse> userCourseList = userCourseRepository.findByUser_UserId(userId);
@@ -159,7 +159,7 @@ public class UserCourseRepositoryTest {
     }
 
     @Test
-    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql", "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
+    @Sql(scripts = {"/sql/drop_data.sql","/sql/insert_roles.sql","/sql/insert_user_statuses.sql",  "/sql/insert_users.sql", "/sql/insert_courses.sql", "/sql/insert_users_courses.sql"})
     void findByUser_UserId_shouldReturnEmptyList_whenInputContainsNotExistingUserId() {
         long userId = 100;
         List<UserCourse> userCourseList = userCourseRepository.findByUser_UserId(userId);

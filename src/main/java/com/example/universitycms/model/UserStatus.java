@@ -26,4 +26,6 @@ public class UserStatus implements Serializable {
         this.userStatusName = userStatusName;
     }
 
+
+
 }
