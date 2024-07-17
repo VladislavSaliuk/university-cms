@@ -1,6 +1,7 @@
 package com.example.universitycms.service;
 
 import com.example.universitycms.model.Course;
+import com.example.universitycms.model.Role;
 import com.example.universitycms.model.RoleId;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.UserRepository;
@@ -77,6 +78,24 @@ public class UserService implements UserDetailsService {
         }
 
         return user;
+    }
+
+    public void updateRole(User user){
+
+        User existingUser = userRepository.findUserByUserId(user.getUserId());
+
+        if(existingUser == null) {
+            throw new IllegalArgumentException("This user doesn't exist!");
+        }
+
+        if(existingUser.getRole() == null) {
+            throw new IllegalArgumentException("This user doesn't have role");
+        }
+
+        Role newRole = user.getRole();
+        existingUser.setRole(newRole);
+
+        userRepository.save(existingUser);
     }
 
     public List<User> getTeachersByUserId(long userId) {

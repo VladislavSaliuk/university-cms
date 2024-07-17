@@ -137,6 +137,126 @@ public class UserServiceTest {
         verify(userRepository, never()).findAll();
     }
 
+
+    @Test
+    void getUserByUsername_shouldThrowException_whenInputContainsNotExistingUsername() {
+
+        String username = "Test username";
+
+        when(userRepository.findUserByUserName(username))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getUserByUsername(username));
+
+        assertEquals("User with this name doesn't exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserName(username);
+    }
+
+    @Test
+    void getUserByUsername_shouldReturnUser_whenInputContainsExistingUsername() {
+
+        String username = "Test username";
+
+        User expectedUser = new User();
+
+        expectedUser.setUserId(1);
+        expectedUser.setUserName(username);
+        expectedUser.setPassword("Test password");
+        expectedUser.setEmail("Test E-mail");
+        expectedUser.setRole(RoleId.STUDENT.getValue());
+
+        when(userRepository.findUserByUserName(username))
+                .thenReturn(expectedUser);
+
+        User actualUser = userService.getUserByUsername(username);
+
+        assertNotNull(actualUser);
+        assertEquals(expectedUser, actualUser);
+
+        verify(userRepository).findUserByUserName(username);
+    }
+
+    @Test
+    void updateRole_shouldThrowException_whenInputContainsNotExistingUser() {
+
+        long userId = 100;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(RoleId.STUDENT.getValue());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(null);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateRole(user));
+
+        assertEquals("This user doesn't exist!", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository,never()).save(user);
+    }
+
+    @Test
+    void updateRole_shouldThrowException_whenInputContainsUserWithoutRole() {
+
+        long userId = 1;
+
+        User user = new User();
+
+        user.setUserId(userId);
+        user.setUserName("Test username");
+        user.setPassword("Test password");
+        user.setEmail("Test E-mail");
+        user.setRole(null);
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(user);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateRole(user));
+
+        assertEquals("This user doesn't have role", exception.getMessage());
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository, never()).save(user);
+
+    }
+
+    @Test
+    void updateRole_shouldUpdateUser_whenInputContainsCorrectUser() {
+
+        long userId = 1;
+
+        User existingUser = new User();
+
+        existingUser.setUserId(userId);
+        existingUser.setUserName("Test username");
+        existingUser.setPassword("Test password");
+        existingUser.setEmail("Test E-mail");
+        existingUser.setRole(RoleId.ADMIN.getValue());
+
+
+        User updatedUser = new User();
+
+        updatedUser.setUserId(userId);
+        updatedUser.setUserName("Test username");
+        updatedUser.setPassword("Test password");
+        updatedUser.setEmail("Test E-mail");
+        updatedUser.setRole(RoleId.STUFF.getValue());
+
+        when(userRepository.findUserByUserId(userId))
+                .thenReturn(existingUser);
+
+        userService.updateRole(updatedUser);
+
+        verify(userRepository).findUserByUserId(userId);
+        verify(userRepository).save(existingUser);
+    }
+
     @Test
     void getAllCoursesForStudentByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
 
