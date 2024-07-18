@@ -29,7 +29,6 @@ public class CourseService {
         }
 
         courseRepository.save(course);
-
     }
 
     public List<Course> getAll() {
@@ -46,6 +45,7 @@ public class CourseService {
 
     }
     public void updateCourse(Course course) {
+
         Course existingCourse = courseRepository.findCourseByCourseId(course.getCourseId());
 
         if (existingCourse == null) {

@@ -39,7 +39,7 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    @Transactional
+
     public void removeGroupByGroupId(long groupId) {
 
         if(!groupRepository.existsByGroupId(groupId)) {

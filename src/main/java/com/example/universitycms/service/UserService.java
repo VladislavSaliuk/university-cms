@@ -1,9 +1,8 @@
 package com.example.universitycms.service;
 
-import com.example.universitycms.exceptions.UserStatusException;
+import com.example.universitycms.exception.UserStatusException;
 import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
-import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -84,16 +83,12 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public void updateRole(User user){
+    public void changeUserRole(User user){
 
         User existingUser = userRepository.findUserByUserId(user.getUserId());
 
         if(existingUser == null) {
             throw new IllegalArgumentException("This user doesn't exist!");
-        }
-
-        if(existingUser.getRole() == null) {
-            throw new IllegalArgumentException("This user doesn't have role");
         }
 
         Role newRole = user.getRole();
@@ -102,24 +97,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(existingUser);
     }
 
-    public User updateUserStatus(User user) {
+    public void changeUserStatus(User user) {
 
         User existingUser = userRepository.findUserByUserId(user.getUserId());
 
         if(existingUser == null) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
-        }
-
-        if(existingUser.getUserStatus() == null) {
-            throw new IllegalArgumentException("This user doesn't have user status!");
+            throw new IllegalArgumentException("This user doesn't exist!");
         }
 
         UserStatus newUserStatus = user.getUserStatus();
         existingUser.setUserStatus(newUserStatus);
 
         userRepository.save(existingUser);
-
-        return existingUser;
     }
 
     public List<User> getTeachersByUserId(long userId) {

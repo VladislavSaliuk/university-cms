@@ -92,11 +92,9 @@ public class User implements Serializable {
         this.role = new Role();
         role.setRoleId(roleId);
     }
-
     public void setRole(Role role) {
         this.role = role;
     }
-
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
     }

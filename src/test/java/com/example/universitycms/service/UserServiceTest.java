@@ -3,7 +3,6 @@ package com.example.universitycms.service;
 
 import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
-import org.hibernate.sql.model.internal.MutationOperationGroupFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +177,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void updateRole_shouldThrowException_whenInputContainsNotExistingUser() {
+    void changeUserRole_shouldThrowException_whenInputContainsNotExistingUser() {
 
         long userId = 100;
 
@@ -194,7 +193,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateRole(user));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.changeUserRole(user));
 
         assertEquals("This user doesn't exist!", exception.getMessage());
 
@@ -203,33 +202,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void updateRole_shouldThrowException_whenInputContainsUserWithoutRole() {
-
-        long userId = 1;
-
-        User user = new User();
-
-        user.setUserId(userId);
-        user.setUserName("Test username");
-        user.setPassword("Test password");
-        user.setEmail("Test E-mail");
-        user.setRole(null);
-        user.setUserStatus(UserStatusId.ACTIVE.getValue());
-
-        when(userRepository.findUserByUserId(userId))
-                .thenReturn(user);
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateRole(user));
-
-        assertEquals("This user doesn't have role", exception.getMessage());
-
-        verify(userRepository).findUserByUserId(userId);
-        verify(userRepository, never()).save(user);
-
-    }
-
-    @Test
-    void updateRole_shouldUpdateUser_whenInputContainsCorrectUser() {
+    void changeUserRole_shouldUpdateUser_whenInputContainsCorrectUser() {
 
         long userId = 1;
 
@@ -254,58 +227,34 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(existingUser);
 
-        userService.updateRole(updatedUser);
+        userService.changeUserRole(updatedUser);
 
         verify(userRepository).findUserByUserId(userId);
         verify(userRepository).save(existingUser);
     }
 
     @Test
-    void updateUserStatus_shouldThrowException_whenInputContainsNotExistingUser() {
+    void changeUserStatus_shouldThrowException_whenInputContainsNotExistingUser() {
 
         long userId = 1;
 
         User user = new User();
 
         user.setUserId(userId);
-        user.setUserName("Test username");
-        user.setPassword("Test password");
-        user.setEmail("Test E-mail");
-        user.setRole(RoleId.ADMIN.getValue());
         user.setUserStatus(UserStatusId.ACTIVE.getValue());
 
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateUserStatus(user));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.changeUserStatus(user));
 
-        assertEquals("User with this Id doesn't exist!", exception.getMessage());
-
-        verify(userRepository).findUserByUserId(userId);
-        verify(userRepository, never()).save(user);
-    }
-
-    @Test
-    void updateUserStatus_shouldThrowException_whenInputContainsUserWithoutUserStatus() {
-
-        long userId = 1;
-
-        User user = new User();
-        user.setUserId(userId);
-
-        when(userRepository.findUserByUserId(userId))
-                .thenReturn(user);
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.updateUserStatus(user));
-
-        assertEquals("This user doesn't have user status!", exception.getMessage());
+        assertEquals("This user doesn't exist!", exception.getMessage());
 
         verify(userRepository).findUserByUserId(userId);
         verify(userRepository, never()).save(user);
     }
-
     @Test
-    void updateUserStatus_shouldReturnUserStatus_whenInputContainsCorrectUser() {
+    void changeUserStatus_shouldReturnUserStatus_whenInputContainsCorrectUser() {
 
         long userId = 1;
 
@@ -320,15 +269,11 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(existingUser);
 
-        User actualUser = userService.updateUserStatus(expectedUser);
-
-        assertNotNull(actualUser);
-        assertEquals(expectedUser, actualUser);
+        userService.changeUserStatus(expectedUser);
 
         verify(userRepository).findUserByUserId(userId);
         verify(userRepository).save(expectedUser);
     }
-
     @Test
     void getAllCoursesForStudentByUserId_shouldReturnCourseList_whenInputContainsExistingUserId() {
 

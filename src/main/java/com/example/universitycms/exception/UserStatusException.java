@@ -1,4 +1,4 @@
-package com.example.universitycms.exceptions;
+package com.example.universitycms.exception;
 
 public class UserStatusException extends org.springframework.security.core.AuthenticationException{
     public UserStatusException(String msg, Throwable cause) {
