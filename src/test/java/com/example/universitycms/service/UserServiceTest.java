@@ -1,6 +1,10 @@
 package com.example.universitycms.service;
 
 
+import com.example.universitycms.exception.UserEmailException;
+import com.example.universitycms.exception.UserNotFoundException;
+import com.example.universitycms.exception.UserRoleException;
+import com.example.universitycms.exception.UsernameException;
 import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,7 +62,7 @@ public class UserServiceTest {
         User user = new User("Test username 1", "Test password", "Test email", new Role("USER"));
         when(userRepository.existsByUserName(user.getUserName())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
+        UsernameException exception = assertThrows(UsernameException.class, () -> userService.registerUser(user));
         assertEquals("This username is already exists!", exception.getMessage());
         verify(userRepository).existsByUserName(user.getUserName());
         verify(userRepository,never()).existsByEmail(user.getEmail());
@@ -72,7 +76,7 @@ public class UserServiceTest {
                 .thenReturn(false);
         when(userRepository.existsByEmail(user.getEmail())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.registerUser(user));
+        UserEmailException exception = assertThrows(UserEmailException.class, () -> userService.registerUser(user));
         assertEquals("This E-mail is already exists!", exception.getMessage());
         verify(userRepository).existsByUserName(user.getUserName());
         verify(userRepository).existsByEmail(user.getEmail());
@@ -81,7 +85,7 @@ public class UserServiceTest {
 
     @Test
     void registerUser_shouldThrowException_whenInputContainsNull() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.registerUser(null));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.registerUser(null));
         assertEquals("Input contains null!", exception.getMessage());
         verify(userRepository, never()).existsByUserName(null);
         verify(userRepository, never()).existsByEmail(null);
@@ -130,7 +134,7 @@ public class UserServiceTest {
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getUsersByRole(role.getRoleId()));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userService.getUsersByRole(role.getRoleId()));
         assertEquals(exception.getMessage(), "This role doesn't exist!");
         verify(userRepository).existsByRole_RoleId(role.getRoleId());
         verify(userRepository, never()).findAll();
@@ -145,7 +149,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserName(username))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getUserByUsername(username));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.getUserByUsername(username));
 
         assertEquals("User with this name doesn't exist!", exception.getMessage());
 
@@ -193,7 +197,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.changeUserRole(user));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.changeUserRole(user));
 
         assertEquals("This user doesn't exist!", exception.getMessage());
 
@@ -246,7 +250,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.changeUserStatus(user));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.changeUserStatus(user));
 
         assertEquals("This user doesn't exist!", exception.getMessage());
 
@@ -343,7 +347,7 @@ public class UserServiceTest {
                 .thenReturn(null);
 
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesForStudentByUserId(userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.getAllCoursesForStudentByUserId(userId));
 
         assertEquals(exception.getMessage(), "User with this Id doesn't exist!");
         verify(userRepository).findUserByUserId(userId);
@@ -390,7 +394,7 @@ public class UserServiceTest {
                 .thenReturn(null);
 
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getAllCoursesForTeacherByUserId(userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.getAllCoursesForTeacherByUserId(userId));
 
         assertEquals(exception.getMessage(), "User with this Id doesn't exist!");
         verify(userRepository).findUserByUserId(userId);
@@ -405,7 +409,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForStudent(userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.getScheduleForStudent(userId));
 
         assertEquals("User with this Id does not exist!", exception.getMessage());
 
@@ -428,7 +432,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(user.getUserId()))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForStudent(user.getUserId()));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userService.getScheduleForStudent(user.getUserId()));
 
         assertEquals("Your user is not a student!", exception.getMessage());
 
@@ -480,7 +484,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForTeacher(userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userService.getScheduleForTeacher(userId));
 
         assertEquals("User with this Id does not exist!", exception.getMessage());
 
@@ -502,7 +506,7 @@ public class UserServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.getScheduleForTeacher(user.getUserId()));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userService.getScheduleForTeacher(user.getUserId()));
 
         assertEquals("Your user is not a teacher!", exception.getMessage());
 

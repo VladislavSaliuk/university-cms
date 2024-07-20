@@ -44,7 +44,7 @@ public class AdminGroupController {
         try {
             groupService.createGroup(group);
             redirectAttributes.addFlashAttribute("successMessage", "Group added successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -57,7 +57,7 @@ public class AdminGroupController {
         try {
             groupService.updateGroup(group);
             redirectAttributes.addFlashAttribute("successMessage", "Group updated successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -70,7 +70,7 @@ public class AdminGroupController {
         try {
             groupService.removeGroupByGroupId(groupId);
             redirectAttributes.addFlashAttribute("successMessage", "Group deleted successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }

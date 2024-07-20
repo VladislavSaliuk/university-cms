@@ -1,7 +1,8 @@
 package com.example.universitycms.controller;
 
 import com.example.universitycms.model.User;
-import com.example.universitycms.service.*;
+import com.example.universitycms.service.UserCourseService;
+import com.example.universitycms.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class StuffStudentController {
         try {
             userCourseService.assignTeacherOnCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course assigned successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }
@@ -66,7 +67,7 @@ public class StuffStudentController {
         try {
             userCourseService.removeTeacherFromCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course removed successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }

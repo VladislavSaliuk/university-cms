@@ -1,7 +1,10 @@
 package com.example.universitycms.service;
 
 
-import com.example.universitycms.model.*;
+import com.example.universitycms.exception.*;
+import com.example.universitycms.model.Group;
+import com.example.universitycms.model.Role;
+import com.example.universitycms.model.User;
 import com.example.universitycms.repository.GroupRepository;
 import com.example.universitycms.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -57,7 +60,7 @@ public class GroupServiceTest {
     @Test
     void createGroup_shouldThrowException_whenGroupNameDoesNotExist() {
         Group group = new Group();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.createGroup(group));
+        GroupNameException exception = assertThrows(GroupNameException.class, () -> groupService.createGroup(group));
         assertEquals(exception.getMessage(), "Group must contains name!");
         verify(groupRepository, never()).existsByGroupName(group.getGroupName());
         verify(groupRepository, never()).save(group);
@@ -69,7 +72,7 @@ public class GroupServiceTest {
         when(groupRepository.existsByGroupName(group.getGroupName()))
                 .thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.createGroup(group));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.createGroup(group));
         assertEquals(exception.getMessage(),"Group with this name already exists!");
         verify(groupRepository).existsByGroupName(group.getGroupName());
         verify(groupRepository, never()).save(group);
@@ -91,7 +94,7 @@ public class GroupServiceTest {
         when(groupRepository.existsByGroupId(groupId))
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->groupService.removeGroupByGroupId(groupId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () ->groupService.removeGroupByGroupId(groupId));
         assertEquals(exception.getMessage(),"Group with this id doesn't exist!");
         verify(groupRepository).existsByGroupId(groupId);
         verify(groupRepository,never()).deleteByGroupId(groupId);
@@ -132,7 +135,7 @@ public class GroupServiceTest {
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(null)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.updateGroup(group));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.updateGroup(group));
         assertEquals(exception.getMessage(), "This group doesn't exist!");
 
         verify(groupRepository).findGroupByGroupId(groupId);
@@ -152,7 +155,7 @@ public class GroupServiceTest {
 
         group.setGroupName(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.updateGroup(group));
+        GroupNameException exception = assertThrows(GroupNameException.class, () -> groupService.updateGroup(group));
 
         assertEquals(exception.getMessage(), "Group must contains name!");
         verify(groupRepository).findGroupByGroupId(groupId);
@@ -176,7 +179,7 @@ public class GroupServiceTest {
 
         when(groupRepository.existsByGroupName(updatedGroup.getGroupName())).thenReturn(true);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.updateGroup(updatedGroup));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.updateGroup(updatedGroup));
 
         assertEquals("Group with this name already exists!", exception.getMessage());
         verify(groupRepository).findGroupByGroupId(groupId);
@@ -217,7 +220,7 @@ public class GroupServiceTest {
         long groupId = 100;
 
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(null);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.getGroupByGroupId(groupId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.getGroupByGroupId(groupId));
         assertEquals("Group with this Id doesn't exists!",exception.getMessage());
 
         verify(groupRepository).findGroupByGroupId(groupId);
@@ -267,7 +270,7 @@ public class GroupServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.assignUserToGroup(groupId, userId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.assignUserToGroup(groupId, userId));
 
         assertEquals("Group with this Id doesn't exist!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 0);
@@ -294,7 +297,7 @@ public class GroupServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.assignUserToGroup(groupId, userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> groupService.assignUserToGroup(groupId, userId));
 
         assertEquals("User with this Id doesn't exist!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 0);
@@ -323,7 +326,7 @@ public class GroupServiceTest {
 
         group.getUserSet().add(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.assignUserToGroup(groupId, groupId));
+        UserAlreadyAssignedException exception = assertThrows(UserAlreadyAssignedException.class, () -> groupService.assignUserToGroup(groupId, groupId));
 
         assertEquals("User with this Id already assigned!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 1);
@@ -381,7 +384,7 @@ public class GroupServiceTest {
 
         group.getUserSet().add(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.removeUserFromGroup(groupId, userId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.removeUserFromGroup(groupId, userId));
 
         assertEquals("Group with this Id doesn't exist!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 1);
@@ -411,7 +414,7 @@ public class GroupServiceTest {
 
         group.getUserSet().add(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.removeUserFromGroup(groupId, userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> groupService.removeUserFromGroup(groupId, userId));
 
         assertEquals("User with this Id doesn't exist!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 1);
@@ -438,7 +441,7 @@ public class GroupServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupService.removeUserFromGroup(groupId, userId));
+        UserNotAssignedException exception = assertThrows(UserNotAssignedException.class, () -> groupService.removeUserFromGroup(groupId, userId));
 
         assertEquals("User with this Id is not assigned!", exception.getMessage());
         assertEquals(group.getUserSet().size(), 0);

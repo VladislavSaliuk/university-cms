@@ -1,8 +1,14 @@
 package com.example.universitycms.service;
 
 
-import com.example.universitycms.model.*;
-import com.example.universitycms.repository.*;
+import com.example.universitycms.exception.*;
+import com.example.universitycms.model.Course;
+import com.example.universitycms.model.RoleId;
+import com.example.universitycms.model.User;
+import com.example.universitycms.model.UserCourse;
+import com.example.universitycms.repository.CourseRepository;
+import com.example.universitycms.repository.UserCourseRepository;
+import com.example.universitycms.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,7 +76,7 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("Teacher with this Id doesn't exist!",exception.getMessage());
         verify(userRepository).findUserByUserId(userId);
@@ -95,7 +101,7 @@ public class UserCourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("This user is not a teacher!",exception.getMessage());
 
@@ -119,7 +125,7 @@ public class UserCourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
 
@@ -150,7 +156,7 @@ public class UserCourseServiceTest {
                 .thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        UserAlreadyAssignedException exception = assertThrows(UserAlreadyAssignedException.class, () ->
                 userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("This teacher is already assigned on this course!", exception.getMessage());
@@ -213,7 +219,7 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("Teacher with this Id doesn't exist!",exception.getMessage());
 
@@ -240,7 +246,7 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userCourseService.assignTeacherOnCourse(userId, courseId));
 
         assertEquals("This user is not a teacher!",exception.getMessage());
 
@@ -271,7 +277,7 @@ public class UserCourseServiceTest {
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.removeTeacherFromCourse(userId, courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> userCourseService.removeTeacherFromCourse(userId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
 
@@ -306,7 +312,7 @@ public class UserCourseServiceTest {
         when(userCourseRepository.existsByUser_UserIdAndCourse_CourseId(userId, courseId))
                 .thenReturn(false);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        UserNotAssignedException exception = assertThrows(UserNotAssignedException.class, () ->
                 userCourseService.removeTeacherFromCourse(userId, courseId));
 
         assertEquals("This teacher is not assigned on this course!", exception.getMessage());
@@ -367,7 +373,7 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
 
         assertEquals("Teacher with this Id doesn't exist!", exception.getMessage());
 
@@ -387,7 +393,7 @@ public class UserCourseServiceTest {
         when(userRepository.findUserByUserId(userId))
                 .thenReturn(user);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
+        UserRoleException exception = assertThrows(UserRoleException.class, () -> userCourseService.getUnassignedCoursesForTeacher(userId));
 
         assertEquals("This user is not a teacher!", exception.getMessage());
 

@@ -1,12 +1,14 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.exception.CourseNameException;
+import com.example.universitycms.exception.CourseNotFoundException;
+import com.example.universitycms.exception.ScheduleTimeException;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +23,11 @@ public class CourseService {
     public void createCourse(Course course) {
 
         if (course.getCourseName() == null) {
-            throw new IllegalArgumentException("Course must contains name!");
+            throw new CourseNameException("Course must contains name!");
         }
 
         if (courseRepository.existsByCourseName(course.getCourseName())) {
-            throw new IllegalArgumentException("Course with this name already exists!");
+            throw new CourseNameException("Course with this name already exists!");
         }
 
         courseRepository.save(course);
@@ -38,7 +40,7 @@ public class CourseService {
     public void removeCourseByCourseId(long courseId) {
 
         if (!courseRepository.existsByCourseId(courseId)) {
-            throw new IllegalArgumentException("Course with this id doesn't exist!");
+            throw new CourseNotFoundException("Course with this id doesn't exist!");
         }
 
         courseRepository.deleteCourseByCourseId(courseId);
@@ -49,15 +51,15 @@ public class CourseService {
         Course existingCourse = courseRepository.findCourseByCourseId(course.getCourseId());
 
         if (existingCourse == null) {
-            throw new IllegalArgumentException("This course doesn't exist!");
+            throw new CourseNotFoundException("This course doesn't exist!");
         }
 
         if (course.getCourseName() == null) {
-            throw new IllegalArgumentException("Course must contains name!");
+            throw new CourseNameException("Course must contains name!");
         }
 
         if (!existingCourse.getCourseName().equals(course.getCourseName()) && courseRepository.existsByCourseName(course.getCourseName())) {
-            throw new IllegalArgumentException("Course with this name already exists!");
+            throw new CourseNameException("Course with this name already exists!");
         }
 
         existingCourse.setCourseName(course.getCourseName());
@@ -71,7 +73,7 @@ public class CourseService {
         Course course = courseRepository.findCourseByCourseId(courseId);
 
         if(course == null) {
-            throw new IllegalArgumentException("Course with this Id doesn't exists!");
+            throw new CourseNotFoundException("Course with this Id doesn't exists!");
         }
 
         return course;
@@ -82,11 +84,11 @@ public class CourseService {
         Course existingCourse = courseRepository.findCourseByCourseId(course.getCourseId());
 
         if(existingCourse == null) {
-            throw new IllegalArgumentException("This course doesn't exist!");
+            throw new CourseNotFoundException("This course doesn't exist!");
         }
 
         if(course.getDayOfWeek() == null) {
-            throw new IllegalArgumentException("Day of week is not set!");
+            throw new ScheduleTimeException("Day of week is not set!");
         }
 
         existingCourse.setDayOfWeek(course.getDayOfWeek());
@@ -101,7 +103,7 @@ public class CourseService {
 
             courseRepository.save(existingCourse);
         } else {
-            throw new IllegalArgumentException("This time is not available.Set another time range or day of the week!");
+            throw new ScheduleTimeException("This time is not available.Set another time range or day of the week!");
         }
 
     }

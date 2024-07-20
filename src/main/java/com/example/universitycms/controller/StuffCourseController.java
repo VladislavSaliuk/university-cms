@@ -46,7 +46,7 @@ public class StuffCourseController {
         try {
             courseService.createCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course added successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -59,7 +59,7 @@ public class StuffCourseController {
         try {
             courseService.updateCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course updated successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }

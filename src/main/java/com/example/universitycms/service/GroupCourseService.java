@@ -1,5 +1,9 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.exception.CourseNotFoundException;
+import com.example.universitycms.exception.GroupAlreadyAssignedException;
+import com.example.universitycms.exception.GroupNotAssignedException;
+import com.example.universitycms.exception.GroupNotFoundException;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.model.Group;
 import com.example.universitycms.model.GroupCourse;
@@ -9,7 +13,6 @@ import com.example.universitycms.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,15 +35,15 @@ public class GroupCourseService {
         Course course = courseRepository.findCourseByCourseId(courseId);
 
         if(group == null) {
-            throw new IllegalArgumentException("Group with this Id doesn't exist!");
+            throw new GroupNotFoundException("Group with this Id doesn't exist!");
         }
 
         if(course == null) {
-            throw new IllegalArgumentException("Course with this Id doesn't exist!");
+            throw new CourseNotFoundException("Course with this Id doesn't exist!");
         }
 
         if(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)) {
-            throw new IllegalArgumentException("This group is already assigned on this course!");
+            throw new GroupAlreadyAssignedException("This group is already assigned on this course!");
         }
 
         GroupCourse groupCourse = new GroupCourse(group, course);
@@ -50,15 +53,15 @@ public class GroupCourseService {
     public void removeCourseFromGroup(long groupId, long courseId) {
 
         if(!groupRepository.existsByGroupId(groupId)) {
-            throw new IllegalArgumentException("Group with this Id doesn't exist!");
+            throw new GroupNotFoundException("Group with this Id doesn't exist!");
         }
 
         if(!courseRepository.existsByCourseId(courseId)) {
-            throw new IllegalArgumentException("Course with this Id doesn't exist!");
+            throw new CourseNotFoundException("Course with this Id doesn't exist!");
         }
 
         if(!groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId)) {
-            throw new IllegalArgumentException("This group is not assigned on this course!");
+            throw new GroupNotAssignedException("This group is not assigned on this course!");
         }
 
         GroupCourse groupCourse = groupCourseRepository.findByGroup_GroupIdAndCourse_CourseId(groupId, courseId);

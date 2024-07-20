@@ -70,7 +70,7 @@ public class StuffGroupController {
         try {
             groupService.createGroup(group);
             redirectAttributes.addFlashAttribute("successMessage", "Group added successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -82,7 +82,7 @@ public class StuffGroupController {
         try {
             groupService.updateGroup(group);
             redirectAttributes.addFlashAttribute("successMessage", "Group updated successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -95,7 +95,7 @@ public class StuffGroupController {
         try {
             groupCourseService.assignCourseOnGroup(groupId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course assigned successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }
@@ -109,7 +109,7 @@ public class StuffGroupController {
         try {
             groupCourseService.removeCourseFromGroup(groupId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course removed successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }
@@ -122,7 +122,7 @@ public class StuffGroupController {
         try {
             groupService.assignUserToGroup(groupId, userId);
             redirectAttributes.addFlashAttribute("successMessage", "User assigned successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch(RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }
@@ -136,7 +136,7 @@ public class StuffGroupController {
         try {
             groupService.removeUserFromGroup(groupId, userId);
             redirectAttributes.addFlashAttribute("successMessage", "User removed successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }

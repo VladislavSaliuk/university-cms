@@ -1,6 +1,8 @@
 package com.example.universitycms.repository;
 
-import com.example.universitycms.model.*;
+import com.example.universitycms.model.Role;
+import com.example.universitycms.model.User;
+import com.example.universitycms.model.UserStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

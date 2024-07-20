@@ -2,6 +2,7 @@ package com.example.universitycms.controller;
 
 
 import com.example.universitycms.model.User;
+import com.example.universitycms.model.UserStatusId;
 import com.example.universitycms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class RegistrationController {
@@ -38,6 +38,7 @@ public class RegistrationController {
     public String registerStudent(@ModelAttribute User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(STUDENT_ROLE_ID);
+        user.setUserStatus(UserStatusId.ACTIVE.getValue());
         userService.registerUser(user);
         return "redirect:/login";
     }

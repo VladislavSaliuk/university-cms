@@ -1,6 +1,10 @@
 package com.example.universitycms.service;
 
 
+import com.example.universitycms.exception.CourseNotFoundException;
+import com.example.universitycms.exception.GroupAlreadyAssignedException;
+import com.example.universitycms.exception.GroupNotAssignedException;
+import com.example.universitycms.exception.GroupNotFoundException;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.model.Group;
 import com.example.universitycms.model.GroupCourse;
@@ -12,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -75,7 +77,7 @@ public class GroupCourseServiceTest {
 
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupCourseService.assignCourseOnGroup(groupId, courseId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupCourseService.assignCourseOnGroup(groupId, courseId));
 
         assertEquals("Group with this Id doesn't exist!",exception.getMessage());
 
@@ -96,7 +98,7 @@ public class GroupCourseServiceTest {
         when(groupRepository.findGroupByGroupId(groupId)).thenReturn(group);
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupCourseService.assignCourseOnGroup(groupId, courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> groupCourseService.assignCourseOnGroup(groupId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
 
@@ -122,7 +124,7 @@ public class GroupCourseServiceTest {
                 .thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        GroupAlreadyAssignedException exception = assertThrows(GroupAlreadyAssignedException.class, () ->
                 groupCourseService.assignCourseOnGroup(groupId, courseId));
 
         assertEquals("This group is already assigned on this course!", exception.getMessage());
@@ -179,7 +181,7 @@ public class GroupCourseServiceTest {
         when(groupRepository.existsByGroupId(groupId)).thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupCourseService.removeCourseFromGroup(groupId, courseId));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupCourseService.removeCourseFromGroup(groupId, courseId));
 
         assertEquals("Group with this Id doesn't exist!", exception.getMessage());
 
@@ -213,7 +215,7 @@ public class GroupCourseServiceTest {
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> groupCourseService.removeCourseFromGroup(groupId, courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> groupCourseService.removeCourseFromGroup(groupId, courseId));
 
         assertEquals("Course with this Id doesn't exist!",exception.getMessage());
         verify(groupRepository).existsByGroupId(groupId);
@@ -246,7 +248,7 @@ public class GroupCourseServiceTest {
         when(groupCourseRepository.existsByGroup_GroupIdAndCourse_CourseId(groupId, courseId))
                 .thenReturn(false);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+        GroupNotAssignedException exception = assertThrows(GroupNotAssignedException.class, () ->
                 groupCourseService.removeCourseFromGroup(groupId, courseId));
 
         assertEquals("This group is not assigned on this course!", exception.getMessage());

@@ -2,7 +2,6 @@ package com.example.universitycms.config;
 
 import com.example.universitycms.model.User;
 import com.example.universitycms.service.UserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

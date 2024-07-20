@@ -48,7 +48,7 @@ public class AdminCourseController {
         try {
             courseService.createCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course added successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -61,7 +61,7 @@ public class AdminCourseController {
         try {
             courseService.updateCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course updated successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
@@ -74,7 +74,7 @@ public class AdminCourseController {
         try {
             courseService.removeCourseByCourseId(courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course deleted successfully!");
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }

@@ -49,7 +49,7 @@ public class StuffTeacherController {
         try {
             userCourseService.assignTeacherOnCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course assigned successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }
@@ -63,7 +63,7 @@ public class StuffTeacherController {
         try {
             userCourseService.removeTeacherFromCourse(userId, courseId);
             redirectAttributes.addFlashAttribute("successMessage", "Course removed successfully!");
-        } catch (IllegalArgumentException exception) {
+        } catch (RuntimeException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             logger.error(exception.getMessage());
         }

@@ -1,7 +1,6 @@
 package com.example.universitycms.controller;
 
 
-import com.example.universitycms.model.Course;
 import com.example.universitycms.model.User;
 import com.example.universitycms.service.UserService;
 import jakarta.servlet.http.HttpSession;

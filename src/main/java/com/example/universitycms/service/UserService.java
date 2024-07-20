@@ -1,6 +1,6 @@
 package com.example.universitycms.service;
 
-import com.example.universitycms.exception.UserStatusException;
+import com.example.universitycms.exception.*;
 import com.example.universitycms.model.*;
 import com.example.universitycms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +22,15 @@ public class UserService implements UserDetailsService {
     public void registerUser(User user) {
 
         if(user == null) {
-            throw new IllegalArgumentException("Input contains null!");
+            throw new RuntimeException("Input contains null!");
         }
 
         if(userRepository.existsByUserName(user.getUserName())) {
-            throw new IllegalArgumentException("This username is already exists!");
+            throw new UsernameException("This username is already exists!");
         }
 
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("This E-mail is already exists!");
+            throw new UserEmailException("This E-mail is already exists!");
         }
 
         userRepository.save(user);
@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
     public List<User> getUsersByRole(long roleId) {
 
         if(!userRepository.existsByRole_RoleId(roleId)) {
-            throw new IllegalArgumentException("This role doesn't exist!");
+            throw new UserRoleException("This role doesn't exist!");
         }
 
         return userRepository.findAll()
@@ -77,7 +77,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUserName(username);
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this name doesn't exist!");
+            throw new UserNotFoundException("User with this name doesn't exist!");
         }
 
         return user;
@@ -88,7 +88,7 @@ public class UserService implements UserDetailsService {
         User existingUser = userRepository.findUserByUserId(user.getUserId());
 
         if(existingUser == null) {
-            throw new IllegalArgumentException("This user doesn't exist!");
+            throw new UserNotFoundException("This user doesn't exist!");
         }
 
         Role newRole = user.getRole();
@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
         User existingUser = userRepository.findUserByUserId(user.getUserId());
 
         if(existingUser == null) {
-            throw new IllegalArgumentException("This user doesn't exist!");
+            throw new UserNotFoundException("This user doesn't exist!");
         }
 
         UserStatus newUserStatus = user.getUserStatus();
@@ -116,11 +116,11 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUserId(userId);
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
+            throw new UserNotFoundException("User with this Id doesn't exist!");
         }
 
         if(user.getRole().getRoleId() != RoleId.STUDENT.getValue()) {
-            throw new IllegalArgumentException("Your user is not a student!");
+            throw new UserRoleException("Your user is not a student!");
         }
 
         return user.getGroup().getUserSet()
@@ -134,7 +134,7 @@ public class UserService implements UserDetailsService {
 
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
+            throw new UserNotFoundException("User with this Id doesn't exist!");
         }
 
         if(user.getGroup() == null) {
@@ -150,7 +150,7 @@ public class UserService implements UserDetailsService {
 
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id doesn't exist!");
+            throw new UserNotFoundException("User with this Id doesn't exist!");
         }
 
         return user.getCourseList();
@@ -161,11 +161,11 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUserId(userId);
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id does not exist!");
+            throw new UserNotFoundException("User with this Id does not exist!");
         }
 
         if(user.getRole().getRoleId() != RoleId.STUDENT.getValue()) {
-            throw new IllegalArgumentException("Your user is not a student!");
+            throw new UserRoleException("Your user is not a student!");
         }
 
         List<Course> coursesSetInSchedule = user
@@ -183,11 +183,11 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findUserByUserId(userId);
 
         if(user == null) {
-            throw new IllegalArgumentException("User with this Id does not exist!");
+            throw new UserNotFoundException("User with this Id does not exist!");
         }
 
         if(user.getRole().getRoleId() != RoleId.TEACHER.getValue()) {
-            throw new IllegalArgumentException("Your user is not a teacher!");
+            throw new UserRoleException("Your user is not a teacher!");
         }
 
         List<Course> coursesSetInSchedule = user

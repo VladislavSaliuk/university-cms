@@ -1,5 +1,8 @@
 package com.example.universitycms.service;
 
+import com.example.universitycms.exception.CourseNameException;
+import com.example.universitycms.exception.CourseNotFoundException;
+import com.example.universitycms.exception.ScheduleTimeException;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.model.DayOfWeek;
 import com.example.universitycms.repository.CourseRepository;
@@ -8,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -57,14 +59,15 @@ public class CourseServiceTest {
         Course course = new Course("Mathematics", "Test description");
         when(courseRepository.existsByCourseName(course.getCourseName()))
                 .thenReturn(true);
-        assertThrows(IllegalArgumentException.class, () -> {courseService.createCourse(course);});
+        CourseNameException exception = assertThrows(CourseNameException.class, () -> {courseService.createCourse(course);});
+        assertEquals("Course with this name already exists!", exception.getMessage());
         verify(courseRepository).existsByCourseName(course.getCourseName());
         verify(courseRepository, never()).save(course);
     }
     @Test
     void createCourse_shouldThrowException_whenCourseDoesNotContainName() {
         Course course = new Course();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.createCourse(course));
+        CourseNameException exception = assertThrows(CourseNameException.class, () -> courseService.createCourse(course));
         assertEquals(exception.getMessage(), "Course must contains name!");
         verify(courseRepository, never()).existsByCourseName(course.getCourseName());
         verify(courseRepository, never()).save(course);
@@ -86,7 +89,7 @@ public class CourseServiceTest {
         when(courseRepository.existsByCourseId(courseId))
                 .thenReturn(false)
                 .thenThrow(IllegalArgumentException.class);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.removeCourseByCourseId(courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> courseService.removeCourseByCourseId(courseId));
         assertEquals(exception.getMessage(),"Course with this id doesn't exist!");
         verify(courseRepository).existsByCourseId(courseId);
         verify(courseRepository,never()).deleteCourseByCourseId(courseId);
@@ -127,7 +130,7 @@ public class CourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId)).thenReturn(null)
                 .thenThrow(IllegalArgumentException.class);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse(course));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> courseService.updateCourse(course));
         assertEquals(exception.getMessage(), "This course doesn't exist!");
 
         verify(courseRepository).findCourseByCourseId(courseId);
@@ -149,7 +152,7 @@ public class CourseServiceTest {
         course.setCourseName(null);
         course.setCourseDescription(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse(course));
+        CourseNameException exception = assertThrows(CourseNameException.class, () -> courseService.updateCourse(course));
 
         assertEquals(exception.getMessage(), "Course must contains name!");
         verify(courseRepository).findCourseByCourseId(courseId);
@@ -175,7 +178,7 @@ public class CourseServiceTest {
 
         when(courseRepository.existsByCourseName(updatedCourse.getCourseName())).thenReturn(true);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.updateCourse(updatedCourse));
+        CourseNameException exception = assertThrows(CourseNameException.class, () -> courseService.updateCourse(updatedCourse));
 
         assertEquals("Course with this name already exists!", exception.getMessage());
         verify(courseRepository).findCourseByCourseId(courseId);
@@ -215,7 +218,7 @@ public class CourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.getCourseByCourseId(courseId));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> courseService.getCourseByCourseId(courseId));
         assertEquals("Course with this Id doesn't exists!",exception.getMessage());
         verify(courseRepository).findCourseByCourseId(courseId);
     }
@@ -344,7 +347,7 @@ public class CourseServiceTest {
         when(courseRepository.findCourseByCourseId(course.getCourseId()))
                 .thenReturn(null);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.setScheduleTimeForCourse(course));
+        CourseNotFoundException exception = assertThrows(CourseNotFoundException.class, () -> courseService.setScheduleTimeForCourse(course));
 
         assertEquals("This course doesn't exist!", exception.getMessage());
 
@@ -370,7 +373,7 @@ public class CourseServiceTest {
         when(courseRepository.findCourseByCourseId(courseId))
                 .thenReturn(existingCourse);
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> courseService.setScheduleTimeForCourse(updatedCourse));
+        ScheduleTimeException exception = assertThrows(ScheduleTimeException.class, () -> courseService.setScheduleTimeForCourse(updatedCourse));
 
         assertEquals("Day of week is not set!" , exception.getMessage());
 
@@ -406,7 +409,7 @@ public class CourseServiceTest {
         CourseService spyCourseService = spy(courseService);
         doReturn(false).when(spyCourseService).isTimeAvailableForCourse(any(Course.class));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> spyCourseService.setScheduleTimeForCourse(updatedCourse));
+        ScheduleTimeException exception = assertThrows(ScheduleTimeException.class, () -> spyCourseService.setScheduleTimeForCourse(updatedCourse));
 
         assertEquals("This time is not available.Set another time range or day of the week!", exception.getMessage());
 
