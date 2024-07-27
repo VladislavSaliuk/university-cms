@@ -1,0 +1,245 @@
+body {
+    position: relative;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    background: url("/img/home-page-bg.jpg") no-repeat center center/cover;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+body * {
+    position: relative;
+    z-index: 2;
+}
+
+.navbar {
+    background-color: #fff;
+    height: 80px;
+    margin: 20px;
+    border-radius: 16px;
+    padding: 0.5rem;
+    z-index: 3;
+}
+
+.navbar-brand {
+    font-weight: 500;
+    color: #009970;
+    font-size: 24px;
+    transition: 0.3s color;
+}
+
+.login-button {
+    background-color: #009970;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: 0.3s background-color;
+}
+
+a {
+    text-decoration: none;
+}
+
+.login-button:hover {
+    background-color: #00b383;
+}
+
+.navbar-toggler {
+    border: none;
+    font-size: 1.25rem;
+}
+
+.navbar-toggler:focus, .btn-close:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.nav-link {
+    color: #666777;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-link:hover, .nav-link:active {
+    color: #000;
+}
+
+@media(min-width: 991px) {
+    .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background-color: #009970;
+        visibility: hidden;
+        transition: 0.3s ease-in-out;
+    }
+
+    .nav-link:hover::before, .nav-link.active::before  {
+        width: 100%;
+        visibility: visible;
+    }
+}
+
+.about {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    width: calc(100% - 40px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    margin: 20px auto;
+    opacity: 0;
+    animation: fadeIn 2s forwards, backgroundFade 2s forwards;
+}
+
+@keyframes backgroundFade {
+    from { background: rgba(255, 255, 255, 0); }
+    to { background: rgba(255, 255, 255, 0.9); }
+}
+
+.about img {
+    border-radius: 16px;
+    box-shadow: 6px 4px 41px -24px rgba(0,0,0,0.75);
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item img:hover {
+    transform: scale(1.05);
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    opacity: 0;
+    animation: fadeIn 2s 1s forwards;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.progress {
+    background-color: rgb(223, 219, 219);
+    justify-content: flex-start;
+    border-radius: 50px;
+    align-items: center;
+    position: relative;
+    display: flex;
+    height: 25px;
+    width: 100%;
+    box-shadow: inset 23px 40px 97px -159px rgba(0,0,0,0.75);
+}
+
+.pro-value1, .pro-value2, .pro-value3, .pro-value4 {
+    border-radius: 50px;
+    background-color: black;
+    height: 25px;
+    width: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.pro-value1 {
+    animation: load1 3s normal forwards;
+}
+
+.pro-value2 {
+    animation: load2 3s normal forwards;
+}
+
+.pro-value3 {
+    animation: load3 3s normal forwards;
+}
+
+.pro-value4 {
+    animation: load4 3s normal forwards;
+}
+
+.progress p {
+    color: white;
+    padding: 3px;
+    margin-left: 10px;
+}
+
+@keyframes load1 {
+    0% { width: 0; }
+    100% { width: 90%; }
+}
+
+@keyframes load2 {
+    0% { width: 0; }
+    100% { width: 95%; }
+}
+
+@keyframes load3 {
+    0% { width: 0; }
+    100% { width: 70%; }
+}
+
+@keyframes load4 {
+    0% { width: 0; }
+    100% { width: 98%; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.btn1, .btn2 {
+    height: 40px;
+    width: 145px;
+    outline: none;
+    border-radius: 4px;
+    transition: background-color 0.5s, color 0.5s, border 0.5s;
+}
+
+.btn1 {
+    border: none;
+    background-color: black;
+    color: white;
+}
+
+.btn1:hover {
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
+}
+
+.btn2 {
+    border: 1px solid black;
+    background-color: transparent;
+    color: black;
+}
+
+.btn2:hover {
+    background-color: black;
+    color: white;
+    border: none;
+}

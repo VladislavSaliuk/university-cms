@@ -29,9 +29,9 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/login","/home", "/img/**", "/templates/**","/registration/**").permitAll();
+                    registry.requestMatchers("/",  "/about-me", "/features", "/contact-me", "/cv/**","/css/**", "/img/**", "/templates/**", "/registration/**").permitAll();
                     registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                    registry.requestMatchers("/stuff/**").hasRole("STUFF");
+                    registry.requestMatchers("/staff/**").hasRole("STAFF");
                     registry.requestMatchers("/student/**").hasRole("STUDENT");
                     registry.anyRequest().authenticated();
                 })
@@ -40,6 +40,7 @@ public class SecurityConfiguration {
                             .successHandler(customAuthenticationSuccessHandler)
                             .permitAll();
                 })
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/home"))
                 .build();
     }
 
