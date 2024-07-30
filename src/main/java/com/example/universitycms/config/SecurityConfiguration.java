@@ -24,6 +24,9 @@ public class SecurityConfiguration {
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -37,6 +40,7 @@ public class SecurityConfiguration {
                 })
                 .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer.loginPage("/login")
+                            .failureHandler(customAuthenticationFailureHandler)
                             .successHandler(customAuthenticationSuccessHandler)
                             .permitAll();
                 })

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -21,16 +22,12 @@ public class UserService implements UserDetailsService {
 
     public void registerUser(User user) {
 
-        if(user == null) {
-            throw new RuntimeException("Input contains null!");
-        }
-
         if(userRepository.existsByUserName(user.getUserName())) {
-            throw new UsernameException("This username is already exists!");
+            throw new UsernameException("This username already exists!");
         }
 
         if(userRepository.existsByEmail(user.getEmail())) {
-            throw new UserEmailException("This E-mail is already exists!");
+            throw new UserEmailException("This E-mail already exists!");
         }
 
         userRepository.save(user);
@@ -55,21 +52,21 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUserName(username);
-        if(user != null) {
 
-            if(user.getUserStatus().getUserStatusId() == UserStatusId.BANNED.getValue()) {
-                throw new UserStatusException("User is banned!");
-            }
-
-            return org.springframework.security.core.userdetails.User.builder()
-                    .username(user.getUserName())
-                    .password(user.getPassword())
-                    .roles(user.getRole().getRoleName())
-                    .build();
-        } else {
-            throw new UsernameNotFoundException(username);
+        if(user == null) {
+            throw new UserNotFoundException("Invalid username or password!");
         }
+
+        if(user.getUserStatus().getUserStatusId() == UserStatusId.BANNED.getValue()) {
+            throw new UserStatusException("You're banned!");
+        }
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUserName())
+                .password(user.getPassword())
+                .roles(user.getRole().getRoleName()).build();
     }
+
 
 
     public User getUserByUsername(String username) {

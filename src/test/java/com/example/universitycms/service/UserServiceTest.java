@@ -63,7 +63,7 @@ public class UserServiceTest {
         when(userRepository.existsByUserName(user.getUserName())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         UsernameException exception = assertThrows(UsernameException.class, () -> userService.registerUser(user));
-        assertEquals("This username is already exists!", exception.getMessage());
+        assertEquals("This username already exists!", exception.getMessage());
         verify(userRepository).existsByUserName(user.getUserName());
         verify(userRepository,never()).existsByEmail(user.getEmail());
         verify(userRepository,never()).save(user);
@@ -77,21 +77,11 @@ public class UserServiceTest {
         when(userRepository.existsByEmail(user.getEmail())).thenReturn(true)
                 .thenThrow(IllegalArgumentException.class);
         UserEmailException exception = assertThrows(UserEmailException.class, () -> userService.registerUser(user));
-        assertEquals("This E-mail is already exists!", exception.getMessage());
+        assertEquals("This E-mail already exists!", exception.getMessage());
         verify(userRepository).existsByUserName(user.getUserName());
         verify(userRepository).existsByEmail(user.getEmail());
         verify(userRepository, never()).save(user);
     }
-
-    @Test
-    void registerUser_shouldThrowException_whenInputContainsNull() {
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> userService.registerUser(null));
-        assertEquals("Input contains null!", exception.getMessage());
-        verify(userRepository, never()).existsByUserName(null);
-        verify(userRepository, never()).existsByEmail(null);
-        verify(userRepository, never()).save(null);
-    }
-
     @Test
     void getAll_shouldReturnUserList() {
         when(userRepository.findAll())

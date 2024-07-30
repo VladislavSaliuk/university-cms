@@ -1,6 +1,10 @@
 package com.example.universitycms.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -43,14 +47,13 @@ public class User implements Serializable {
     @JoinColumn(name = "user_status_id", nullable = false)
     private UserStatus userStatus;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "users_courses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private List<Course> courseList;
-
 
     @ManyToOne
     @JoinColumn(name = "group_id")

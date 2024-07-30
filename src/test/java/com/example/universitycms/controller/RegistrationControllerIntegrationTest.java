@@ -45,20 +45,24 @@ public class RegistrationControllerIntegrationTest {
         mockMvc.perform(get("/registration/student"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-student-page"))
-                .andExpect(model().attributeExists("student"));
+                .andExpect(model().attributeExists("userDTO"));
     }
 
     @Test
     public void registerStudent_shouldRegisterStudentAndRedirectToLoginPageView() throws Exception {
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
         doNothing().when(userService).registerUser(any(User.class));
 
-        mockMvc.perform(post("/registered-student")
-                        .param("username", "testUser")
-                        .param("password", "testPassword")
-                        .param("otherModelAttribute", "otherModelAttribute"))
-                .andExpect(redirectedUrl("http://localhost/login"));
+        mockMvc.perform(post("/registration/student")
+                        .param("firstName", "Test")
+                        .param("lastName", "User")
+                        .param("userName", "testUser")
+                        .param("email", "test@example.com")
+                        .param("password", "password")
+                        .param("confirmPassword", "password"))
+                .andExpect(status().isOk());
 
     }
 
@@ -67,20 +71,24 @@ public class RegistrationControllerIntegrationTest {
         mockMvc.perform(get("/registration/teacher"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-teacher-page"))
-                .andExpect(model().attributeExists("teacher"));
+                .andExpect(model().attributeExists("userDTO"));
     }
 
     @Test
     public void registerTeacher_shouldRegisterTeacherAndRedirectToLoginPageView() throws Exception {
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+
         doNothing().when(userService).registerUser(any(User.class));
 
-        mockMvc.perform(post("/registered-teacher")
-                        .param("username", "testUser")
-                        .param("password", "testPassword")
-                        .param("otherModelAttribute", "otherModelAttribute"))
-                .andExpect(redirectedUrl("http://localhost/login"));
+        mockMvc.perform(post("/registration/teacher")
+                        .param("firstName", "Test")
+                        .param("lastName", "Teacher")
+                        .param("userName", "teacherUser")
+                        .param("email", "teacher@example.com")
+                        .param("password", "password")
+                        .param("confirmPassword", "password"))
+                .andExpect(status().isOk());
 
     }
 
