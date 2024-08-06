@@ -79,6 +79,18 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
+    public User getUserByUserId(long userId) {
+
+        User user = userRepository.findUserByUserId(userId);
+
+        if(user == null) {
+            throw new UserNotFoundException("User with this name doesn't exist!");
+        }
+
+        return user;
+
+    }
+
 
     public void changeUserRole(User user){
 

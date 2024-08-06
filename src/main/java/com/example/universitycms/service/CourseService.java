@@ -5,6 +5,7 @@ import com.example.universitycms.exception.CourseNotFoundException;
 import com.example.universitycms.exception.ScheduleTimeException;
 import com.example.universitycms.model.Course;
 import com.example.universitycms.repository.CourseRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    @Transactional
     public void removeCourseByCourseId(long courseId) {
 
         if (!courseRepository.existsByCourseId(courseId)) {

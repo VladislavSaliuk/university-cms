@@ -1,2 +1,2 @@
 INSERT INTO public.users (username, password, email, first_name, last_name, role_id, user_status_id) VALUES
-('admin', '$2a$12$4XCZdU2DGFzvgLVIAp.ZiOmd/b8OX5ovvxEGXAywflsNpv8gYnX02', 'seattlemusic345@gmail.com', 'Vladislav', 'Saliuk', 1, 1);
+('admin', '$2a$12$nhS.Y.RWTB42n2c9j1Ye0OT0x3udrz.L5r0NteUb1CC1XmfxU5XUW', 'seattlemusic345@gmail.com', 'Vladislav', 'Saliuk', 1, 1);

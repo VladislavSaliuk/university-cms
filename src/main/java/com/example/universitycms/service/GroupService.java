@@ -6,6 +6,7 @@ import com.example.universitycms.model.Group;
 import com.example.universitycms.model.User;
 import com.example.universitycms.repository.GroupRepository;
 import com.example.universitycms.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class GroupService {
     }
 
 
+    @Transactional
     public void removeGroupByGroupId(long groupId) {
 
         if(!groupRepository.existsByGroupId(groupId)) {
