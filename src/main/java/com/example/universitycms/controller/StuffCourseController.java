@@ -28,7 +28,8 @@ public class StuffCourseController {
         model.addAttribute("courseList", courseList);
         return "stuff-course-page";
     }
-    @GetMapping( "/stuff/courses/add-course")
+
+    @GetMapping("/stuff/courses/add-course")
     public String showAddCourseForm(Model model) {
         model.addAttribute("course", new Course());
         return "add-course-page";
@@ -40,9 +41,9 @@ public class StuffCourseController {
         model.addAttribute("course", course);
         return "stuff-edit-course-page";
     }
+
     @PostMapping("/stuff/courses/add-course")
     public String addCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
-
         try {
             courseService.createCourse(course);
             redirectAttributes.addFlashAttribute("successMessage", "Course added successfully!");
@@ -50,11 +51,10 @@ public class StuffCourseController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
-
         return "redirect:/stuff/courses";
     }
 
-    @PostMapping( "/stuff/courses/edit-course/{courseId}")
+    @PostMapping("/stuff/courses/edit-course/{courseId}")
     public String editCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
         try {
             courseService.updateCourse(course);
@@ -63,8 +63,34 @@ public class StuffCourseController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             logger.error(e.getMessage());
         }
-
         return "redirect:/stuff/courses";
     }
+
+    @GetMapping("/stuff/courses/set-time/{courseId}")
+    public String showSetTimeForm(@PathVariable long courseId, Model model) {
+        Course course = courseService.getCourseByCourseId(courseId);
+        model.addAttribute("course", course);
+        return "stuff-set-time-for-course-page";
+    }
+
+    @PostMapping("/stuff/courses/set-time")
+    public String setCourseTime(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
+        try {
+
+            if (course.getStartCourseTime() == null || course.getEndCourseTime() == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Start time and end time cannot be empty.");
+                return "redirect:/stuff/courses";
+            }
+
+            courseService.setScheduleTimeForCourse(course);
+            redirectAttributes.addFlashAttribute("successMessage", "Course time set successfully!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return "redirect:/stuff/courses";
+    }
+
+
 
 }

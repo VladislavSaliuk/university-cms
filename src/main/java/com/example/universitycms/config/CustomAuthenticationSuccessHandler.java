@@ -41,7 +41,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             case "ROLE_STUDENT" -> response.sendRedirect("/student/courses");
             case "ROLE_TEACHER" -> response.sendRedirect("/teacher/courses");
             case "ROLE_ADMIN" -> response.sendRedirect("/admin/home");
-            case "ROLE_STUFF" -> response.sendRedirect("/stuff/teachers");
+            case "ROLE_STUFF" -> response.sendRedirect("/stuff/home");
             default -> response.sendRedirect("/home");
         }
     }

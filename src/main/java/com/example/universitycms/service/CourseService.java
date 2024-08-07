@@ -95,7 +95,7 @@ public class CourseService {
 
         existingCourse.setDayOfWeek(course.getDayOfWeek());
 
-        if(isTimeAvailableForCourse(existingCourse)){
+        if(isTimeAvailableForCourse(course)){
 
             LocalTime startCourseTime = course.getStartCourseTime();
             LocalTime endCourseTime = course.getEndCourseTime();

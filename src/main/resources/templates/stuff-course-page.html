@@ -2,428 +2,363 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
-
-        * {
-            margin: 0;
-            padding: 0;
-            border: none;
-            outline: none;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
         body {
-            display: flex;
-        }
-
-        .slidebar {
-            position: sticky;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 115px;
-            height: 100vh;
-            padding: 0 1.7rem;
-            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #d3d3d3, #a8a8a8);
+            color: #333;
             overflow: hidden;
-            transition: all 0.5s linear;
-            background: rgb(113, 99, 186, 255);
         }
 
-        .slidebar:hover {
-            width: 240px;
-            transition: 0.5s;
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid #dee2e6;
+            padding: 0.5rem 1rem;
         }
 
-        .logo {
-            height: 80px;
-            padding: 16px;
+        .navbar-brand {
+            color: #009970;
+            font-weight: 500;
+            font-size: 1.5rem;
         }
 
-        .menu {
-            height: 88%;
-            position: relative;
-            list-style: none;
-            padding: 0;
+        .nav-link {
+            color: #666777;
+            font-weight: 500;
         }
 
-        .menu li {
-            padding: 1rem;
-            margin: 8px 0;
+        .nav-link:hover {
+            color: #000;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 8px;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .menu li:hover,
-        .active {
-            background: #e0e0e058;
-        }
-
-        .menu a {
-            color: #fff;
-            font-size: 14px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .menu a span {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            height: calc(100vh - 150px);
             overflow: hidden;
         }
 
-        .menu a i {
-            font-size: 1.2rem;
-        }
-
-        .logout {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-        }
-
-        .main--content {
-            position: relative;
-            background: #ebe9e9;
-            width: 100%;
-            padding: 1rem;
-        }
-
-        .header--wrapper {
+        .header {
+            border-bottom: 2px solid #009970;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            background: #fff;
-            border-radius: 10px;
-            padding: 10px 2rem;
-            margin-bottom: 1rem;
+            position: relative;
         }
 
-        .header--title {
-            color: rgba(113, 99, 186, 255)
+        .header h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: #009970;
+            white-space: nowrap;
         }
 
-        .user--info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+        .search-wrapper {
+            position: relative;
+            width: 200px;
         }
 
-        .search--box {
-            background: rgb(237, 237, 237);
-            border-radius: 15px;
-            color: rgba(113, 99, 186, 255);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 12px;
-        }
-
-        .search--box input {
-            background: transparent;
-            padding: 10px;
-        }
-
-        .search--box i {
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .search--box i:hover {
-            transform: scale(1.2);
-        }
-
-        .tabular--wrapper {
-            background: #fff;
-            margin-top: 1rem;
-            border-radius: 10px;
-            padding: 2rem;
-        }
-
-        .table-container {
+        .search-input {
             width: 100%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: rgba(113, 99, 186, 255);
-            color: #fff;
-        }
-
-        th {
-            padding: 15px;
-            text-align: left;
-        }
-
-        tbody {
-            background: #f2f2f2;
-        }
-
-        td {
-            padding: 15px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        tr:nth-child(even) {
-            background: #fff;
-        }
-
-        tfoot {
-            background: rgba(113, 99, 186, 255);
-            font-weight: bold;
-            color: #fff;
-        }
-
-        tfoot td {
-            padding: 15px;
-        }
-
-        .table-container button {
-            color: green;
-            background: none;
-            cursor: pointer;
-        }
-
-        .create-course-btn {
-            cursor: pointer;
-            display: inline-block;
-            background: #007bff;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-bottom: 1rem;
-            transition: background 0.3s ease;
+            padding: 8px 30px 8px 10px;
             font-size: 0.875rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .create-course-btn:hover {
-            background: #0056b3;
+        .search-input:focus {
+            border-color: #009970;
+            box-shadow: 0 0 0 0.2rem rgba(0, 153, 112, 0.25);
+            outline: none;
         }
 
-        .actions a {
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            color: #009970;
+        }
+
+        .table-wrapper {
+            height: 80%;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #009970 #e0e0e0;
+            padding: 0 15px;
+        }
+
+        .table-wrapper::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background-color: #009970;
+            border-radius: 10px;
+        }
+
+        .table-wrapper::-webkit-scrollbar-track {
+            background-color: #e0e0e0;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th, .table td {
+            white-space: nowrap;
+        }
+
+        .icon {
+            margin-right: 8px;
+            color: #009970;
+        }
+
+        .btn {
             font-size: 0.875rem;
-            transition: background 0.3s ease;
-            margin-right: 5px;
-        }
-
-        .actions a.edit {
-            background: #28a745;
-            color: #fff;
-        }
-
-        .actions a.edit:hover {
-            background: #218838;
-        }
-
-        .actions a.delete {
-            background: #dc3545;
-            color: #fff;
-        }
-
-        .actions a.delete:hover {
-            background: #c82333;
-        }
-
-        .modal-footer button {
-            background: #28a745;
-            color: #fff;
-            padding: 10px 20px;
+            border-radius: 4px;
+            padding: 8px 12px;
+            text-transform: uppercase;
+            font-weight: 500;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
 
-        .modal-footer button:hover {
-            background: #218838;
+        .btn.create {
+            background-color: #009970;
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+
+        .btn.create:hover {
+            background-color: #007a5e;
+        }
+
+        .btn.edit {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn.edit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn.delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn.set-time {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .btn.set-time:hover {
+            background-color: #e0a800;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            position: relative;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        .alert.success .closebtn {
+            color: #155724;
+        }
+
+        .alert .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            justify-content: center;
+            background: rgba(0,0,0,0.5);
             align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
-            background-color: #fff;
+            background: #fff;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
+            width: 80%;
+            max-width: 400px;
         }
 
         .modal-header, .modal-body, .modal-footer {
-            margin-bottom: 10px;
+            padding: 10px;
         }
 
         .modal-header {
-            font-size: 18px;
+            font-size: 1.25rem;
+            font-weight: bold;
         }
 
         .modal-footer {
-            display: flex;
-            justify-content: space-around;
+            text-align: right;
         }
 
         .btn-modal {
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: 500;
+            margin-left: 10px;
         }
 
         .btn-modal.yes {
-            background-color: #4caf50;
-            color: white;
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-modal.yes:hover {
+            background-color: #218838;
         }
 
         .btn-modal.no {
-            background-color: #f44336;
-            color: white;
+            background-color: #dc3545;
+            color: #fff;
         }
 
-        .alert {
-            padding: 20px;
-            background-color: #f44336;
-            color: white;
-            margin-bottom: 15px;
+        .btn-modal.no:hover {
+            background-color: #c82333;
         }
 
-        .success {
-            background-color: #4caf50;
-        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-        .closebtn {
-            margin-left: 15px;
-            color: white;
-            font-weight: bold;
-            float: right;
-            font-size: 22px;
-            line-height: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+            .header h2 {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
 
-        .closebtn:hover {
-            color: black;
+            .search-wrapper {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .search-input {
+                width: 100%;
+                padding: 8px 40px 8px 12px;
+            }
+
+            .search-icon {
+                right: 12px;
+                font-size: 1rem;
+            }
+
+            .table-wrapper {
+                padding: 0;
+            }
         }
 
     </style>
-
-
+    <title>Manage Courses</title>
 </head>
 <body>
-<div class="slidebar">
-    <div class="logo"></div>
-    <ul class="menu">
-        <li>
-            <a href="#">
-                <i class="fas fa-tachometer-alt"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li>
-            <a href="/stuff/teachers">
-                <i class="fa-solid fa-chalkboard-user"></i>
-                <span>Teachers</span>
-            </a>
-        </li>
-        <li>
-            <a href="/stuff/students">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <span>Students</span>
-            </a>
-        </li>
-        <li class="active">
-            <a href="/stuff/courses">
-                <i class="fa-solid fa-book"></i>
-                <span>Courses</span>
-            </a>
-        </li>
-        <li>
-            <a href="/stuff/groups">
-                <i class="fa-solid fa-user-group"></i>
-                <span>Groups</span>
-            </a>
-        </li>
-        <li class="logout">
-            <a href="#">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-            </a>
-        </li>
-    </ul>
-</div>
 
-<div class="main--content">
-    <div class="header--wrapper">
-        <div class="header--title">
-            <span>Stuff</span>
-            <h2>Dashboard</h2>
+<div class="admin-dashboard">
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/stuff/home">Stuff Panel</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user icon"></i>Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-cogs icon"></i>Settings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt icon"></i>Logout</a>
+                </li>
+            </ul>
         </div>
-        <div class="user--info">
-            <div class="search--box">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" placeholder="Search" id="searchBox" onkeyup="filterTable()"/>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="header">
+            <h2>Manage Courses</h2>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search courses...">
+                <i class="fas fa-search search-icon"></i>
             </div>
         </div>
-    </div>
 
-    <div th:if="${successMessage}" class="alert success">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${successMessage}"></span>
-    </div>
-    <div th:if="${errorMessage}" class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-        <span th:text="${errorMessage}"></span>
-    </div>
+        <div th:if="${successMessage}" class="alert success">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-    <div class="tabular--wrapper">
-        <h3 class="main--title">Courses</h3>
-        <a th:href="@{/stuff/courses/add-course}" class="create-course-btn">Create Course</a>
-        <div class="table-container">
-            <table id="courseTable">
+        <a th:href="@{/stuff/courses/add-course}" class="btn create">Create New Course</a>
+
+        <div class="table-wrapper">
+            <table class="table table-bordered">
                 <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Course</th>
+                    <th>Course Name</th>
                     <th>Description</th>
-                    <th>Action</th>
-                    </td>
+                    <th>Actions</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                 <tr th:each="course : ${courseList}">
                     <td th:text="${course.courseId}"></td>
                     <td th:text="${course.courseName}"></td>
                     <td th:text="${course.courseDescription}"></td>
                     <td class="actions">
                         <a th:href="@{/stuff/courses/edit-course/{courseId}(courseId=${course.getCourseId()})}" class="btn edit">Edit</a>
+                        <a href="#" class="btn delete" th:onclick="'showModal(' + ${course.courseId} + ')'">Delete</a>
+                        <a th:href="@{/stuff/courses/set-time/{courseId}(courseId=${course.getCourseId()})}" class="btn set-time">Set Time</a>
                     </td>
                 </tr>
                 </tbody>
@@ -432,28 +367,63 @@
     </div>
 </div>
 
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            Are you sure?
+        </div>
+        <div class="modal-body">
+            Do you really want to delete this course?
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal yes" onclick="confirmDelete()">Yes</button>
+            <button class="btn-modal no" onclick="closeModal()">No</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function filterTable() {
-        const searchValue = document.getElementById('searchBox').value.toLowerCase();
-        const table = document.getElementById('courseTable');
-        const rows = table.getElementsByTagName('tr');
+    let courseIdToDelete = null;
 
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName('td');
-            let showRow = false;
+    function showModal(courseId) {
+        courseIdToDelete = courseId;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
 
-            for (let j = 0; j < cells.length; j++) {
-                if (cells[j].innerText.toLowerCase().includes(searchValue)) {
-                    showRow = true;
-                    break;
-                }
-            }
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
 
-            rows[i].style.display = showRow ? '' : 'none';
+    function confirmDelete() {
+        if (courseIdToDelete) {
+            window.location.href = `/admin/courses/delete-course/${courseIdToDelete}`;
         }
     }
 
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const tableBody = document.getElementById('tableBody');
+        const rows = tableBody.getElementsByTagName('tr');
+
+        Array.from(rows).forEach(row => {
+            const cells = row.getElementsByTagName('td');
+            let match = false;
+
+            Array.from(cells).forEach(cell => {
+                if (cell.textContent.toLowerCase().includes(searchTerm)) {
+                    match = true;
+                }
+            });
+
+            if (match) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
