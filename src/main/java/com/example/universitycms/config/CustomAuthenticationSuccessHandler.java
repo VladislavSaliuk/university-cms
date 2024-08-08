@@ -38,7 +38,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 .orElseThrow(() -> new RuntimeException("No suitable role found"));
 
         switch (role) {
-            case "ROLE_STUDENT" -> response.sendRedirect("/student/courses");
+            case "ROLE_STUDENT" -> response.sendRedirect("/student/home");
             case "ROLE_TEACHER" -> response.sendRedirect("/teacher/courses");
             case "ROLE_ADMIN" -> response.sendRedirect("/admin/home");
             case "ROLE_STUFF" -> response.sendRedirect("/stuff/home");
