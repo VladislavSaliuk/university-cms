@@ -22,7 +22,7 @@ public class User implements Serializable {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -42,7 +42,7 @@ public class User implements Serializable {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "group_id")
     private Group group;
 

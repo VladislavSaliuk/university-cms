@@ -2,7 +2,7 @@
 create table public.users (
     user_id bigserial not null,
     username varchar(255) not null unique,
-    password varchar(255) not null unique,
+    password varchar(255) not null,
     email varchar(255) not null unique,
     firstname varchar(255),
     lastname varchar(255),
