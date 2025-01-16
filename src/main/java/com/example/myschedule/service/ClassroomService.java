@@ -21,15 +21,15 @@ public class ClassroomService {
     private final ClassroomRepository classroomRepository;
 
     public ClassroomDTO createClassroom(ClassroomDTO classroomDTO) {
-        log.info("Attempting to create a classroom with number: {}", classroomDTO.getNumber());
+        log.info("Attempting to create a classroom with number: {}", classroomDTO.getClassroomNumber());
 
-        if (classroomRepository.existsByNumber(classroomDTO.getNumber())) {
-            log.warn("Classroom with number {} already exists!", classroomDTO.getNumber());
-            throw new ClassroomException("Classroom with " + classroomDTO.getNumber() + " number already exists!");
+        if (classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber())) {
+            log.warn("Classroom with number {} already exists!", classroomDTO.getClassroomNumber());
+            throw new ClassroomException("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!");
         }
 
         Classroom classroom = classroomRepository.save(Classroom.toClassroom(classroomDTO));
-        log.info("Successfully created classroom with ID: {} and number: {}", classroom.getClassroomId(), classroom.getNumber());
+        log.info("Successfully created classroom with ID: {} and number: {}", classroom.getClassroomId(), classroom.getClassroomNumber());
 
         return ClassroomDTO.toClassroomDTO(classroom);
     }
@@ -44,15 +44,15 @@ public class ClassroomService {
                     return new ClassroomNotFoundException("Classroom with " + classroomDTO.getClassRoomId() + " Id not found!");
                 });
 
-        if (classroomRepository.existsByNumber(classroomDTO.getNumber())) {
-            log.warn("Classroom with number {} already exists!", classroomDTO.getNumber());
-            throw new ClassroomException("Classroom with " + classroomDTO.getNumber() + " number already exists!");
+        if (classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber())) {
+            log.warn("Classroom with number {} already exists!", classroomDTO.getClassroomNumber());
+            throw new ClassroomException("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!");
         }
 
-        updatedClassroom.setNumber(classroomDTO.getNumber());
-        updatedClassroom.setDescription(classroomDTO.getDescription());
+        updatedClassroom.setClassroomNumber(classroomDTO.getClassroomNumber());
+        updatedClassroom.setClassroomDescription(classroomDTO.getClassroomDescription());
 
-        log.info("Successfully updated classroom with ID: {} to number: {}", updatedClassroom.getClassroomId(), updatedClassroom.getNumber());
+        log.info("Successfully updated classroom with ID: {} to number: {}", updatedClassroom.getClassroomId(), updatedClassroom.getClassroomNumber());
 
         return ClassroomDTO.toClassroomDTO(updatedClassroom);
     }
@@ -83,17 +83,17 @@ public class ClassroomService {
                 });
     }
 
-    public ClassroomDTO getByNumber(long number) {
-        log.info("Fetching classroom with number: {}", number);
+    public ClassroomDTO getByClassroomNumber(long classroomNumber) {
+        log.info("Fetching classroom with number: {}", classroomNumber);
 
-        return classroomRepository.findByNumber(number)
+        return classroomRepository.findByClassroomNumber(classroomNumber)
                 .map(classroom -> {
-                    log.info("Classroom found with number: {}", number);
+                    log.info("Classroom found with number: {}", classroomNumber);
                     return ClassroomDTO.toClassroomDTO(classroom);
                 })
                 .orElseThrow(() -> {
-                    log.error("Classroom with number {} not found!", number);
-                    return new ClassroomNotFoundException("Classroom with " + number + " number not found!");
+                    log.error("Classroom with number {} not found!", classroomNumber);
+                    return new ClassroomNotFoundException("Classroom with " + classroomNumber + " number not found!");
                 });
     }
 

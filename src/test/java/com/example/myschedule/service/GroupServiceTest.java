@@ -33,14 +33,14 @@ public class GroupServiceTest {
     @BeforeEach
     void setUp(){
 
-        String name = "Name";
+        String groupName = "Group name";
 
         group = Group.builder()
-                .name(name)
+                .groupName(groupName)
                 .build();
 
         groupDTO = GroupDTO.builder()
-                .name(name)
+                .groupName(groupName)
                 .build();
 
     }
@@ -48,7 +48,7 @@ public class GroupServiceTest {
     @Test
     void createGroup_shouldReturnGroupDTO() {
 
-        when(groupRepository.existsByName(groupDTO.getName()))
+        when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(false);
 
         when(groupRepository.save(any(Group.class)))
@@ -59,23 +59,23 @@ public class GroupServiceTest {
         assertNotNull(actualGroupDTO);
         assertEquals(groupDTO, actualGroupDTO);
 
-        verify(groupRepository).existsByName(groupDTO.getName());
+        verify(groupRepository).existsByGroupName(groupDTO.getGroupName());
         verify(groupRepository).save(any(Group.class));
 
     }
 
 
     @Test
-        void createGroup_shouldThrowException_whenNameRepeats() {
+        void createGroup_shouldThrowException_whenGroupNameRepeats() {
 
-        when(groupRepository.existsByName(groupDTO.getName()))
+        when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(true);
 
         GroupException exception = assertThrows(GroupException.class, () -> groupService.createGroup(groupDTO));
 
-        assertEquals("Group with " + groupDTO.getName() + " name already exists!", exception.getMessage());
+        assertEquals("Group with " + groupDTO.getGroupName() + " name already exists!", exception.getMessage());
 
-        verify(groupRepository).existsByName(groupDTO.getName());
+        verify(groupRepository).existsByGroupName(groupDTO.getGroupName());
         verify(groupRepository, never()).save(any(Group.class));
 
     }
@@ -83,12 +83,12 @@ public class GroupServiceTest {
     @Test
     void updateGroup_shouldReturnGroupDTO() {
 
-        groupDTO.setName("Name 2");
+        groupDTO.setGroupName("Name 2");
 
         when(groupRepository.findById(groupDTO.getGroupId()))
                 .thenReturn(Optional.of(group));
 
-        when(groupRepository.existsByName(groupDTO.getName()))
+        when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(false);
 
         GroupDTO actualGroupDTO = groupService.updateGroup(groupDTO);
@@ -97,7 +97,7 @@ public class GroupServiceTest {
         assertEquals(groupDTO, actualGroupDTO);
 
         verify(groupRepository).findById(groupDTO.getGroupId());
-        verify(groupRepository).existsByName(groupDTO.getName());
+        verify(groupRepository).existsByGroupName(groupDTO.getGroupName());
 
     }
 
@@ -112,24 +112,24 @@ public class GroupServiceTest {
         assertEquals("Group with " + groupDTO.getGroupId() + " Id not found!", exception.getMessage());
 
         verify(groupRepository).findById(groupDTO.getGroupId());
-        verify(groupRepository, never()).existsByName(groupDTO.getName());
+        verify(groupRepository, never()).existsByGroupName(groupDTO.getGroupName());
 
     }
     @Test
-        void updateGroup_shouldThrowException_whenNameRepeats() {
+        void updateGroup_shouldThrowException_whenGroupNameRepeats() {
 
         when(groupRepository.findById(groupDTO.getGroupId()))
                 .thenReturn(Optional.of(group));
 
-        when(groupRepository.existsByName(groupDTO.getName()))
+        when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(true);
 
         GroupException exception = assertThrows(GroupException.class, () -> groupService.updateGroup(groupDTO));
 
-        assertEquals("Group with " + groupDTO.getName() + " name already exists!", exception.getMessage());
+        assertEquals("Group with " + groupDTO.getGroupName() + " name already exists!", exception.getMessage());
 
         verify(groupRepository).findById(groupDTO.getGroupId());
-        verify(groupRepository).existsByName(groupDTO.getName());
+        verify(groupRepository).existsByGroupName(groupDTO.getGroupName());
 
     }
 
@@ -185,35 +185,35 @@ public class GroupServiceTest {
     }
 
     @Test
-    void getByName_shouldReturnGroupDTO() {
+    void getByGroupName_shouldReturnGroupDTO() {
 
-        String name = "CS-23";
+        String groupName = "CS-23";
 
-        when(groupRepository.findByName(name))
+        when(groupRepository.findByGroupName(groupName))
                 .thenReturn(Optional.of(group));
 
-        GroupDTO actualGroupDTO = groupService.getByName(name);
+        GroupDTO actualGroupDTO = groupService.getByGroupName(groupName);
 
         assertNotNull(actualGroupDTO);
         assertEquals(groupDTO, actualGroupDTO);
 
-        verify(groupRepository).findByName(name);
+        verify(groupRepository).findByGroupName(groupName);
 
     }
 
     @Test
-    void getByName_shouldThrowException_whenGroupNotFound() {
+    void getByGroupName_shouldThrowException_whenGroupNotFound() {
 
-        String name = "Name 1";
+        String groupName = "Name 1";
 
-        when(groupRepository.findByName(name))
+        when(groupRepository.findByGroupName(groupName))
                 .thenReturn(Optional.empty());
 
-        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.getByName(name));
+        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () -> groupService.getByGroupName(groupName));
 
-        assertEquals("Group with " + name + " name not found!", exception.getMessage());
+        assertEquals("Group with " + groupName + " name not found!", exception.getMessage());
 
-        verify(groupRepository).findByName(name);
+        verify(groupRepository).findByGroupName(groupName);
 
     }
 

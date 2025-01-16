@@ -55,7 +55,7 @@ public class LessonRepositoryIntegrationTest {
         String groupName = "Group name";
 
         Group group = Group.builder()
-                .name(groupName)
+                .groupName(groupName)
                 .build();
 
         String courseName = "Course name";
@@ -66,11 +66,12 @@ public class LessonRepositoryIntegrationTest {
                 .courseDescription(courseDescription)
                 .build();
 
-        long number = 400L;
+        long classroomNumber = 400L;
+        String classroomDescription = "Classroom description";
 
         Classroom classroom = Classroom.builder()
-                .number(number)
-                .description(courseDescription)
+                .classroomNumber(classroomNumber)
+                .classroomDescription(classroomDescription)
                 .build();
 
         LocalTime startTime = LocalTime.of(13,00);

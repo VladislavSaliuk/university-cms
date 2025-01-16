@@ -20,13 +20,13 @@ public class Group implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "group_name", nullable = false, unique = true)
+    private String groupName;
 
     public static Group toGroup(GroupDTO groupDTO) {
         return Group.builder()
                 .groupId(groupDTO.getGroupId())
-                .name(groupDTO.getName())
+                .groupName(groupDTO.getGroupName())
                 .build();
     }
 

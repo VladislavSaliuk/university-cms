@@ -29,17 +29,17 @@ public class Classroom implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long classroomId;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "classroom_number", nullable = false, unique = true)
+    private long classroomNumber;
 
-    @Column(name = "number", nullable = false, unique = true)
-    private long number;
+    @Column(name = "classroom_description")
+    private String classroomDescription;
 
     public static Classroom toClassroom(ClassroomDTO classroomDTO) {
         return Classroom.builder()
                 .classroomId(classroomDTO.getClassRoomId())
-                .description(classroomDTO.getDescription())
-                .number(classroomDTO.getNumber())
+                .classroomNumber(classroomDTO.getClassroomNumber())
+                .classroomDescription(classroomDTO.getClassroomDescription())
                 .build();
     }
 

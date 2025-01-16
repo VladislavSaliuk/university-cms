@@ -35,14 +35,10 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
 
-        String name = "name";
+        String groupName = "name";
 
         Group group = Group.builder()
-                .name(name)
-                .build();
-
-        GroupDTO groupDTO = GroupDTO.builder()
-                .name(name)
+                .groupName(groupName)
                 .build();
 
         String username = "username";

@@ -45,10 +45,10 @@ public class GroupRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        String name = "Name";
+        String groupName = "Group name";
 
         group = Group.builder()
-                .name(name)
+                .groupName(groupName)
                 .build();
 
     }
@@ -60,14 +60,14 @@ public class GroupRepositoryIntegrationTest {
     }
     @Test
     void save_shouldThrowException_whenNameIsNull() {
-            group.setName(null);
+            group.setGroupName(null);
             DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> groupRepository.save(group));
             assertEquals(10, groupRepository.count());
     }
     @ParameterizedTest
     @ValueSource(strings = {"TB-23", "TB-24", "MK-23", "MK-24", "FI-23", "FI-24", "CS-23", "CS-24", "BI-23", "BI-24"})
-    void save_shouldThrowException_whenNameRepeats(String name) {
-        group.setName(name);
+    void save_shouldThrowException_whenGroupNameRepeats(String name) {
+        group.setGroupName(name);
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> groupRepository.save(group));
         assertEquals(10, groupRepository.count());
     }
@@ -95,14 +95,14 @@ public class GroupRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"TB-23", "TB-24", "MK-23", "MK-24", "FI-23", "FI-24", "CS-23", "CS-24", "BI-23", "BI-24"})
-    void findByName_shouldReturnGroup(String name) {
-        Optional<Group> optionalGroup = groupRepository.findByName(name);
+    void findByGroupName_shouldReturnGroup(String groupName) {
+        Optional<Group> optionalGroup = groupRepository.findByGroupName(groupName);
         assertTrue(optionalGroup.isPresent());
     }
 
     @Test
-    void findByName_shouldThrowException_whenGroupNotFound() {
-        Optional<Group> optionalGroup = groupRepository.findByName(group.getName());
+    void findByGroupName_shouldThrowException_whenGroupNotFound() {
+        Optional<Group> optionalGroup = groupRepository.findByGroupName(group.getGroupName());
         assertTrue(optionalGroup.isEmpty());
     }
 
@@ -136,13 +136,13 @@ public class GroupRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"TB-23", "TB-24", "MK-23", "MK-24", "FI-23", "FI-24", "CS-23", "CS-24", "BI-23", "BI-24"})
-    void existsByName_shouldReturnTrue(String name) {
-        boolean isGroupExists = groupRepository.existsByName(name);
+    void existsByGroupName_shouldReturnTrue(String groupName) {
+        boolean isGroupExists = groupRepository.existsByGroupName(groupName);
         assertTrue(isGroupExists);
     }
     @Test
-    void existsByName_shouldReturnFalse_whenGroupNotExist() {
-        boolean isGroupExists = groupRepository.existsByName(group.getName());
+    void existsByGroupName_shouldReturnFalse_whenGroupNotExist() {
+        boolean isGroupExists = groupRepository.existsByGroupName(group.getGroupName());
         assertFalse(isGroupExists);
     }
 

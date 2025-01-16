@@ -31,17 +31,17 @@ public class ClassroomServiceTest {
     @BeforeEach
     void setUp(){
 
-        long number = 400L;
-        String description = "description";
+        long classroomNumber = 400L;
+        String classroomDescription = "Classroom description";
 
         classroom = Classroom.builder()
-                .number(number)
-                .description(description)
+                .classroomNumber(classroomNumber)
+                .classroomDescription(classroomDescription)
                 .build();
 
         classroomDTO = ClassroomDTO.builder()
-                .number(number)
-                .description(description)
+                .classroomNumber(classroomNumber)
+                .classroomDescription(classroomDescription)
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class ClassroomServiceTest {
     @Test
     void createClassroom_shouldReturnClassroomDTO() {
 
-        when(classroomRepository.existsByNumber(classroomDTO.getNumber()))
+        when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(false);
 
         when(classroomRepository.save(any(Classroom.class)))
@@ -60,23 +60,23 @@ public class ClassroomServiceTest {
         assertNotNull(actualClassroomDTO);
         assertEquals(classroomDTO, actualClassroomDTO);
 
-        verify(classroomRepository).existsByNumber(classroomDTO.getNumber());
+        verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());
         verify(classroomRepository).save(any(Classroom.class));
 
     }
 
 
     @Test
-    void createClassroom_shouldThrowException_whenNumberRepeats() {
+    void createClassroom_shouldThrowException_whenClassroomNumberRepeats() {
 
-        when(classroomRepository.existsByNumber(classroomDTO.getNumber()))
+        when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(true);
 
         ClassroomException exception = assertThrows(ClassroomException.class, () -> classroomService.createClassroom(classroomDTO));
 
-        assertEquals("Classroom with " + classroomDTO.getNumber() + " number already exists!", exception.getMessage());
+        assertEquals("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!", exception.getMessage());
 
-        verify(classroomRepository).existsByNumber(classroomDTO.getNumber());
+        verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());
         verify(classroomRepository, never()).save(any(Classroom.class));
 
     }
@@ -84,13 +84,13 @@ public class ClassroomServiceTest {
     @Test
     void updateClassroom_shouldReturnClassroomDTO() {
 
-        classroomDTO.setNumber(500L);
-        classroomDTO.setDescription("Description 2");
+        classroomDTO.setClassroomNumber(500L);
+        classroomDTO.setClassroomDescription("Classroom description 2");
 
         when(classroomRepository.findById(classroomDTO.getClassRoomId()))
                 .thenReturn(Optional.of(classroom));
 
-        when(classroomRepository.existsByNumber(classroomDTO.getNumber()))
+        when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(false);
 
         ClassroomDTO actualClassroomDTO = classroomService.updateClassroom(classroomDTO);
@@ -99,7 +99,7 @@ public class ClassroomServiceTest {
         assertEquals(classroomDTO, actualClassroomDTO);
 
         verify(classroomRepository).findById(classroomDTO.getClassRoomId());
-        verify(classroomRepository).existsByNumber(classroomDTO.getNumber());
+        verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());
 
     }
 
@@ -114,24 +114,24 @@ public class ClassroomServiceTest {
         assertEquals("Classroom with " + classroomDTO.getClassRoomId() + " Id not found!", exception.getMessage());
 
         verify(classroomRepository).findById(classroomDTO.getClassRoomId());
-        verify(classroomRepository, never()).existsByNumber(classroomDTO.getNumber());
+        verify(classroomRepository, never()).existsByClassroomNumber(classroomDTO.getClassroomNumber());
 
     }
     @Test
-    void updateClassroom_shouldThrowException_whenNumberRepeats() {
+    void updateClassroom_shouldThrowException_whenClassroomNumberRepeats() {
 
         when(classroomRepository.findById(classroomDTO.getClassRoomId()))
                 .thenReturn(Optional.of(classroom));
 
-        when(classroomRepository.existsByNumber(classroomDTO.getNumber()))
+        when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(true);
 
         ClassroomException exception = assertThrows(ClassroomException.class, () -> classroomService.updateClassroom(classroomDTO));
 
-        assertEquals("Classroom with " + classroomDTO.getNumber() + " number already exists!", exception.getMessage());
+        assertEquals("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!", exception.getMessage());
 
         verify(classroomRepository).findById(classroomDTO.getClassRoomId());
-        verify(classroomRepository).existsByNumber(classroomDTO.getNumber());
+        verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());
 
     }
 
@@ -187,36 +187,36 @@ public class ClassroomServiceTest {
     }
 
     @Test
-    void getByNumber_shouldReturnClassroomDTO() {
+    void getByClassroomNumber_shouldReturnClassroomDTO() {
 
-        long number = 500L;
+        long classroomNumber = 500L;
 
-        when(classroomRepository.findByNumber(number))
+        when(classroomRepository.findByClassroomNumber(classroomNumber))
                 .thenReturn(Optional.of(classroom));
 
-        ClassroomDTO actualClassroomDTO = classroomService.getByNumber(number);
+        ClassroomDTO actualClassroomDTO = classroomService.getByClassroomNumber(classroomNumber);
 
         assertNotNull(actualClassroomDTO);
         assertEquals(classroomDTO, actualClassroomDTO);
 
 
-        verify(classroomRepository).findByNumber(number);
+        verify(classroomRepository).findByClassroomNumber(classroomNumber);
 
     }
 
     @Test
-    void getByNumber_shouldThrowException_whenClassroomNotFound() {
+    void getByClassroomNumber_shouldThrowException_whenClassroomNotFound() {
 
-        long number = 100L;
+        long classroomNumber = 100L;
 
-        when(classroomRepository.findByNumber(number))
+        when(classroomRepository.findByClassroomNumber(classroomNumber))
                 .thenReturn(Optional.empty());
 
-        ClassroomNotFoundException exception = assertThrows(ClassroomNotFoundException.class, () -> classroomService.getByNumber(number));
+        ClassroomNotFoundException exception = assertThrows(ClassroomNotFoundException.class, () -> classroomService.getByClassroomNumber(classroomNumber));
 
-        assertEquals("Classroom with " + number + " number not found!", exception.getMessage());
+        assertEquals("Classroom with " + classroomNumber + " number not found!", exception.getMessage());
 
-        verify(classroomRepository).findByNumber(number);
+        verify(classroomRepository).findByClassroomNumber(classroomNumber);
 
     }
 

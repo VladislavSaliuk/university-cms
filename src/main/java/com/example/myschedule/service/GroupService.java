@@ -21,15 +21,15 @@ public class GroupService {
     private final GroupRepository groupRepository;
 
     public GroupDTO createGroup(GroupDTO groupDTO) {
-        log.info("Attempting to create a group with name: {}", groupDTO.getName());
+        log.info("Attempting to create a group with name: {}", groupDTO.getGroupName());
 
-        if (groupRepository.existsByName(groupDTO.getName())) {
-            log.warn("Group with name {} already exists!", groupDTO.getName());
-            throw new GroupException("Group with " + groupDTO.getName() + " name already exists!");
+        if (groupRepository.existsByGroupName(groupDTO.getGroupName())) {
+            log.warn("Group with name {} already exists!", groupDTO.getGroupName());
+            throw new GroupException("Group with " + groupDTO.getGroupName() + " name already exists!");
         }
 
         Group group = groupRepository.save(Group.toGroup(groupDTO));
-        log.info("Successfully created group with ID: {} and name: {}", group.getGroupId(), group.getName());
+        log.info("Successfully created group with ID: {} and name: {}", group.getGroupId(), group.getGroupName());
 
         return GroupDTO.toGroupDTO(group);
     }
@@ -44,13 +44,13 @@ public class GroupService {
                     return new GroupNotFoundException("Group with " + groupDTO.getGroupId() + " Id not found!");
                 });
 
-        if (groupRepository.existsByName(groupDTO.getName())) {
-            log.warn("Group with name {} already exists!", groupDTO.getName());
-            throw new GroupException("Group with " + groupDTO.getName() + " name already exists!");
+        if (groupRepository.existsByGroupName(groupDTO.getGroupName())) {
+            log.warn("Group with name {} already exists!", groupDTO.getGroupName());
+            throw new GroupException("Group with " + groupDTO.getGroupName() + " name already exists!");
         }
 
-        updatedGroup.setName(groupDTO.getName());
-        log.info("Successfully updated group with ID: {} to name: {}", updatedGroup.getGroupId(), updatedGroup.getName());
+        updatedGroup.setGroupName(groupDTO.getGroupName());
+        log.info("Successfully updated group with ID: {} to name: {}", updatedGroup.getGroupId(), updatedGroup.getGroupName());
 
         return GroupDTO.toGroupDTO(updatedGroup);
     }
@@ -81,17 +81,17 @@ public class GroupService {
                 });
     }
 
-    public GroupDTO getByName(String name) {
-        log.info("Fetching group with name: {}", name);
+    public GroupDTO getByGroupName(String groupName) {
+        log.info("Fetching group with name: {}", groupName);
 
-        return groupRepository.findByName(name)
+        return groupRepository.findByGroupName(groupName)
                 .map(group -> {
-                    log.info("Group found with name: {}", name);
+                    log.info("Group found with name: {}", groupName);
                     return GroupDTO.toGroupDTO(group);
                 })
                 .orElseThrow(() -> {
-                    log.error("Group with name {} not found!", name);
-                    return new GroupNotFoundException("Group with " + name + " name not found!");
+                    log.error("Group with name {} not found!", groupName);
+                    return new GroupNotFoundException("Group with " + groupName + " name not found!");
                 });
     }
 

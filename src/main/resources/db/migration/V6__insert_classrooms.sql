@@ -1,5 +1,5 @@
 
-INSERT INTO public.classrooms (number, description) VALUES
+INSERT INTO public.classrooms (classroom_number, classroom_description) VALUES
 (101, 'Lecture hall, first floor'),
 (102, 'Computer lab, first floor'),
 (103, 'Physics laboratory, first floor'),

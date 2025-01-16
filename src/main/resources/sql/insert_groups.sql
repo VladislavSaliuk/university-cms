@@ -1,4 +1,4 @@
-INSERT INTO public.groups (name) VALUES
+INSERT INTO public.groups (group_name) VALUES
 ('TB-23'),
 ('TB-24'),
 ('MK-23'),

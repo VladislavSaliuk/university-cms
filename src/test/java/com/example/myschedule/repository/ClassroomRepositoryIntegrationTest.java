@@ -43,12 +43,12 @@ public class ClassroomRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        long number = 400L;
-        String description = "description";
+        long classroomNumber = 400L;
+        String classroomDescription = "Classroom description";
 
         classroom = Classroom.builder()
-                .number(number)
-                .description(description)
+                .classroomNumber(classroomNumber)
+                .classroomDescription(classroomDescription)
                 .build();
     }
     @Test
@@ -58,8 +58,8 @@ public class ClassroomRepositoryIntegrationTest {
     }
     @ParameterizedTest
     @ValueSource(longs = {101, 102, 103, 104, 105, 201, 202, 203, 301, 302})
-    void save_shouldThrowException_whenNumberRepeats(long number) {
-        classroom.setNumber(number);
+    void save_shouldThrowException_whenClassroomNumberRepeats(long classroomNumber) {
+        classroom.setClassroomNumber(classroomNumber);
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> classroomRepository.save(classroom));
         assertEquals(10, classroomRepository.count());
     }
@@ -87,14 +87,14 @@ public class ClassroomRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(longs = {101, 102, 103, 104, 105, 201, 202, 203, 301, 302})
-    void findByNumber_shouldReturnClassroom(long number) {
-        Optional<Classroom> optionalClassroom = classroomRepository.findByNumber(number);
+    void findByClassroomNumber_shouldReturnClassroom(long classroomNumber) {
+        Optional<Classroom> optionalClassroom = classroomRepository.findByClassroomNumber(classroomNumber);
         assertTrue(optionalClassroom.isPresent());
     }
 
     @Test
-    void findByNumber_shouldThrowException_whenClassroomNotFound() {
-        Optional<Classroom> optionalClassroom = classroomRepository.findById(classroom.getNumber());
+    void findByClassroomNumber_shouldThrowException_whenClassroomNotFound() {
+        Optional<Classroom> optionalClassroom = classroomRepository.findById(classroom.getClassroomNumber());
         assertTrue(optionalClassroom.isEmpty());
     }
 
@@ -106,7 +106,7 @@ public class ClassroomRepositoryIntegrationTest {
     }
 
     @Test
-    void deleteById_shouldNotRemoveClassroom_whenClassRoomNotFound() {
+    void deleteById_shouldNotRemoveClassroom_whenClassroomNotFound() {
         long classRoomId = 100L;
         classroomRepository.deleteById(classRoomId);
         assertEquals(10, classroomRepository.count());
@@ -128,14 +128,14 @@ public class ClassroomRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(longs = {101, 102, 103, 104, 105, 201, 202, 203, 301, 302})
-    void existsByNumber_shouldReturnTrue(long number) {
-        boolean isClassroomExists = classroomRepository.existsByNumber(number);
+    void existsByClassroomNumber_shouldReturnTrue(long classroomNumber) {
+        boolean isClassroomExists = classroomRepository.existsByClassroomNumber(classroomNumber);
         assertTrue(isClassroomExists);
     }
 
     @Test
-    void existsByNumber_shouldReturnFalse_whenClassroomNotExist() {
-        boolean isClassroomExists = classroomRepository.existsByNumber(classroom.getNumber());
+    void existsByClassroomNumber_shouldReturnFalse_whenClassroomNotExist() {
+        boolean isClassroomExists = classroomRepository.existsByClassroomNumber(classroom.getClassroomNumber());
         assertFalse(isClassroomExists);
     }
 

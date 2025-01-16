@@ -1,7 +1,6 @@
 package com.example.myschedule.dto;
 
 import com.example.myschedule.entity.Classroom;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,14 +19,14 @@ public class ClassroomDTO {
 
     @Min(value = 0L, message = "Number cannot be negativ!")
     @NotNull(message = "Classroom should contains number!")
-    private long number;
+    private long classroomNumber;
 
-    private String description;
+    private String classroomDescription;
     public static ClassroomDTO toClassroomDTO(Classroom classroom) {
         return ClassroomDTO.builder()
                 .classRoomId(classroom.getClassroomId())
-                .number(classroom.getNumber())
-                .description(classroom.getDescription())
+                .classroomNumber(classroom.getClassroomNumber())
+                .classroomDescription(classroom.getClassroomDescription())
                 .build();
     }
 

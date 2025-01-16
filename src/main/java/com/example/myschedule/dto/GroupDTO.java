@@ -16,11 +16,11 @@ public class GroupDTO {
     private long groupId;
 
     @NotNull(message = "Group should contains name!")
-    private String name;
+    private String groupName;
     public static GroupDTO toGroupDTO(Group group) {
         return GroupDTO.builder()
                 .groupId(group.getGroupId())
-                .name(group.getName())
+                .groupName(group.getGroupName())
                 .build();
     }
 
