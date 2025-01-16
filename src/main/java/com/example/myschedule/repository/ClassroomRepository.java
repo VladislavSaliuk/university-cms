@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ClassroomRepository extends JpaRepository<Classroom,Long> {
     Optional<Classroom> findByNumber(long number);
-
+    boolean existsByNumber(long number);
 }

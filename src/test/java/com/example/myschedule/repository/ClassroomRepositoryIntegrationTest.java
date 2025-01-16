@@ -44,9 +44,11 @@ public class ClassroomRepositoryIntegrationTest {
     void setUp() {
 
         long number = 400L;
+        String description = "description";
 
         classroom = Classroom.builder()
                 .number(number)
+                .description(description)
                 .build();
     }
     @Test
@@ -109,5 +111,34 @@ public class ClassroomRepositoryIntegrationTest {
         classroomRepository.deleteById(classRoomId);
         assertEquals(10, classroomRepository.count());
     }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L})
+    void existsById_shouldReturnTrue(long classroomId) {
+        boolean isClassroomExists = classroomRepository.existsById(classroomId);
+        assertTrue(isClassroomExists);
+    }
+
+    @Test
+    void existsById_shouldReturnFalse_whenClassroomNotExist() {
+        long classroomId = 100L;
+        boolean isClassroomExists = classroomRepository.existsById(classroomId);
+        assertFalse(isClassroomExists);
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {101, 102, 103, 104, 105, 201, 202, 203, 301, 302})
+    void existsByNumber_shouldReturnTrue(long number) {
+        boolean isClassroomExists = classroomRepository.existsByNumber(number);
+        assertTrue(isClassroomExists);
+    }
+
+    @Test
+    void existsByNumber_shouldReturnFalse_whenClassroomNotExist() {
+        boolean isClassroomExists = classroomRepository.existsByNumber(classroom.getNumber());
+        assertFalse(isClassroomExists);
+    }
+
+
 
 }

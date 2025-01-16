@@ -60,9 +60,9 @@ public class GroupRepositoryIntegrationTest {
     }
     @Test
     void save_shouldThrowException_whenNameIsNull() {
-        group.setName(null);
-        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> groupRepository.save(group));
-        assertEquals(10, groupRepository.count());
+            group.setName(null);
+            DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> groupRepository.save(group));
+            assertEquals(10, groupRepository.count());
     }
     @ParameterizedTest
     @ValueSource(strings = {"TB-23", "TB-24", "MK-23", "MK-24", "FI-23", "FI-24", "CS-23", "CS-24", "BI-23", "BI-24"})
@@ -118,6 +118,32 @@ public class GroupRepositoryIntegrationTest {
         long groupId = 100L;
         groupRepository.deleteById(groupId);
         assertEquals(10, groupRepository.count());
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L})
+    void existsById_shouldReturnTrue(long groupId) {
+        boolean isGroupExists = groupRepository.existsById(groupId);
+        assertTrue(isGroupExists);
+    }
+
+    @Test
+    void existsById_shouldReturnFalse_whenGroupNotExist() {
+        long groupId = 100L;
+        boolean isGroupExists = groupRepository.existsById(groupId);
+        assertFalse(isGroupExists);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"TB-23", "TB-24", "MK-23", "MK-24", "FI-23", "FI-24", "CS-23", "CS-24", "BI-23", "BI-24"})
+    void existsByName_shouldReturnTrue(String name) {
+        boolean isGroupExists = groupRepository.existsByName(name);
+        assertTrue(isGroupExists);
+    }
+    @Test
+    void existsByName_shouldReturnFalse_whenGroupNotExist() {
+        boolean isGroupExists = groupRepository.existsByName(group.getName());
+        assertFalse(isGroupExists);
     }
 
 }

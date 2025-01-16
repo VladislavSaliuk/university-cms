@@ -45,12 +45,6 @@ public class UserRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        String name = "name";
-
-        Group group = Group.builder()
-                .name(name)
-                .build();
-
         String username = "username";
         String password = "$2y$10$fGkGf4h1aCSlfPBpwTfvGerNI4puZTLVQeZLLCpSrqh8WcPuMtr7a";
         String email = "email@gmail.com";
@@ -65,7 +59,6 @@ public class UserRepositoryIntegrationTest {
                 .lastname(lastname)
                 .role(Role.STUDENT)
                 .status(Status.ACTIVE)
-                .group(group)
                 .build();
 
     }

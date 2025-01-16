@@ -1,5 +1,6 @@
 package com.example.myschedule.entity;
 
+import com.example.myschedule.dto.GroupDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,12 @@ public class Group implements Serializable {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    public static Group toGroup(GroupDTO groupDTO) {
+        return Group.builder()
+                .groupId(groupDTO.getGroupId())
+                .name(groupDTO.getName())
+                .build();
+    }
 
 }

@@ -52,12 +52,6 @@ public class LessonRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        long number = 400L;
-
-        Classroom classroom = Classroom.builder()
-                .number(number)
-                .build();
-
         String name = "Name";
 
         Group group = Group.builder()
@@ -84,6 +78,13 @@ public class LessonRepositoryIntegrationTest {
 
         Course course = Course.builder()
                 .user(user)
+                .description(description)
+                .build();
+
+        long number = 400L;
+
+        Classroom classroom = Classroom.builder()
+                .number(number)
                 .description(description)
                 .build();
 
