@@ -52,40 +52,25 @@ public class LessonRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        String name = "Name";
+        String groupName = "Group name";
 
         Group group = Group.builder()
-                .name(name)
+                .name(groupName)
                 .build();
 
-        String username = "username";
-        String password = "$2y$10$fGkGf4h1aCSlfPBpwTfvGerNI4puZTLVQeZLLCpSrqh8WcPuMtr7a";
-        String email = "email@gmail.com";
-        String firstname = "Firstname";
-        String lastname = "Lastname";
-
-        User user = User.builder()
-                .username(username)
-                .password(password)
-                .email(email)
-                .firstname(firstname)
-                .lastname(lastname)
-                .role(Role.TEACHER)
-                .status(Status.ACTIVE)
-                .build();
-
-        String description = "Description";
+        String courseName = "Course name";
+        String courseDescription = "Course description";
 
         Course course = Course.builder()
-                .user(user)
-                .description(description)
+                .courseName(courseName)
+                .courseDescription(courseDescription)
                 .build();
 
         long number = 400L;
 
         Classroom classroom = Classroom.builder()
                 .number(number)
-                .description(description)
+                .description(courseDescription)
                 .build();
 
         LocalTime startTime = LocalTime.of(13,00);

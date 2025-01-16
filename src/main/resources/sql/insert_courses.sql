@@ -1,4 +1,4 @@
-INSERT INTO public.courses (course_name, description, user_id) VALUES
+INSERT INTO public.courses (course_name, course_description, user_id) VALUES
 ('Introduction to Programming', 'Learn the basics of programming and coding principles.', 4),
 ('Data Structures and Algorithms', 'Explore data structures, their operations, and algorithms.', 5),
 ('Database Management Systems', 'Understand database models, SQL, and database design.', 3),

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -40,27 +41,12 @@ public class CourseRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
 
-        String username = "username";
-        String password = "$2y$10$fGkGf4h1aCSlfPBpwTfvGerNI4puZTLVQeZLLCpSrqh8WcPuMtr7a";
-        String email = "email@gmail.com";
-        String firstname = "Firstname";
-        String lastname = "Lastname";
-
-        User user = User.builder()
-                .username(username)
-                .password(password)
-                .email(email)
-                .firstname(firstname)
-                .lastname(lastname)
-                .role(Role.TEACHER)
-                .status(Status.ACTIVE)
-                .build();
-
-        String description = "Description";
+        String courseName = "Course name";
+        String courseDescription = "Course description";
 
         course = Course.builder()
-                .user(user)
-                .description(description)
+                .courseName(courseName)
+                .courseDescription(courseDescription)
                 .build();
 
     }
@@ -70,6 +56,12 @@ public class CourseRepositoryIntegrationTest {
         assertEquals(11, courseRepository.count());
     }
 
+    @Test
+    void save_shouldThrowException_whenCourseNameIsNull() {
+        course.setCourseName(null);
+        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> courseRepository.save(course));
+        assertEquals(10, courseRepository.count());
+    }
     @Test
     void findAll_shouldReturnCourseList() {
         List<Course> courseList = courseRepository.findAll();
@@ -88,6 +80,30 @@ public class CourseRepositoryIntegrationTest {
     void findById_shouldThrowException_whenCourseNotFound() {
         long courseId = 100L;
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
+        assertTrue(optionalCourse.isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "Introduction to Programming",
+            "Data Structures and Algorithms",
+            "Database Management Systems",
+            "Web Development Basics",
+            "Advanced Java Programming",
+            "Machine Learning Fundamentals",
+            "Cybersecurity Essentials",
+            "Mobile App Development",
+            "Cloud Computing Overview",
+            "Software Engineering Principles"
+    })
+    void findByCourseName_shouldReturnCourse(String courseName) {
+        Optional<Course> optionalCourse = courseRepository.findByCourseName(courseName);
+        assertTrue(optionalCourse.isPresent());
+    }
+
+    @Test
+    void findByCourseName_shouldThrowException_whenCourseNotFound() {
+        Optional<Course> optionalCourse = courseRepository.findByCourseName(course.getCourseName());
         assertTrue(optionalCourse.isEmpty());
     }
 

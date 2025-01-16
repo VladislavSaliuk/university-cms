@@ -24,8 +24,11 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long courseId;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "course_name", nullable = false, unique = true)
+    private String courseName;
+
+    @Column(name = "course_description")
+    private String courseDescription;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "user_id")
