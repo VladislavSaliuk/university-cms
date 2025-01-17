@@ -1,17 +1,9 @@
 package com.example.myschedule.dto;
 
-
-import com.example.myschedule.entity.Role;
 import com.example.myschedule.entity.Status;
 import com.example.myschedule.entity.User;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
@@ -20,9 +12,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class StudentDTO {
 
-    @NotNull(message = "User should contains Id!")
+    @NotNull(message = "Student should contains userId!")
     private long userId;
 
     private String username;
@@ -33,20 +25,20 @@ public class UserDTO {
 
     private String lastname;
 
-    private Role role;
-
-    @NotNull(message = "User should contains status!")
     private Status status;
-    public static UserDTO toUserDTO(User user) {
-        return UserDTO.builder()
+
+    private GroupDTO groupDTO;
+    public static StudentDTO toStudentDTO(User user) {
+        return StudentDTO.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
-                .role(user.getRole())
                 .status(user.getStatus())
+                .groupDTO(user.getGroup() != null ? GroupDTO.toGroupDTO(user.getGroup()) : null)
                 .build();
     }
+
 
 }

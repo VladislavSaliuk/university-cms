@@ -120,4 +120,41 @@ public class CourseRepositoryIntegrationTest {
         assertEquals(10, courseRepository.count());
     }
 
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L})
+    void existsById_shouldReturnTrue(long courseId) {
+        boolean isCourseExists = courseRepository.existsById(courseId);
+        assertTrue(isCourseExists);
+    }
+
+    @Test
+    void existsById_shouldReturnFalse_whenCourseNotExist() {
+        long courseId = 100L;
+        boolean isCourseExists = courseRepository.existsById(courseId);
+        assertFalse(isCourseExists);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "Introduction to Programming",
+            "Data Structures and Algorithms",
+            "Database Management Systems",
+            "Web Development Basics",
+            "Advanced Java Programming",
+            "Machine Learning Fundamentals",
+            "Cybersecurity Essentials",
+            "Mobile App Development",
+            "Cloud Computing Overview",
+            "Software Engineering Principles"
+    })
+    void existsByCourseName_shouldReturnTrue(String courseName) {
+        boolean isCourseExists = courseRepository.existsByCourseName(courseName);
+        assertTrue(isCourseExists);
+    }
+    @Test
+    void existsByCourseName_shouldReturnFalse_whenCourseNotExist() {
+        boolean isCourseExists = courseRepository.existsByCourseName(course.getCourseName());
+        assertFalse(isCourseExists);
+    }
+
 }

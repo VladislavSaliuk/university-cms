@@ -1,8 +1,6 @@
 package com.example.myschedule.service;
 
 
-import com.example.myschedule.dto.GroupDTO;
-import com.example.myschedule.dto.UpdateStatusDTO;
 import com.example.myschedule.dto.UserDTO;
 import com.example.myschedule.entity.Group;
 import com.example.myschedule.entity.Role;
@@ -71,39 +69,33 @@ public class UserServiceTest {
     @Test
     void updateStatus_shouldReturnUserDTO() {
 
-        UpdateStatusDTO updateStatusDTO = UpdateStatusDTO.builder()
-                .userId(1L)
-                .status(Status.BANNED)
-                .build();
+        userDTO.setStatus(Status.BANNED);
 
-        when(userRepository.findById(updateStatusDTO.getUserId()))
+        when(userRepository.findById(userDTO.getUserId()))
                 .thenReturn(Optional.of(user));
 
-        UserDTO actualUserDTO = userService.updateStatus(updateStatusDTO);
+        UserDTO actualUserDTO = userService.updateStatus(userDTO);
 
         Assert.assertNotNull(actualUserDTO);
-        Assert.assertEquals(updateStatusDTO.getStatus(), actualUserDTO.getStatus());
+        Assert.assertEquals(userDTO.getStatus(), actualUserDTO.getStatus());
 
-        verify(userRepository).findById(updateStatusDTO.getUserId());
+        verify(userRepository).findById(userDTO.getUserId());
 
     }
 
     @Test
     void updateStatus_shouldThrowException_whenUserNotFound() {
 
-        UpdateStatusDTO updateStatusDTO = UpdateStatusDTO.builder()
-                .userId(100L)
-                .status(Status.BANNED)
-                .build();
+        userDTO.setStatus(Status.BANNED);
 
-        when(userRepository.findById(updateStatusDTO.getUserId()))
+        when(userRepository.findById(userDTO.getUserId()))
                 .thenReturn(Optional.empty());
 
-        UserNotFoundException exception = Assert.assertThrows(UserNotFoundException.class, () -> userService.updateStatus(updateStatusDTO));
+        UserNotFoundException exception = Assert.assertThrows(UserNotFoundException.class, () -> userService.updateStatus(userDTO));
 
-        Assert.assertEquals("User with " + updateStatusDTO.getUserId() + " Id not found!", exception.getMessage());
+        Assert.assertEquals("User with " + userDTO.getUserId() + " Id not found!", exception.getMessage());
 
-        verify(userRepository).findById(updateStatusDTO.getUserId());
+        verify(userRepository).findById(userDTO.getUserId());
 
     }
 
@@ -155,5 +147,6 @@ public class UserServiceTest {
         verify(userRepository).findById(userId);
 
     }
+
 
 }

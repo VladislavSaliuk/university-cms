@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 public class GroupDTO {
 
+    @NotNull(message = "Group should contains Id!")
     private long groupId;
 
     @NotNull(message = "Group should contains name!")

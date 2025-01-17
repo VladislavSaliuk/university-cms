@@ -1,6 +1,5 @@
 package com.example.myschedule.service;
 
-import com.example.myschedule.dto.UpdateStatusDTO;
 import com.example.myschedule.dto.UserDTO;
 import com.example.myschedule.entity.User;
 import com.example.myschedule.exception.UserNotFoundException;
@@ -21,16 +20,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserDTO updateStatus(UpdateStatusDTO updateStatusDTO) {
-        log.info("Attempting to update status for user with ID: {}", updateStatusDTO.getUserId());
+    public UserDTO updateStatus(UserDTO userDTO) {
+        log.info("Attempting to update status for user with ID: {}", userDTO.getUserId());
 
-        User updatedUser = userRepository.findById(updateStatusDTO.getUserId())
+        User updatedUser = userRepository.findById(userDTO.getUserId())
                 .orElseThrow(() -> {
-                    log.error("User with ID {} not found!", updateStatusDTO.getUserId());
-                    return new UserNotFoundException("User with " + updateStatusDTO.getUserId() + " Id not found!");
+                    log.error("User with ID {} not found!", userDTO.getUserId());
+                    return new UserNotFoundException("User with " + userDTO.getUserId() + " Id not found!");
                 });
 
-        updatedUser.setStatus(updateStatusDTO.getStatus());
+        updatedUser.setStatus(userDTO.getStatus());
         log.info("Successfully updated status for user with ID: {} to {}", updatedUser.getUserId(), updatedUser.getStatus());
 
         return UserDTO.toUserDTO(updatedUser);
@@ -61,5 +60,7 @@ public class UserService {
                     return new UserNotFoundException("User with " + userId + " Id not found!");
                 });
     }
+
+
 
 }

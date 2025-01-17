@@ -1,6 +1,7 @@
 package com.example.myschedule.entity;
 
 
+import com.example.myschedule.dto.CourseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
