@@ -1,5 +1,6 @@
 package com.example.myschedule.dto;
 
+import com.example.myschedule.entity.Role;
 import com.example.myschedule.entity.Status;
 import com.example.myschedule.entity.User;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 public class TeacherDTO {
 
-    @NotNull(message = "Teacher should contains userId!")
+    @NotNull(message = "Teacher should contains Id!")
     private long userId;
 
     private String username;
@@ -26,6 +27,8 @@ public class TeacherDTO {
     private String lastname;
 
     private Status status;
+
+    private Role role;
     public static TeacherDTO toTeacherDTO(User user) {
         return TeacherDTO.builder()
                 .userId(user.getUserId())
@@ -34,6 +37,7 @@ public class TeacherDTO {
                 .firstname(user.getFirstname())
                 .lastname(user.getLastname())
                 .status(user.getStatus())
+                .role(user.getRole())
                 .build();
     }
 

@@ -1,5 +1,7 @@
 package com.example.myschedule.entity;
 
+import com.example.myschedule.dto.CourseDTO;
+import com.example.myschedule.dto.LessonDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,5 +43,6 @@ public class Lesson implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "classroom_id", nullable = false)
     private Classroom classroom;
+
 
 }

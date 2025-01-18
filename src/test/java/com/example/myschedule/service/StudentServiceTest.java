@@ -77,6 +77,7 @@ public class StudentServiceTest {
                 .firstname(firstname)
                 .lastname(lastname)
                 .status(Status.ACTIVE)
+                .role(Role.STUDENT)
                 .groupDTO(groupDTO)
                 .build();
     }

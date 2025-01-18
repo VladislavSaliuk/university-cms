@@ -68,6 +68,7 @@ public class CourseServiceTest {
                 .email(email)
                 .firstname(firstname)
                 .lastname(lastname)
+                .role(Role.TEACHER)
                 .status(Status.ACTIVE)
                 .build();
 

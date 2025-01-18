@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @Testcontainers
 @SpringBootTest
@@ -168,6 +169,19 @@ public class LessonRepositoryIntegrationTest {
         long lessonId = 100L;
         lessonRepository.deleteById(lessonId);
         Assert.assertEquals(10, lessonRepository.count());
+    }
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L})
+    void existsById_shouldReturnTrue(long lessonId) {
+        boolean isLessonExists = lessonRepository.existsById(lessonId);
+        assertTrue(isLessonExists);
+    }
+
+    @Test
+    void existsById_shouldReturnFalse_whenLessonNotExist() {
+        long lessonId = 100L;
+        boolean isLessonExists = lessonRepository.existsById(lessonId);
+        assertFalse(isLessonExists);
     }
 
 }

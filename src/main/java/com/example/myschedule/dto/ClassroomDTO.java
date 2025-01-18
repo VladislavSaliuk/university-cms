@@ -15,6 +15,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ClassroomDTO {
 
+    @NotNull(message = "Classroom should contains Id!")
     private long classRoomId;
 
     @Min(value = 0L, message = "Number cannot be negativ!")
