@@ -13,7 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CourseDTO {
 
-    @NotNull(message = "Course should contains Id!")
     private long courseId;
 
     @NotNull(message = "Course should contains name!")

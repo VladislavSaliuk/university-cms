@@ -35,12 +35,4 @@ public class Classroom implements Serializable {
     @Column(name = "classroom_description")
     private String classroomDescription;
 
-    public static Classroom toClassroom(ClassroomDTO classroomDTO) {
-        return Classroom.builder()
-                .classroomId(classroomDTO.getClassRoomId())
-                .classroomNumber(classroomDTO.getClassroomNumber())
-                .classroomDescription(classroomDTO.getClassroomDescription())
-                .build();
-    }
-
 }

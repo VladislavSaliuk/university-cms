@@ -20,7 +20,7 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
 
-    public GroupDTO createGroup(GroupDTO groupDTO) {
+    public void createGroup(GroupDTO groupDTO) {
         log.info("Attempting to create a group with name: {}", groupDTO.getGroupName());
 
         if (groupRepository.existsByGroupName(groupDTO.getGroupName())) {
@@ -28,14 +28,17 @@ public class GroupService {
             throw new GroupException("Group with " + groupDTO.getGroupName() + " name already exists!");
         }
 
-        Group group = groupRepository.save(Group.toGroup(groupDTO));
-        log.info("Successfully created group with ID: {} and name: {}", group.getGroupId(), group.getGroupName());
+        Group group = Group.builder()
+                .groupName(groupDTO.getGroupName())
+                .build();
 
-        return GroupDTO.toGroupDTO(group);
+        groupRepository.save(group);
+
+        log.info("Successfully created group with ID: {} and name: {}", group.getGroupId(), group.getGroupName());
     }
 
     @Transactional
-    public GroupDTO updateGroup(GroupDTO groupDTO) {
+    public void updateGroup(GroupDTO groupDTO) {
         log.info("Attempting to update group with ID: {}", groupDTO.getGroupId());
 
         Group updatedGroup = groupRepository.findById(groupDTO.getGroupId())
@@ -50,9 +53,9 @@ public class GroupService {
         }
 
         updatedGroup.setGroupName(groupDTO.getGroupName());
+
         log.info("Successfully updated group with ID: {} to name: {}", updatedGroup.getGroupId(), updatedGroup.getGroupName());
 
-        return GroupDTO.toGroupDTO(updatedGroup);
     }
 
     public List<GroupDTO> getAll() {

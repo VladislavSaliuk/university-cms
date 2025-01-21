@@ -44,7 +44,7 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO assignStudentToGroup(StudentDTO studentDTO) {
+    public void assignStudentToGroup(StudentDTO studentDTO) {
         log.info("Assigning student with ID {} to group with ID {}.",
                 studentDTO.getUserId(), studentDTO.getGroupDTO().getGroupId());
 
@@ -68,9 +68,7 @@ public class StudentService {
         log.debug("Assigning user {} to group {}.", user.getUsername(), group.getGroupName());
         user.setGroup(group);
 
-        StudentDTO result = StudentDTO.toStudentDTO(user);
-        log.info("Successfully assigned student {} to group {}.", result.getUsername(), group.getGroupName());
-        return result;
+        log.info("Successfully assigned student {} to group {}.", user.getUsername(), group.getGroupName());
     }
 
 }

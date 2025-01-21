@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>MySchedule Features</title>
+    <style>
+
+        body {
+            position: relative;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            background: url("/img/home-page-bg.jpg") no-repeat center center/cover;
+            width: 100%;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        body * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            background-color: #fff;
+            height: 80px;
+            margin: 20px;
+            border-radius: 16px;
+            padding: 0.5rem;
+            transition: background-color 0.5s;
+            z-index: 3;
+        }
+
+        .navbar:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
+
+        .navbar-brand {
+            font-weight: 500;
+            color: #009970;
+            font-size: 24px;
+            transition: 0.3s color;
+        }
+
+        .login-button {
+            background-color: #009970;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s background-color;
+        }
+
+        .login-button:hover {
+            background-color: #00b383;
+        }
+
+        .navbar-toggler {
+            border: none;
+            font-size: 1.25rem;
+        }
+
+        .navbar-toggler:focus, .btn-close:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .nav-link {
+            color: #666777;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link:active {
+            color: #000;
+        }
+
+        @media(min-width: 991px) {
+            .nav-link::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 2px;
+                background-color: #009970;
+                visibility: hidden;
+                transition: 0.3s ease-in-out;
+            }
+
+            .nav-link:hover::before, .nav-link.active::before  {
+                width: 100%;
+                visibility: visible;
+            }
+        }
+
+        .features {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            width: calc(100% - 40px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 2s forwards, backgroundFade 2s forwards;
+        }
+
+        .features i {
+            color: #009970;
+            margin-bottom: 20px;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .features i:hover {
+            transform: scale(1.1);
+            color: #00b383;
+        }
+
+        .feature-item {
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .feature-item:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+
+        .feature-item:nth-child(even) {
+            animation-delay: 1s;
+        }
+
+        h1, h2 {
+            font-weight: 900;
+            opacity: 0;
+            animation: fadeIn 2s 1s forwards;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        @keyframes backgroundFade {
+            from { background: rgba(255, 255, 255, 0); }
+            to { background: rgba(255, 255, 255, 0.9); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand me-auto" href="/">MySchedule</a>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">MySchedule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about-me">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact-me">Contact Me</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a href="/login" class="login-button">Login</a>
+        <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<section class="features py-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1 class="fade-in">Features</h1>
+                <p class="py-3 fade-in">Discover the key features that make MySchedule the ultimate platform for students and educators alike. From user-friendly interfaces to robust backend systems, we provide everything you need for a seamless educational experience.</p>
+            </div>
+        </div>
+        <div class="row feature-item py-5 fade-in">
+            <div class="col-lg-3 text-center">
+                <i class="fas fa-laptop-code fa-5x"></i>
+            </div>
+            <div class="col-lg-9 pt-3">
+                <h2>Intuitive Interface</h2>
+                <p>Our platform offers an intuitive and interactive interface that allows users to navigate effortlessly. Whether you are a student or an educator, you'll find our tools easy to use and highly effective in enhancing your learning and teaching experience.</p>
+            </div>
+        </div>
+        <div class="row feature-item py-5 fade-in">
+            <div class="col-lg-3 text-center">
+                <i class="fas fa-server fa-5x"></i>
+            </div>
+            <div class="col-lg-9 pt-3">
+                <h2>Scalable Infrastructure</h2>
+                <p>Our backend infrastructure is built to scale, ensuring that no matter how large your institution grows, MySchedule will grow with you. We use the latest technologies to provide a robust and reliable backend system.</p>
+            </div>
+        </div>
+        <div class="row feature-item py-5 fade-in">
+            <div class="col-lg-3 text-center">
+                <i class="fas fa-shield-alt fa-5x"></i>
+            </div>
+            <div class="col-lg-9 pt-3">
+                <h2>Top-notch Security</h2>
+                <p>Security is our top priority. We implement state-of-the-art security measures to protect your data and ensure that your information remains confidential and secure at all times.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

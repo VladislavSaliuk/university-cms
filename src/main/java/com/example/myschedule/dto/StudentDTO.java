@@ -15,7 +15,6 @@ import lombok.*;
 @NoArgsConstructor
 public class StudentDTO {
 
-    @NotNull(message = "Student should contains userId!")
     private long userId;
 
     private String username;

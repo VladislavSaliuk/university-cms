@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 public class ClassroomService {
 
     private final ClassroomRepository classroomRepository;
-
-    public ClassroomDTO createClassroom(ClassroomDTO classroomDTO) {
+    public void createClassroom(ClassroomDTO classroomDTO) {
         log.info("Attempting to create a classroom with number: {}", classroomDTO.getClassroomNumber());
 
         if (classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber())) {
@@ -28,14 +27,17 @@ public class ClassroomService {
             throw new ClassroomException("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!");
         }
 
-        Classroom classroom = classroomRepository.save(Classroom.toClassroom(classroomDTO));
-        log.info("Successfully created classroom with ID: {} and number: {}", classroom.getClassroomId(), classroom.getClassroomNumber());
+        Classroom classroom = Classroom.builder()
+                .classroomNumber(classroomDTO.getClassroomNumber())
+                .classroomDescription(classroomDTO.getClassroomDescription())
+                .build();
 
-        return ClassroomDTO.toClassroomDTO(classroom);
+        classroomRepository.save(classroom);
+        log.info("Successfully created classroom with ID: {} and number: {}", classroom.getClassroomId(), classroom.getClassroomNumber());
     }
 
     @Transactional
-    public ClassroomDTO updateClassroom(ClassroomDTO classroomDTO) {
+    public void updateClassroom(ClassroomDTO classroomDTO) {
         log.info("Attempting to update classroom with ID: {}", classroomDTO.getClassRoomId());
 
         Classroom updatedClassroom = classroomRepository.findById(classroomDTO.getClassRoomId())
@@ -53,8 +55,6 @@ public class ClassroomService {
         updatedClassroom.setClassroomDescription(classroomDTO.getClassroomDescription());
 
         log.info("Successfully updated classroom with ID: {} to number: {}", updatedClassroom.getClassroomId(), updatedClassroom.getClassroomNumber());
-
-        return ClassroomDTO.toClassroomDTO(updatedClassroom);
     }
 
     public List<ClassroomDTO> getAll() {

@@ -27,7 +27,7 @@ public class ScheduleService {
 
     private final UserRepository userRepository;
 
-    public LessonDTO createLesson(LessonDTO lessonDTO) {
+    public void createLesson(LessonDTO lessonDTO) {
         log.info("Attempting to create a new lesson: {}", lessonDTO);
 
         if (hasTimeOverlap(lessonDTO)) {
@@ -62,11 +62,10 @@ public class ScheduleService {
         Lesson createdLesson = lessonRepository.save(lesson);
         log.info("Lesson created successfully: {}", createdLesson);
 
-        return LessonDTO.toLessonDTO(createdLesson);
     }
 
     @Transactional
-    public LessonDTO updateLesson(LessonDTO lessonDTO) {
+    public void updateLesson(LessonDTO lessonDTO) {
         log.info("Attempting to update lesson with ID: {}", lessonDTO.getLessonId());
 
         if (hasTimeOverlap(lessonDTO)) {
@@ -102,7 +101,6 @@ public class ScheduleService {
         updatedLesson.setClassroom(classroom);
 
         log.info("Lesson updated successfully: {}", updatedLesson);
-        return LessonDTO.toLessonDTO(updatedLesson);
     }
 
     public LessonDTO getLessonById(long lessonId) {

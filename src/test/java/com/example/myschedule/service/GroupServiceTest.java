@@ -46,7 +46,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    void createGroup_shouldReturnGroupDTO() {
+    void createGroup_shouldSaveGroup() {
 
         when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(false);
@@ -54,10 +54,7 @@ public class GroupServiceTest {
         when(groupRepository.save(any(Group.class)))
                 .thenReturn(group);
 
-        GroupDTO actualGroupDTO = groupService.createGroup(groupDTO);
-
-        assertNotNull(actualGroupDTO);
-        assertEquals(groupDTO, actualGroupDTO);
+        groupService.createGroup(groupDTO);
 
         verify(groupRepository).existsByGroupName(groupDTO.getGroupName());
         verify(groupRepository).save(any(Group.class));
@@ -81,7 +78,7 @@ public class GroupServiceTest {
     }
 
     @Test
-    void updateGroup_shouldReturnGroupDTO() {
+    void updateGroup_shouldUpdateGroup() {
 
         groupDTO.setGroupName("Name 2");
 
@@ -91,10 +88,7 @@ public class GroupServiceTest {
         when(groupRepository.existsByGroupName(groupDTO.getGroupName()))
                 .thenReturn(false);
 
-        GroupDTO actualGroupDTO = groupService.updateGroup(groupDTO);
-
-        assertNotNull(actualGroupDTO);
-        assertEquals(groupDTO, actualGroupDTO);
+        groupService.updateGroup(groupDTO);
 
         verify(groupRepository).findById(groupDTO.getGroupId());
         verify(groupRepository).existsByGroupName(groupDTO.getGroupName());

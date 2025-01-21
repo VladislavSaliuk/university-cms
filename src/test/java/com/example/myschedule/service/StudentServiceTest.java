@@ -97,7 +97,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void assignStudentToGroup_shouldReturnStudentDTO() {
+    void assignStudentToGroup_shouldUpdateUser() {
 
         when(userRepository.findById(studentDTO.getUserId()))
                 .thenReturn(Optional.of(user));
@@ -105,10 +105,7 @@ public class StudentServiceTest {
         when(groupRepository.findById(studentDTO.getGroupDTO().getGroupId()))
                 .thenReturn(Optional.of(group));
 
-        StudentDTO actualStudentDTO = studentService.assignStudentToGroup(studentDTO);
-
-        assertNotNull(actualStudentDTO);
-        assertEquals(studentDTO, actualStudentDTO);
+        studentService.assignStudentToGroup(studentDTO);
 
         verify(userRepository).findById(studentDTO.getUserId());
         verify(groupRepository).findById(studentDTO.getGroupDTO().getGroupId());

@@ -90,7 +90,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    void createCourse_shouldReturnCourseDTO() {
+    void createCourse_shouldSaveCourse() {
 
         when(courseRepository.existsByCourseName(courseDTO.getCourseName()))
                 .thenReturn(false);
@@ -101,10 +101,7 @@ public class CourseServiceTest {
         when(courseRepository.save(any(Course.class)))
                 .thenReturn(course);
 
-        CourseDTO actualCourseDTO = courseService.createCourse(courseDTO);
-
-        assertNotNull(actualCourseDTO);
-        assertEquals(courseDTO, actualCourseDTO);
+        courseService.createCourse(courseDTO);
 
         verify(courseRepository).existsByCourseName(courseDTO.getCourseName());
         verify(userRepository).findById(courseDTO.getTeacherDTO().getUserId());
@@ -171,7 +168,7 @@ public class CourseServiceTest {
     }
 
     @Test
-    void updateCourse_shouldReturnCourseDTO() {
+    void updateCourse_shouldUpdateCourse() {
 
         courseDTO.setCourseName("Course name 2");
 
@@ -184,10 +181,7 @@ public class CourseServiceTest {
         when(userRepository.findById(courseDTO.getTeacherDTO().getUserId()))
                 .thenReturn(Optional.of(user));
 
-        CourseDTO actualCourseDTO = courseService.updateCourse(courseDTO);
-
-        assertNotNull(actualCourseDTO);
-        assertEquals(courseDTO, actualCourseDTO);
+        courseService.updateCourse(courseDTO);
 
         verify(courseRepository).findById(courseDTO.getCourseId());
         verify(courseRepository).existsByCourseName(courseDTO.getCourseName());

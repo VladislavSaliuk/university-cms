@@ -123,7 +123,7 @@ public class ScheduleServiceTest {
     }
 
     @Test
-    void createLesson_shouldReturnLessonDTO() {
+    void createLesson_shouldSaveLesson() {
 
         when(lessonRepository.findAll()).thenReturn(Collections.emptyList());
 
@@ -139,10 +139,7 @@ public class ScheduleServiceTest {
         when(lessonRepository.save(any(Lesson.class)))
                 .thenReturn(lesson);
 
-        LessonDTO createdLessonDTO = scheduleService.createLesson(lessonDTO);
-
-        assertNotNull(createdLessonDTO);
-        assertEquals(lessonDTO, createdLessonDTO);
+        scheduleService.createLesson(lessonDTO);
 
         verify(lessonRepository).findAll();
         verify(courseRepository).findById(lessonDTO.getCourseDTO().getCourseId());
@@ -294,7 +291,7 @@ public class ScheduleServiceTest {
     }
 
     @Test
-    void updateLesson_shouldReturnLessonDTO() {
+    void updateLesson_shouldUpdateLesson() {
 
         when(lessonRepository.findAll())
                 .thenReturn(Collections.emptyList());
@@ -314,10 +311,7 @@ public class ScheduleServiceTest {
         lessonDTO.setStartTime(LocalTime.of(11, 00));
         lessonDTO.setEndTime(LocalTime.of(12, 00));
 
-        LessonDTO updatedLessonDTO = scheduleService.updateLesson(lessonDTO);
-
-        assertNotNull(updatedLessonDTO);
-        assertEquals(lessonDTO, updatedLessonDTO);
+        scheduleService.updateLesson(lessonDTO);
 
         verify(lessonRepository).findAll();
         verify(lessonRepository).findById(lessonDTO.getLessonId());

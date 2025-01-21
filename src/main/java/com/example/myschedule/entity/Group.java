@@ -23,11 +23,4 @@ public class Group implements Serializable {
     @Column(name = "group_name", nullable = false, unique = true)
     private String groupName;
 
-    public static Group toGroup(GroupDTO groupDTO) {
-        return Group.builder()
-                .groupId(groupDTO.getGroupId())
-                .groupName(groupDTO.getGroupName())
-                .build();
-    }
-
 }

@@ -22,7 +22,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class UserDTO {
 
-    @NotNull(message = "User should contains Id!")
     private long userId;
 
     private String username;
@@ -35,7 +34,6 @@ public class UserDTO {
 
     private Role role;
 
-    @NotNull(message = "User should contains status!")
     private Status status;
     public static UserDTO toUserDTO(User user) {
         return UserDTO.builder()

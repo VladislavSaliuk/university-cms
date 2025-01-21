@@ -47,7 +47,7 @@ public class ClassroomServiceTest {
 
 
     @Test
-    void createClassroom_shouldReturnClassroomDTO() {
+    void createClassroom_shouldSaveClassroom() {
 
         when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(false);
@@ -55,10 +55,7 @@ public class ClassroomServiceTest {
         when(classroomRepository.save(any(Classroom.class)))
                 .thenReturn(classroom);
 
-        ClassroomDTO actualClassroomDTO = classroomService.createClassroom(classroomDTO);
-
-        assertNotNull(actualClassroomDTO);
-        assertEquals(classroomDTO, actualClassroomDTO);
+        classroomService.createClassroom(classroomDTO);
 
         verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());
         verify(classroomRepository).save(any(Classroom.class));
@@ -82,7 +79,7 @@ public class ClassroomServiceTest {
     }
 
     @Test
-    void updateClassroom_shouldReturnClassroomDTO() {
+    void updateClassroom_shouldUpdateClassroom() {
 
         classroomDTO.setClassroomNumber(500L);
         classroomDTO.setClassroomDescription("Classroom description 2");
@@ -93,10 +90,7 @@ public class ClassroomServiceTest {
         when(classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber()))
                 .thenReturn(false);
 
-        ClassroomDTO actualClassroomDTO = classroomService.updateClassroom(classroomDTO);
-
-        assertNotNull(actualClassroomDTO);
-        assertEquals(classroomDTO, actualClassroomDTO);
+        classroomService.updateClassroom(classroomDTO);
 
         verify(classroomRepository).findById(classroomDTO.getClassRoomId());
         verify(classroomRepository).existsByClassroomNumber(classroomDTO.getClassroomNumber());

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Contact Me</title>
+    <style>
+
+        body {
+            position: relative;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+            background: url("/img/home-page-bg.jpg") no-repeat center center/cover;
+            width: 100%;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        body * {
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            background-color: #fff;
+            height: 80px;
+            margin: 20px;
+            border-radius: 16px;
+            padding: 0.5rem;
+            z-index: 3;
+        }
+
+        .navbar-brand {
+            font-weight: 500;
+            color: #009970;
+            font-size: 24px;
+            transition: 0.3s color;
+        }
+
+        .login-button {
+            background-color: #009970;
+            color: #fff;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s background-color;
+        }
+
+        .login-button:hover {
+            background-color: #00b383;
+        }
+
+        .navbar-toggler {
+            border: none;
+            font-size: 1.25rem;
+        }
+
+        .navbar-toggler:focus, .btn-close:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .nav-link {
+            color: #666777;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link:active {
+            color: #000;
+        }
+
+        @media(min-width: 991px) {
+            .nav-link::before {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 2px;
+                background-color: #009970;
+                visibility: hidden;
+                transition: 0.3s ease-in-out;
+            }
+
+            .nav-link:hover::before, .nav-link.active::before  {
+                width: 100%;
+                visibility: visible;
+            }
+        }
+
+
+        .contact {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            width: calc(100% - 40px);
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 2s forwards, backgroundFade 2s forwards;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .contact-content {
+            text-align: center;
+        }
+
+        .contact h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .contact p {
+            font-size: 1.125rem;
+            margin-bottom: 40px;
+            color: #555;
+        }
+
+        .contact ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            grid-template-rows: repeat(2, auto);
+        }
+
+        .contact li {
+            display: flex;
+            align-items: center;
+            font-size: 1.125rem;
+            color: #333;
+        }
+
+        .contact i {
+            margin-right: 10px;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .contact i:hover {
+            transform: scale(1.2);
+            color: #00b383;
+        }
+
+        .contact a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact a:hover {
+            color: #009970;
+        }
+
+
+        .contact li:nth-last-child(-n+2) {
+            grid-column: span 2;
+            align-self: end;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes backgroundFade {
+            from { background: rgba(255, 255, 255, 0); }
+            to { background: rgba(255, 255, 255, 0.9); }
+        }
+
+        @media (max-width: 320px) {
+            .contact ul {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .contact li {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .contact i {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand me-auto" href="/">MySchedule</a>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">MySchedule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about-me">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/contact-me">Contact Me</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a href="/login" class="login-button">Login</a>
+        <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<section class="contact py-5">
+    <div class="container py-5">
+        <div class="contact-content">
+            <h1 class="fade-in">Contact Me</h1>
+            <p class="py-3 fade-in">Feel free to reach out to me through any of the following channels:</p>
+            <ul class="list-unstyled">
+                <li>
+                    <i class="fab fa-instagram fa-2x" style="color: #C13584;"></i>
+                    <a href="https://www.instagram.com/vladislav.saliuk_" target="_blank" class="text-decoration-none">Instagram</a>
+                </li>
+                <li>
+                    <i class="fab fa-twitter fa-2x" style="color: #1DA1F2;"></i>
+                    <a href="https://x.com/Vladislav19350" target="_blank" class="text-decoration-none">Twitter</a>
+                </li>
+                <li>
+                    <i class="fab fa-telegram-plane fa-2x" style="color: #0088CC;"></i>
+                    <a href="https://t.me/vladslk18" target="_blank" class="text-decoration-none">Telegram</a>
+                </li>
+                <li>
+                    <i class="fab fa-linkedin fa-2x" style="color: #0077B5;"></i>
+                    <a href="https://www.linkedin.com/in/vladislav-saliuk" target="_blank" class="text-decoration-none">LinkedIn</a>
+                </li>
+                <li>
+                    <i class="fas fa-phone fa-2x" style="color: #333;"></i>
+                    <a href="tel:+380634865966" class="text-decoration-none">+380 (63) 486-5966</a>
+                </li>
+                <li>
+                    <i class="fas fa-envelope fa-2x" style="color: #333;"></i>
+                    <a href="mailto:salukvladislav81@gmail.com" class="text-decoration-none">salukvladislav81@gmail.com</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

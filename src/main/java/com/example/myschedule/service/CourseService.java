@@ -24,7 +24,7 @@ public class CourseService {
 
     private final UserRepository userRepository;
 
-    public CourseDTO createCourse(CourseDTO courseDTO) {
+    public void createCourse(CourseDTO courseDTO) {
 
         log.info("Attempting to create a new course with name: {}", courseDTO.getCourseName());
 
@@ -50,14 +50,13 @@ public class CourseService {
                 .user(user)
                 .build();
 
-        Course createdCourse = courseRepository.save(course);
+        courseRepository.save(course);
 
         log.info("Course with name '{}' successfully created with ID: {}", courseDTO.getCourseName(), course.getCourseId());
-        return CourseDTO.toCourseDTO(createdCourse);
     }
 
     @Transactional
-    public CourseDTO updateCourse(CourseDTO courseDTO) {
+    public void updateCourse(CourseDTO courseDTO) {
         log.info("Attempting to update course with ID: {}", courseDTO.getCourseId());
 
         Course updatedCourse = courseRepository.findById(courseDTO.getCourseId())
@@ -87,7 +86,6 @@ public class CourseService {
         updatedCourse.setUser(updatedCourse.getUser());
 
         log.info("Course with ID '{}' successfully updated.", courseDTO.getCourseId());
-        return CourseDTO.toCourseDTO(updatedCourse);
     }
 
     public List<CourseDTO> getAll() {

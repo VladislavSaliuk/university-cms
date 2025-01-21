@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -145,6 +146,39 @@ public class UserServiceTest {
         Assert.assertEquals("User with " + userId + " Id not found!", exception.getMessage());
 
         verify(userRepository).findById(userId);
+
+    }
+
+    @Test
+    void getByUsername_shouldReturnUserDTO() {
+
+        String username = "Username";
+
+        when(userRepository.findByUsername(username))
+                .thenReturn(Optional.of(user));
+
+        UserDTO actualUserDTO = userService.getByUsername(username);
+
+        Assert.assertNotNull(actualUserDTO);
+        Assert.assertEquals(userDTO, actualUserDTO);
+
+        verify(userRepository).findByUsername(username);
+
+    }
+
+    @Test
+    void getByUsername_shouldThrowException_whenUserNotFound() {
+
+        String username = "Username";
+
+        when(userRepository.findByUsername(username))
+                .thenReturn(Optional.empty());
+
+        UsernameNotFoundException exception = Assert.assertThrows(UsernameNotFoundException.class, () -> userService.getByUsername(username));
+
+        Assert.assertEquals("User with " + username + " username not found!", exception.getMessage());
+
+        verify(userRepository).findByUsername(username);
 
     }
 
