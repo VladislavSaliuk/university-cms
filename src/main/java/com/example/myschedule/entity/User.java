@@ -28,10 +28,10 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "firstname")
+    @Column(name = "firstname",nullable = false)
     private String firstname;
 
-    @Column(name = "lastname")
+    @Column(name = "lastname",nullable = false)
     private String lastname;
 
     @Enumerated(EnumType.STRING)

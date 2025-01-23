@@ -1,7 +1,8 @@
 package com.example.myschedule.service;
 
+import com.example.myschedule.dto.RegistrationDTO;
 import com.example.myschedule.dto.UserDTO;
-import com.example.myschedule.entity.Status;
+import com.example.myschedule.entity.Role;
 import com.example.myschedule.entity.User;
 import com.example.myschedule.exception.UserException;
 import com.example.myschedule.exception.UserNotFoundException;
@@ -9,8 +10,6 @@ import com.example.myschedule.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +19,43 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService  {
 
     private final UserRepository userRepository;
+
+    public void registerUser(RegistrationDTO registrationDTO) {
+        log.info("Starting user registration for username: {}", registrationDTO.getUsername());
+
+        if (userRepository.existsByUsername(registrationDTO.getUsername())) {
+            log.warn("User with username '{}' already exists!", registrationDTO.getUsername());
+            throw new UserException("User with " + registrationDTO.getUsername() + " username already exists!");
+        }
+
+        if (userRepository.existsByEmail(registrationDTO.getEmail())) {
+            log.warn("User with email '{}' already exists!", registrationDTO.getEmail());
+            throw new UserException("User with " + registrationDTO.getEmail() + " E-mail already exists!");
+        }
+
+        if (registrationDTO.getRole() == Role.STUFF || registrationDTO.getRole() == Role.ADMIN) {
+            log.warn("Attempt to assign forbidden role '{}' for username: {}", registrationDTO.getRole(), registrationDTO.getUsername());
+            throw new UserException("This role is not allowed for you!");
+        }
+
+        log.debug("Creating user object for username: {}", registrationDTO.getUsername());
+        User user = User.builder()
+                .username(registrationDTO.getUsername())
+                .password(registrationDTO.getPassword())
+                .email(registrationDTO.getEmail())
+                .firstname(registrationDTO.getFirstname())
+                .lastname(registrationDTO.getLastname())
+                .role(registrationDTO.getRole())
+                .status(registrationDTO.getStatus())
+                .build();
+
+        log.info("Saving user to the database for username: {}", registrationDTO.getUsername());
+        userRepository.save(user);
+        log.info("User registration successful for username: {}", registrationDTO.getUsername());
+    }
 
     @Transactional
     public UserDTO updateStatus(UserDTO userDTO) {
@@ -76,28 +109,6 @@ public class UserService implements UserDetailsService {
                     log.error("User with username '{}' not found!", username);
                     return new UsernameNotFoundException("User with " + username + " username not found!");
                 });
-    }
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Loading user details for username: {}", username);
-
-        User user = userRepository.findByUsername(username).orElseThrow(() -> {
-            log.error("User with username '{}' not found!", username);
-            return new UsernameNotFoundException("User with " + username + " username not found!");
-        });
-
-        if (user.getStatus().name().equals(Status.BANNED.name())) {
-            log.warn("User '{}' is banned!", username);
-            throw new UserException("You are banned!");
-        }
-
-        log.info("Successfully loaded user details for username: {}", username);
-
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build();
     }
 
 }

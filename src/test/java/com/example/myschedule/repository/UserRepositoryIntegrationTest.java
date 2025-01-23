@@ -89,13 +89,27 @@ public class UserRepositoryIntegrationTest {
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(user));
         assertEquals(10, userRepository.count());
     }
+
+    @Test
+    void save_shouldThrowException_whenFirstnameIsNull() {
+        user.setFirstname(null);
+        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(user));
+        assertEquals(10, userRepository.count());
+    }
+
+    @Test
+    void save_shouldThrowException_whenLastnameIsNull() {
+        user.setLastname(null);
+        DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(user));
+        assertEquals(10, userRepository.count());
+    }
+
     @Test
     void save_shouldThrowException_whenRoleIsNull() {
         user.setRole(null);
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(user));
         assertEquals(10, userRepository.count());
     }
-
     @Test
     void save_shouldThrowException_whenStatusIsNull() {
         user.setStatus(null);
@@ -105,8 +119,8 @@ public class UserRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "john_doe", "jane_smith", "mark_twain", "lucy_adams", "mike_jones",
-            "susan_clark", "admin", "stuff", "emma_brown", "oliver_black"})
+            "johndoe", "janesmith", "marktwain", "lucyadams", "mikejones",
+            "susanclark", "admin", "stuff", "emmabrown", "oliverblack"})
     void save_shouldThrowException_whenUsernameRepeats(String username) {
         user.setUsername(username);
         DataIntegrityViolationException exception = assertThrows(DataIntegrityViolationException.class, () -> userRepository.save(user));
@@ -148,8 +162,8 @@ public class UserRepositoryIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "john_doe", "jane_smith", "mark_twain", "lucy_adams", "mike_jones",
-            "susan_clark", "admin", "stuff", "emma_brown", "oliver_black"})
+            "johndoe", "janesmith", "marktwain", "lucyadams", "mikejones",
+            "susanclark", "admin", "stuff", "emmabrown", "oliverblack"})
     void findByUsername_shouldReturnUser(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         assertTrue(optionalUser.isPresent());
@@ -172,6 +186,36 @@ public class UserRepositoryIntegrationTest {
         long userId = 100L;
         userRepository.deleteById(userId);
         assertEquals(10, userRepository.count());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "johndoe", "janesmith", "marktwain", "lucyadams", "mikejones",
+            "susanclark", "admin", "stuff", "emmabrown", "oliverblack"})
+    void existsByUsername_shouldReturnTrue(String username) {
+        boolean isUserExists = userRepository.existsByUsername(username);
+        assertTrue(isUserExists);
+    }
+    @Test
+    void existsByUsername_shouldReturnFalse_whenUserNotExist() {
+        String username = "Username";
+        boolean isUserExists = userRepository.existsByUsername(username);
+        assertFalse(isUserExists);
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "john.doe@example.com", "jane.smith@example.com", "mark.twain@example.com",
+            "lucy.adams@example.com", "mike.jones@example.com",
+            "susan.clark@example.com", "salukvladislav81@gmail.com",
+            "seattlemusic345@gmail.com", "emma.brown@example.com", "oliver.black@example.com"})
+    void existsByEmail_shouldReturnTrue(String username) {
+        boolean isUserExists = userRepository.existsByEmail(username);
+        assertTrue(isUserExists);
+    }
+    @Test
+    void existsByEmail_shouldReturnFalse_whenUserNotExist() {
+        boolean isUserExists = userRepository.existsByEmail(user.getUsername());
+        assertFalse(isUserExists);
     }
 
 }
