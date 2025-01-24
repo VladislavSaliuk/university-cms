@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -142,9 +144,35 @@ public class ScheduleService {
                 .stream()
                 .filter(lesson -> lesson.getGroup().getGroupId() == groupId)
                 .map(LessonDTO::toLessonDTO)
+                .sorted(Comparator.comparing(LessonDTO::getStartTime))
                 .collect(Collectors.toList());
 
         log.info("Retrieved {} lessons for group with ID: {}", schedule.size(), groupId);
+        return schedule;
+    }
+
+    public List<LessonDTO> getScheduleForStudent(long userId) {
+        log.debug("Attempting to retrieve schedule for user with ID: {}", userId);
+
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            log.error("User with ID: {} not found!", userId);
+            return new UserNotFoundException("User with " + userId + " Id not found!");
+        });
+
+        if (!user.getRole().name().equals(Role.STUDENT.name())) {
+            log.error("User with ID: {} is not a student!", userId);
+            throw new UserException("User with " + userId + " Id is not a student!");
+        }
+
+        log.info("User with ID: {} is a student. Retrieving schedule.", userId);
+        List<LessonDTO> schedule = lessonRepository.findAll()
+                .stream()
+                .filter(lesson -> lesson.getGroup().getGroupId() == user.getGroup().getGroupId())
+                .map(LessonDTO::toLessonDTO)
+                .sorted(Comparator.comparing(LessonDTO::getStartTime))
+                .collect(Collectors.toList());
+
+        log.info("Retrieved {} lessons for user with ID: {}", schedule.size(), userId);
         return schedule;
     }
 
@@ -166,6 +194,7 @@ public class ScheduleService {
                 .stream()
                 .filter(lesson -> lesson.getCourse().getUser().getUserId() == userId)
                 .map(LessonDTO::toLessonDTO)
+                .sorted(Comparator.comparing(LessonDTO::getStartTime))
                 .collect(Collectors.toList());
 
         log.info("Retrieved {} lessons for teacher with User ID: {}", schedule.size(), userId);

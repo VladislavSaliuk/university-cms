@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin dashboard</title>
+</head>
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #4a90e2, #50c878);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    table, th, td {
+        border-collapse: collapse;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        left: 0;
+        background-color: #d5d1defe;
+    }
+
+    table th {
+        position: sticky;
+        top: 0;
+        left: 0;
+        background-color: #d5d1defe;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #0000000b;
+    }
+
+    tbody tr {
+        --delay: .1s;
+        transition: .5s ease-in-out var(--delay), background-color 0s;
+    }
+
+    tbody tr.hide {
+        --delay: .1s;
+        transition: .5s ease-in-out var(--delay);
+    }
+
+    tbody tr.hide {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    tbody tr:hover {
+        background-color: #fff6 !important;
+    }
+
+    tbody tr td,
+    tbody tr td p {
+        padding: 0;
+        transition: .2s ease-in-out .5s;
+    }
+
+    tbody tr.hide td {
+        width: 0;
+        height: 0;
+        transition: .2s ease-in-out .5s;
+    }
+
+    tbody tr.hide td,
+    tbody tr.hide td p {
+        padding: 0;
+    }
+
+    .table-header {
+        width: 100%;
+        height: 10%;
+        background-color: #fff4;
+        padding: .8rem 1rem;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .table-body {
+        width: 95%;
+        max-height: calc(89% - 1.6rem);
+        background-color: #fffb;
+        margin: .8rem auto;
+        border-radius: .6rem;
+        overflow: auto;
+    }
+
+    .table-header .input-group {
+        width: 35%;
+        height: 100%;
+        background-color: #fff5;
+        padding: 0 .8rem;
+        border-radius: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: .2s;
+    }
+
+    .table-header .input-group:hover {
+        width: 45%;
+        background-color: #fff8;
+        box-shadow: 0 .1rem .4rem #0002;
+    }
+
+    .table-header .input-group img {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    .table-header .input-group input {
+        width: 100%;
+        padding: 0 .5rem 0 .3rem;
+        background-color: transparent;
+        border: none;
+        outline: none;
+    }
+
+    .table-body::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+
+    .table-body::-webkit-scrollbar-thumb {
+        border-radius: .5rem;
+        background-color: #0004;
+        visibility: hidden;
+    }
+
+    .table-body:hover::-webkit-scrollbar-thumb {
+        visibility: visible;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    main.table {
+        width: 82vw;
+        height: 90vh;
+        background-color: #fff5;
+        backdrop-filter: blur(7px);
+        box-shadow: 0 .4rem .8rem #0005;
+        border-radius: .8rem;
+        overflow: hidden;
+    }
+
+    .status {
+        padding: .4rem 0;
+        border-radius: 2rem;
+        text-align: center;
+    }
+
+    .status.active {
+        background-color: #86e48d;
+        color: #006b21;
+    }
+
+    .status.banned {
+        background-color: #d893a3;
+        color: #b30021;
+    }
+
+    @media (max-width: 1000px) {
+        td:not(:first-of-type) {
+            min-width: 12.1rem;
+        }
+    }
+
+</style>
+<body>
+    <main class="table">
+        <section class="table-header">
+            <h1>Users</h1>
+            <div class="input-group">
+                <input type="search" placeholder="Search data...">
+                <img src="/img/search.png" alt="">
+            </div>
+        </section>
+        <section class="table-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th> Id </th>
+                        <th> Username </th>
+                        <th> E-mail </th>
+                        <th> Firstname </th>
+                        <th> Lastname </th>
+                        <th> Role </th>
+                        <th> Status </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user: ${userList}">
+                    <td><span th:text="${user.userId}"></span></td>
+                    <td><span th:text="${user.username}"></span></td>
+                    <td><span th:text="${user.email}"></span></td>
+                    <td><span th:text="${user.firstname}"></span></td>
+                    <td><span th:text="${user.lastname}"></span></td>
+                    <td><span th:text="${user.role.getRoleName()}"></span></td>
+                    <td><p class="status active"  th:text="${user.status.getStatusName()}"></p></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+
+        const search = document.querySelector('.input-group input'),
+            table_rows = document.querySelectorAll('tbody tr'),
+            table_headings = document.querySelectorAll('thead th');
+
+        search.addEventListener('input', searchTable);
+
+        function searchTable() {
+            table_rows.forEach((row, i) => {
+                let table_data = row.textContent.toLowerCase(),
+                    search_data = search.value.toLowerCase();
+
+                row.classList.toggle('hide', table_data.indexOf(search_data) < 0);
+                row.style.setProperty('--delay', i / 25 + 's');
+            })
+
+            document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {
+                visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
+            });
+        }
+
+    </script>
+</body>
+</html>

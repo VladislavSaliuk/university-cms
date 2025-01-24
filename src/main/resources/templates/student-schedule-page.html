@@ -1,0 +1,135 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student schedule</title>
+</head>
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #4a90e2, #50c878);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    table, th, td {
+        border-collapse: collapse;
+        padding: 1rem;
+        text-align: left;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        left: 0;
+        background-color: #d5d1defe;
+    }
+
+    table th {
+        position: sticky;
+        top: 0;
+        left: 0;
+        background-color: #d5d1defe;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #0000000b;
+    }
+
+    tbody tr:hover {
+        background-color: #fff6;
+    }
+
+    .table-header {
+        width: 100%;
+        height: 10%;
+        background-color: #fff4;
+        padding: .8rem 1rem;
+    }
+
+    .table-body {
+        width: 95%;
+        max-height: calc(89% - 1.6rem);
+        background-color: #fffb;
+        margin: .8rem auto;
+        border-radius: .6rem;
+        overflow: auto;
+    }
+
+    .table-body::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+    }
+
+    .table-body::-webkit-scrollbar-thumb {
+        border-radius: .5rem;
+        background-color: #0004;
+        visibility: hidden;
+    }
+
+    .table-body:hover::-webkit-scrollbar-thumb {
+        visibility: visible;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    main.table {
+        width: 82vw;
+        height: 90vh;
+        background-color: #fff5;
+        backdrop-filter: blur(7px);
+        box-shadow: 0 .4rem .8rem #0005;
+        border-radius: .8rem;
+        overflow: hidden;
+    }
+
+    @media (max-width: 1000px) {
+        td:not(:first-of-type) {
+            min-width: 12.1rem;
+        }
+    }
+
+</style>
+<body>
+<main class="table">
+    <section class="table-header">
+        <h1>Schedule</h1>
+    </section>
+    <section class="table-body">
+        <table>
+            <thead>
+            <tr>
+                <th> Start time </th>
+                <th> End time </th>
+                <th> Day </th>
+                <th> Course </th>
+                <th> Teacher </th>
+                <th> Classroom </th>
+            </tr>
+            <tr th:each="lesson: ${lessonList}">
+                <td><span th:text="${lesson.getStartTime().toString()}"></span></td>
+                <td><span th:text="${lesson.getEndTime().toString()}"></span></td>
+                <td><span th:text="${lesson.getDayOfWeek().getDayOfWeekName()}"></span></td>
+                <td><span th:text="${lesson.getCourseDTO().getCourseName()}"></span></td>
+                <td><span th:text="${lesson.getCourseDTO().getTeacherDTO().username}"></span></td>
+                <td><span th:text="${lesson.getClassroomDTO().getClassroomNumber()}"></span></td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
