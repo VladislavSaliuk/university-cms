@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Dashboard</title>
+    <title>Stuff Lessons Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #4a90e2, #50c878);
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -228,7 +228,7 @@
 <body>
 <main class="table" id="customers_table">
     <section class="table__header">
-        <h1>Users</h1>
+        <h1>Lessons</h1>
         <div class="input-group">
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
@@ -239,23 +239,26 @@
             <thead>
             <tr>
                 <th> Id <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Username <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> E-mail <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Firstname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Lastname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Role <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Status <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Course <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Group <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Start Time <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> End Time <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Day <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Teacher <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Classroom <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Actions </th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user: ${userList}">
-                <td><span th:text="${user.userId}"></span></td>
-                <td><span th:text="${user.username}"></span></td>
-                <td><span th:text="${user.email}"></span></td>
-                <td><span th:text="${user.firstname}"></span></td>
-                <td><span th:text="${user.lastname}"></span></td>
-                <td><span th:text="${user.role.getRoleName()}"></span></td>
-                <td><p class="status active"  th:text="${user.status.getStatusName()}"></p></td>
+            <tr th:each="lesson: ${lessonList}">
+                <td><span th:text="${lesson.lessonId}"></span></td>
+                <td><span th:text="${lesson.courseDTO.courseName}"></span></td>
+                <td><span th:text="${lesson.groupDTO.groupName}"></span></td>
+                <td><span th:text="${lesson.startTime}"></span></td>
+                <td><span th:text="${lesson.endTime}"></span></td>
+                <td><span th:text="${lesson.dayOfWeek.getDayOfWeekName()}"></span></td>
+                <td><span th:text="${lesson.courseDTO.teacherDTO.username}"></span></td>
+                <td><span th:text="${lesson.classroomDTO.classroomNumber}"></span></td>
             </tr>
             </tbody>
         </table>
