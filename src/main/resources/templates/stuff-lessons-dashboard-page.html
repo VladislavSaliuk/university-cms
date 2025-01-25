@@ -222,6 +222,223 @@
             color: #6c00bd;
         }
 
+        .btn-create {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 2rem;
+            background-color: #6c00bd;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .btn-create:hover {
+            background-color: #8e44ad;
+        }
+
+        .btn-update, .btn-delete {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 2rem;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-update:hover {
+            background-color: #45a049;
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+        }
+
+        .btn-delete:hover {
+            background-color: #e53935;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 30px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.3s ease-in-out;
+            position: relative;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover {
+            color: #ff5e5e;
+        }
+
+        h2 {
+            margin: 0 0 20px 0;
+            font-size: 22px;
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .modal input, textarea, .choicebox {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .choicebox {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+        }
+
+        .modal input:focus, textarea:focus, .choicebox {
+            border-color: #7dbaff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                width: 90%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            .submit-button {
+                font-size: 14px;
+            }
+        }
+
+        .time-picker {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .time-picker:focus {
+            border-color: #7dbaff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .time-picker::-webkit-outer-spin-button,
+        .time-picker::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .time-picker::-webkit-input-placeholder {
+            color: #aaa;
+        }
+
+        .time-picker:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
     </style>
 </head>
 
@@ -233,6 +450,7 @@
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
         </div>
+        <button class="btn-create" id="openModal">Create</button>
     </section>
     <section class="table__body">
         <table>
@@ -259,11 +477,55 @@
                 <td><span th:text="${lesson.dayOfWeek.getDayOfWeekName()}"></span></td>
                 <td><span th:text="${lesson.courseDTO.teacherDTO.username}"></span></td>
                 <td><span th:text="${lesson.classroomDTO.classroomNumber}"></span></td>
+                <td>
+                    <button class="btn-update">Update</button>
+                    <button class="btn-delete">Delete</button>
+                </td>
             </tr>
             </tbody>
         </table>
     </section>
 </main>
+
+<div class="modal">
+    <form class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Create Lesson</h2>
+
+        <label for="teacher">Select Course:</label>
+        <select id="teacher"  class="choicebox">
+            <option value="" disabled selected>Select a course</option>
+            <option th:each="course : ${courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+        </select>
+
+        <label for="group">Select Group:</label>
+        <select id="group" class="choicebox">
+            <option value="" disabled selected>Select a group</option>
+            <option th:each="group : ${groupList}" th:value="${group.groupId}" th:text="${group.groupName}"></option>
+        </select>
+
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" class="time-picker" />
+
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" class="time-picker" />
+
+        <label for="day">Select Day:</label>
+        <select id="day" class="choicebox">
+            <option value="" disabled selected>Select a day</option>
+            <option th:each="day : ${T(com.example.myschedule.entity.DayOfWeek).values()}"
+                    th:value="${day}" th:text="${day.getDayOfWeekName()}"></option>
+        </select>
+
+        <label for="classRoom">Select Classroom:</label>
+        <select id="classRoom" class="choicebox">
+            <option value="" disabled selected>Select a classroom</option>
+            <option th:each="classroom : ${classroomList}" th:value="${classroom.classRoomId}" th:text="${classroom.classroomNumber}"></option>
+        </select>
+        <button class="submit-button">Create</button>
+    </form>
+</div>
+
 <script>
     const search = document.querySelector('.input-group input'),
         table_rows = document.querySelectorAll('tbody tr'),
@@ -312,6 +574,56 @@
         })
             .map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const createButton = document.querySelector(".btn-create");
+
+        const modal = document.querySelector(".modal");
+        const closeModalButton = document.querySelector(".close");
+
+        createButton.addEventListener("click", function () {
+            modal.style.display = "flex";
+        });
+
+
+        closeModalButton.addEventListener("click", function () {
+            modal.style.animation = "fadeOut 0.3s ease-in-out";
+            setTimeout(() => {
+                modal.style.display = "none";
+                modal.style.animation = "fadeIn 0.3s ease-in-out";
+            }, 300);
+        });
+
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.animation = "fadeOut 0.3s ease-in-out";
+                setTimeout(() => {
+                    modal.style.display = "none";
+                    modal.style.animation = "fadeIn 0.3s ease-in-out";
+                }, 300);
+            }
+        });
+    });
+
+    const openCreateModalButton = document.getElementById('openCreateModal');
+    const closeCreateModalButton = document.getElementById('closeCreateModal');
+    const createModal = document.getElementById('createModal');
+
+    openCreateModalButton.addEventListener('click', () => {
+        createModal.style.display = 'flex';
+    });
+
+    closeCreateModalButton.addEventListener('click', () => {
+        createModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === createModal) {
+            createModal.style.display = 'none';
+        }
+    });
+
 </script>
 </body>
 </html>

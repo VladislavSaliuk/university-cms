@@ -222,6 +222,22 @@
             color: #6c00bd;
         }
 
+        .btn-assign-group {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 2rem;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-assign-group:hover {
+            background-color: #45a049;
+        }
+
     </style>
 </head>
 
@@ -259,6 +275,9 @@
                 <td><span th:text="${student.status}"></span></td>
                 <td><span th:text="${student.role}"></span></td>
                 <td><span th:text="${student.groupDTO.groupName}"></span></td>
+                <td>
+                    <button class="btn-assign-group">Assign group</button>
+                </td>
             </tr>
             </tbody>
         </table>
