@@ -105,9 +105,16 @@ public class ScheduleService {
     }
 
     public List<LessonDTO> getAllLessons() {
-        return lessonRepository.findAll()
-                .stream().map(LessonDTO::toLessonDTO)
+        log.info("Fetching all lessons...");
+
+        List<LessonDTO> lessons = lessonRepository.findAll()
+                .stream()
+                .map(LessonDTO::toLessonDTO)
                 .collect(Collectors.toList());
+
+        log.info("Fetched {} lessons.", lessons.size());
+
+        return lessons;
     }
 
     public LessonDTO getLessonById(long lessonId) {
@@ -134,26 +141,6 @@ public class ScheduleService {
 
         lessonRepository.deleteById(lessonId);
         log.info("Lesson removed successfully with ID: {}", lessonId);
-    }
-
-    public List<LessonDTO> getScheduleForGroup(long groupId) {
-        log.debug("Attempting to retrieve schedule for group with ID: {}", groupId);
-
-        if (!groupRepository.existsById(groupId)) {
-            log.error("Group with ID: {} not found!", groupId);
-            throw new GroupNotFoundException("Group with " + groupId + " Id not found!");
-        }
-        log.info("Group with ID: {} found. Retrieving schedule.", groupId);
-
-        List<LessonDTO> schedule = lessonRepository.findAll()
-                .stream()
-                .filter(lesson -> lesson.getGroup().getGroupId() == groupId)
-                .map(LessonDTO::toLessonDTO)
-                .sorted(Comparator.comparing(LessonDTO::getStartTime))
-                .collect(Collectors.toList());
-
-        log.info("Retrieved {} lessons for group with ID: {}", schedule.size(), groupId);
-        return schedule;
     }
 
     public List<LessonDTO> getScheduleForStudent(long userId) {

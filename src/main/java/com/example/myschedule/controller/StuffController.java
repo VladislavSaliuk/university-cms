@@ -70,23 +70,13 @@ public class StuffController {
 
     @GetMapping("/stuff/students-dashboard")
     public String showStuffStudentsDashboardPage(Model model, RedirectAttributes redirectAttributes) {
-        try {
-            model.addAttribute("studentList", studentService.getAllStudents());
-            return "stuff-students-dashboard-page";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/login";
-        }
+        model.addAttribute("studentList", studentService.getAllStudents());
+        return "stuff-students-dashboard-page";
     }
     @GetMapping("/stuff/teachers-dashboard")
     public String showStuffTeachersDashboardPage(Model model, RedirectAttributes redirectAttributes) {
-        try {
-            model.addAttribute("teacherList", teacherService.getAllTeachers());
-            return "stuff-teachers-dashboard-page";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/login";
-        }
+        model.addAttribute("teacherList", teacherService.getAllTeachers());
+        return "stuff-teachers-dashboard-page";
     }
 
 }

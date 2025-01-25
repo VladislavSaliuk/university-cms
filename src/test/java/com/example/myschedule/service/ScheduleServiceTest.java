@@ -497,6 +497,22 @@ public class ScheduleServiceTest {
 
     }
     @Test
+    void getAllLessons_shouldReturnLessonDTOList() {
+
+        when(lessonRepository.findAll())
+                .thenReturn(List.of(lesson));
+
+        List<LessonDTO> lessonDTOList = scheduleService.getAllLessons();
+
+        assertNotNull(lessonDTOList);
+        assertFalse(lessonDTOList.isEmpty());
+        assertEquals(1, lessonDTOList.size());
+
+        verify(lessonRepository).findAll();
+
+    }
+
+    @Test
     void getLessonById_shouldReturnLessonDTO() {
 
         long lessonId = 1L;
@@ -563,43 +579,73 @@ public class ScheduleServiceTest {
     }
 
     @Test
-    void getScheduleForGroup_shouldReturnLessonDTOList() {
+    void getScheduleForStudent_shouldReturnLessonDTOList() {
 
-        long groupId = 1L;
+        long userId = 1L;
 
-        when(groupRepository.existsById(groupId))
-                .thenReturn(true);
+        User user = User.builder()
+                .userId(userId)
+                .role(Role.STUDENT)
+                .group(group)
+                .build();
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
 
         when(lessonRepository.findAll())
                 .thenReturn(List.of(lesson));
 
-        List<LessonDTO> studentSchedule = scheduleService.getScheduleForGroup(groupId);
+        List<LessonDTO> studentSchedule = scheduleService.getScheduleForStudent(userId);
 
         assertNotNull(studentSchedule);
         assertFalse(studentSchedule.isEmpty());
         assertEquals(1, studentSchedule.size());
 
-        verify(groupRepository).existsById(groupId);
+        verify(userRepository).findById(userId);
         verify(lessonRepository).findAll();
 
     }
-
     @Test
-    void getScheduleForGroup_shouldThrowException_whenGroupNotExist() {
+    void getScheduleForStudent_shouldThrowException_whenUserNotFound() {
 
-        long groupId = 1L;
+        long userId = 1L;
 
-        when(groupRepository.existsById(groupId))
-                .thenReturn(false);
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.empty());
 
-        GroupNotFoundException exception = assertThrows(GroupNotFoundException.class, () ->scheduleService.getScheduleForGroup(groupId));
-        assertEquals("Group with " + groupId + " Id not found!", exception.getMessage());
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> scheduleService.getScheduleForStudent(userId));
+        assertEquals("User with " + userId + " Id not found!", exception.getMessage());
 
-        verify(groupRepository).existsById(groupId);
+        verify(userRepository).findById(userId);
         verify(lessonRepository,never()).findAll();
 
     }
 
+    @ParameterizedTest
+    @EnumSource(value = Role.class, names = {"TEACHER", "ADMIN", "STUFF"})
+    void getScheduleForStudent_shouldThrowException_whenUserIsNotStudent(Role role) {
+
+        long userId = 1L;
+
+        User user = User.builder()
+                .userId(userId)
+                .role(role)
+                .build();
+
+        course.setUser(user);
+        lesson.setCourse(course);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+        UserException exception = assertThrows(UserException.class, () -> scheduleService.getScheduleForStudent(userId));
+
+        assertEquals("User with " + userId + " Id is not a student!", exception.getMessage());
+
+        verify(userRepository).findById(userId);
+        verify(lessonRepository, never()).findAll();
+
+    }
     @Test
     void getScheduleForTeacher_shouldReturnLessonDTOList() {
 

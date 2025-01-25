@@ -681,7 +681,7 @@ public class RegistrationControllerIntegrationTest {
             " name",
             "name ",
     })
-    void registerTaecher_shouldReturnRegisterTeacherPageView_whenUsernameContainsSpecialCharacters(String username) throws Exception {
+    void registerTeacher_shouldReturnRegisterTeacherPageView_whenUsernameContainsSpecialCharacters(String username) throws Exception {
 
         registrationDTO.setRole(Role.TEACHER);
         registrationDTO.setUsername(username);

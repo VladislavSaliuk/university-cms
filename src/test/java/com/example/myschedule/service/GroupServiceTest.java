@@ -110,7 +110,7 @@ public class GroupServiceTest {
 
     }
     @Test
-        void updateGroup_shouldThrowException_whenGroupNameRepeats() {
+    void updateGroup_shouldThrowException_whenGroupNameRepeats() {
 
         when(groupRepository.findById(groupDTO.getGroupId()))
                 .thenReturn(Optional.of(group));
