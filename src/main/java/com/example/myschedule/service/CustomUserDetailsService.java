@@ -6,6 +6,7 @@ import com.example.myschedule.exception.UserException;
 import com.example.myschedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,12 +24,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> {
             log.error("User with username '{}' not found!", username);
-            return new UsernameNotFoundException("User with " + username + " username not found!");
+            return new BadCredentialsException("User with " + username + " username not found!");
         });
 
         if (user.getStatus().name().equals(Status.BANNED.name())) {
             log.warn("User '{}' is banned!", username);
-            throw new UserException("You are banned!");
+            throw new BadCredentialsException("You are banned!");
         }
 
         log.info("Successfully loaded user details for username: {}", username);

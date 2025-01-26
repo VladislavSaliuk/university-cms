@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -42,7 +41,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             case "ROLE_TEACHER" -> response.sendRedirect("/teacher");
             case "ROLE_ADMIN" -> response.sendRedirect("/admin");
             case "ROLE_STUFF" -> response.sendRedirect("/stuff");
-            default -> response.sendRedirect("/home");
         }
     }
 }
