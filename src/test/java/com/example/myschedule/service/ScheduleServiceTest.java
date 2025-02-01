@@ -605,6 +605,32 @@ public class ScheduleServiceTest {
         verify(lessonRepository).findAll();
 
     }
+
+    @Test
+    void getScheduleForStudent_shouldReturnEmptyList_whenGroupIsNull() {
+
+        long userId = 1L;
+
+        User user = User.builder()
+                .userId(userId)
+                .role(Role.STUDENT)
+                .build();
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user));
+
+
+        List<LessonDTO> studentSchedule = scheduleService.getScheduleForStudent(userId);
+
+        assertNotNull(studentSchedule);
+        assertTrue(studentSchedule.isEmpty());
+        assertEquals(0, studentSchedule.size());
+
+        verify(userRepository).findById(userId);
+        verify(lessonRepository,never()).findAll();
+
+    }
+
     @Test
     void getScheduleForStudent_shouldThrowException_whenUserNotFound() {
 

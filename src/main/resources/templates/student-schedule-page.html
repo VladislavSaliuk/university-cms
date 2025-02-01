@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Student Schedule</title>
+    <title>Teacher Schedule</title>
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -78,6 +79,16 @@
             background-color: transparent;
             border: none;
             outline: none;
+        }
+
+        .table__header select {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
         }
 
         .table__body {
@@ -180,33 +191,64 @@
 <main class="table" id="customers_table">
     <section class="table__header">
         <h1>Schedule</h1>
+        <div class="filter-group">
+            <select id="dayFilter">
+                <option th:each="day : ${T(com.example.myschedule.entity.DayOfWeek).values()}"
+                        th:value="${day}" th:text="${day.getDayOfWeekName()}" th:selected="${day.name() == 'MONDAY'}"></option>
+            </select>
+        </div>
     </section>
     <section class="table__body">
         <table>
             <thead>
             <tr>
-            <tr>
                 <th> Start time </th>
                 <th> End time </th>
-                <th> Day </th>
                 <th> Course </th>
                 <th> Teacher </th>
                 <th> Classroom </th>
             </tr>
-            </tr>
             </thead>
             <tbody>
-            <tr th:each="lesson: ${lessonList}">
+            <tr th:each="lesson: ${lessonList}" th:attr="data-day=${lesson.getDayOfWeek()}">
                 <td><span th:text="${lesson.getStartTime().toString()}"></span></td>
                 <td><span th:text="${lesson.getEndTime().toString()}"></span></td>
-                <td><span th:text="${lesson.getDayOfWeek().getDayOfWeekName()}"></span></td>
                 <td><span th:text="${lesson.getCourseDTO().getCourseName()}"></span></td>
-                <td><span th:text="${lesson.getCourseDTO().getTeacherDTO().username}"></span></td>
+                <td><span th:text="${lesson.getCourseDTO().getTeacherDTO().getUsername()}"></span></td>
                 <td><span th:text="${lesson.getClassroomDTO().getClassroomNumber()}"></span></td>
             </tr>
             </tbody>
         </table>
     </section>
 </main>
+<script>
+
+    document.getElementById('dayFilter').addEventListener('change', function () {
+        let selectedDay = this.value;
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.style.display = selectedDay && row.querySelector('.day').textContent !== selectedDay ? 'none' : '';
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const dayFilter = document.getElementById("dayFilter");
+        const rows = document.querySelectorAll("tbody tr");
+
+        const selectedDay = dayFilter.value;
+        rows.forEach(row => {
+            const dayCell = row.getAttribute("data-day");
+            row.style.display = (selectedDay === "" || dayCell === selectedDay) ? "" : "none";
+        });
+
+        dayFilter.addEventListener("change", function () {
+            const selectedDay = this.value;
+            rows.forEach(row => {
+                const dayCell = row.getAttribute("data-day");
+                row.style.display = (selectedDay === "" || dayCell === selectedDay) ? "" : "none";
+            });
+        });
+    });
+
+</script>
 </body>
 </html>

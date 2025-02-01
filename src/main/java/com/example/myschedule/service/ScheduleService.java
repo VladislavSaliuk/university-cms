@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -154,6 +155,10 @@ public class ScheduleService {
         if (!user.getRole().name().equals(Role.STUDENT.name())) {
             log.error("User with ID: {} is not a student!", userId);
             throw new UserException("User with " + userId + " Id is not a student!");
+        }
+
+        if(user.getGroup() == null) {
+            return Collections.emptyList();
         }
 
         log.info("User with ID: {} is a student. Retrieving schedule.", userId);
