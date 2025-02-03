@@ -4,402 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/css/stuff-dashboard-styles.css" rel="stylesheet">
     <title>Stuff Classrooms Dashboard</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
-        @media print {
-            .table, .table__body {
-                overflow: visible;
-                height: auto !important;
-                width: auto !important;
-            }
-        }
-
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        main.table {
-            width: 82vw;
-            height: 90vh;
-            background-color: #fff5;
-            backdrop-filter: blur(7px);
-            box-shadow: 0 .4rem .8rem #0005;
-            border-radius: .8rem;
-            overflow: hidden;
-        }
-
-        .table__header {
-            width: 100%;
-            height: 10%;
-            background-color: #fff4;
-            padding: .8rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table__header .input-group {
-            width: 35%;
-            height: 100%;
-            background-color: #fff5;
-            padding: 0 .8rem;
-            border-radius: 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: .2s;
-        }
-
-        .table__header .input-group:hover {
-            width: 45%;
-            background-color: #fff8;
-            box-shadow: 0 .1rem .4rem #0002;
-        }
-
-        .table__header .input-group img {
-            width: 1.2rem;
-            height: 1.2rem;
-        }
-
-        .table__header .input-group input {
-            width: 100%;
-            padding: 0 .5rem 0 .3rem;
-            background-color: transparent;
-            border: none;
-            outline: none;
-        }
-
-        .table__body {
-            width: 95%;
-            max-height: calc(89% - 1.6rem);
-            background-color: #fffb;
-            margin: .8rem auto;
-            border-radius: .6rem;
-            overflow: auto;
-        }
-
-        .table__body::-webkit-scrollbar {
-            width: 0.5rem;
-            height: 0.5rem;
-        }
-
-        .table__body::-webkit-scrollbar-thumb {
-            border-radius: .5rem;
-            background-color: #0004;
-            visibility: hidden;
-        }
-
-        .table__body:hover::-webkit-scrollbar-thumb {
-            visibility: visible;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        td img {
-            width: 36px;
-            height: 36px;
-            margin-right: .5rem;
-            border-radius: 50%;
-            vertical-align: middle;
-        }
-
-        table, th, td {
-            border-collapse: collapse;
-            padding: 1rem;
-            text-align: left;
-        }
-
-        thead th {
-            position: sticky;
-            top: 0;
-            left: 0;
-            background-color: #d5d1defe;
-            cursor: pointer;
-            text-transform: capitalize;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #0000000b;
-        }
-
-        tbody tr {
-            --delay: .1s;
-            transition: .5s ease-in-out var(--delay), background-color 0s;
-        }
-
-        tbody tr.hide {
-            opacity: 0;
-            transform: translateX(100%);
-        }
-
-        tbody tr:hover {
-            background-color: #fff6 !important;
-        }
-
-        tbody tr td,
-        tbody tr td p,
-        tbody tr td img {
-            transition: .2s ease-in-out;
-        }
-
-        tbody tr.hide td,
-        tbody tr.hide td p {
-            padding: 0;
-            transition: .2s ease-in-out .5s;
-        }
-
-        tbody tr.hide td img {
-            width: 0;
-            height: 0;
-            transition: .2s ease-in-out .5s;
-        }
-
-        .status {
-            padding: .4rem 0;
-            border-radius: 2rem;
-            text-align: center;
-        }
-
-        .status.active {
-            background-color: #86e49d;
-            color: #006b21;
-        }
-
-        .status.banned {
-            background-color: #d893a3;
-            color: #b30021;
-        }
-
-        @media (max-width: 1000px) {
-            td:not(:first-of-type) {
-                min-width: 12.1rem;
-            }
-        }
-
-        thead th span.icon-arrow {
-            display: inline-block;
-            width: 1.3rem;
-            height: 1.3rem;
-            border-radius: 50%;
-            border: 1.4px solid transparent;
-            text-align: center;
-            font-size: 1rem;
-            margin-left: .5rem;
-            transition: .2s ease-in-out;
-        }
-
-        thead th:hover span.icon-arrow {
-            border: 1.4px solid #6c00bd;
-        }
-
-        thead th:hover {
-            color: #6c00bd;
-        }
-
-        thead th.active span.icon-arrow {
-            background-color: #6c00bd;
-            color: #fff;
-        }
-
-        thead th.asc span.icon-arrow {
-            transform: rotate(180deg);
-        }
-
-        thead th.active, tbody td.active {
-            color: #6c00bd;
-        }
-
-        .btn-create {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 2rem;
-            background-color: #6c00bd;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-            font-size: 1rem;
-        }
-
-        .btn-create:hover {
-            background-color: #8e44ad;
-        }
-
-        .btn-update, .btn-delete {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 2rem;
-            background-color: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-            font-size: 0.9rem;
-            margin-right: 0.5rem;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .btn-update:hover {
-            background-color: #45a049;
-        }
-
-        .btn-delete {
-            background-color: #f44336;
-        }
-
-        .btn-delete:hover {
-            background-color: #e53935;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-in-out;
-            z-index: 1000;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
-        }
-
-        .modal-content {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px 30px;
-            width: 400px;
-            max-width: 90%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            animation: scaleIn 0.3s ease-in-out;
-            position: relative;
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.8);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #555;
-            transition: color 0.2s ease;
-        }
-
-        .close:hover {
-            color: #ff5e5e;
-        }
-
-        h2 {
-            margin: 0 0 20px 0;
-            font-size: 22px;
-            text-align: center;
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #444;
-            font-size: 14px;
-        }
-
-        .modal input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .modal input:focus, textarea:focus {
-            border-color: #7dbaff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
-        }
-
-        .submit-button {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        .submit-button:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        @media (max-width: 480px) {
-            .modal-content {
-                width: 90%;
-                padding: 15px;
-            }
-
-            h2 {
-                font-size: 18px;
-            }
-
-            .submit-button {
-                font-size: 14px;
-            }
-        }
-
-    </style>
 </head>
-
 <body>
+<div th:if="${successMessage}" role="alert" class="success-message">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}" role="alert" class="error-message">
+    <p th:text="${errorMessage}"></p>
+</div>
 <main class="table" id="customers_table">
     <section class="table__header">
         <h1>Classrooms</h1>
@@ -407,26 +21,30 @@
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
         </div>
-        <button class="btn-create" id="openModal">Create</button>
+        <button onclick="openCreateModal('create-modal')" class="btn-create">Create</button>
     </section>
     <section class="table__body">
         <table>
             <thead>
             <tr>
-                <th>Id <span class="icon-arrow">&UpArrow;</span></th>
-                <th>Number <span class="icon-arrow">&UpArrow;</span></th>
-                <th>Description <span class="icon-arrow">&UpArrow;</span></th>
+                <th>Id</th>
+                <th>Number</th>
+                <th>Description</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="classroom: ${classroomList}">
-                <td><span th:text="${classroom.classRoomId}"></span></td>
-                <td><span th:text="${classroom.classroomNumber}"></span></td>
+                <td><span th:text="${classroom.getClassRoomId()}"></span></td>
+                <td><span th:text="${classroom.getClassroomNumber()}"></span></td>
                 <td><span th:text="${classroom.getClassroomDescription()}"></span></td>
                 <td>
-                    <button class="btn-update">Update</button>
-                    <button class="btn-delete">Delete</button>
+                    <button class="btn-update"
+                            th:data-classroom-id="${classroom.getClassRoomId()}"
+                            th:data-classroom-number="${classroom.getClassroomNumber()}"
+                            th:data-classroom-description="${classroom.getClassroomDescription()}"
+                            onclick="openUpdateModal(this)">Update</button>
+                    <a class="btn-delete" role="button" th:href="@{'/stuff/classrooms-dashboard/delete?classroomId=' + ${classroom.getClassRoomId()}}" >Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -434,119 +52,41 @@
     </section>
 </main>
 
-<div class="modal">
-    <form class="modal-content">
-        <span class="close">&times;</span>
+<div id="update-modal" class="modal">
+    <form th:action="@{/stuff/classrooms-dashboard/update}" th:object="${classroomDTO}" method="post" class="modal-content">
+
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
+        <h2>Update Classroom</h2>
+
+        <input type="hidden" id="updatedClassroomId" th:field="*{classRoomId}">
+
+        <label>Classroom Number:</label>
+        <input type="number" id="updatedClassroomNumber" placeholder="Enter classroom number" th:field="*{classroomNumber}">
+
+        <label>Description:</label>
+        <textarea id="updatedClassroomDescription" rows="4" placeholder="Enter description" th:field="*{classroomDescription}"></textarea>
+
+        <button class="submit-button">Update</button>
+    </form>
+</div>
+
+<div id="create-modal" class="modal">
+    <form th:action="@{/stuff/classrooms-dashboard/create}" th:object="${classroomDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('create-modal')">&times;</span>
         <h2>Create Classroom</h2>
 
         <label>Classroom Number:</label>
-        <input placeholder="Enter classroom number">
+        <input type="number" placeholder="Enter classroom number" th:field="*{classroomNumber}">
 
         <label>Description:</label>
-        <textarea rows="4" placeholder="Enter description"></textarea>
+        <textarea rows="4" placeholder="Enter description" th:field="*{classroomDescription}"></textarea>
 
         <button class="submit-button">Create</button>
     </form>
 </div>
 
-<script>
-    const search = document.querySelector('.input-group input'),
-        table_rows = document.querySelectorAll('tbody tr'),
-        table_headings = document.querySelectorAll('thead th');
-
-    search.addEventListener('input', searchTable);
-
-    function searchTable() {
-        table_rows.forEach((row, i) => {
-            let table_data = row.textContent.toLowerCase(),
-                search_data = search.value.toLowerCase();
-
-            row.classList.toggle('hide', table_data.indexOf(search_data) < 0);
-            row.style.setProperty('--delay', i / 25 + 's');
-        })
-
-        document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {
-            visible_row.style.backgroundColor = (i % 2 == 0) ? 'transparent' : '#0000000b';
-        });
-    }
-
-    table_headings.forEach((head, i) => {
-        let sort_asc = true;
-        head.onclick = () => {
-            table_headings.forEach(head => head.classList.remove('active'));
-            head.classList.add('active');
-
-            document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
-            table_rows.forEach(row => {
-                row.querySelectorAll('td')[i].classList.add('active');
-            })
-
-            head.classList.toggle('asc', sort_asc);
-            sort_asc = head.classList.contains('asc') ? false : true;
-
-            sortTable(i, sort_asc);
-        }
-    })
-
-    function sortTable(column, sort_asc) {
-        [...table_rows].sort((a, b) => {
-            let first_row = a.querySelectorAll('td')[column].textContent.toLowerCase(),
-                second_row = b.querySelectorAll('td')[column].textContent.toLowerCase();
-
-            return sort_asc ? (first_row < second_row ? 1 : -1) : (first_row < second_row ? -1 : 1);
-        })
-            .map(sorted_row => document.querySelector('tbody').appendChild(sorted_row));
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const createButton = document.querySelector(".btn-create");
-
-        const modal = document.querySelector(".modal");
-        const closeModalButton = document.querySelector(".close");
-
-        createButton.addEventListener("click", function () {
-            modal.style.display = "flex";
-        });
-
-
-        closeModalButton.addEventListener("click", function () {
-            modal.style.animation = "fadeOut 0.3s ease-in-out";
-            setTimeout(() => {
-                modal.style.display = "none";
-                modal.style.animation = "fadeIn 0.3s ease-in-out";
-            }, 300);
-        });
-
-
-        modal.addEventListener("click", function (event) {
-            if (event.target === modal) {
-                modal.style.animation = "fadeOut 0.3s ease-in-out";
-                setTimeout(() => {
-                    modal.style.display = "none";
-                    modal.style.animation = "fadeIn 0.3s ease-in-out";
-                }, 300);
-            }
-        });
-    });
-
-    const openCreateModalButton = document.getElementById('openCreateModal');
-    const closeCreateModalButton = document.getElementById('closeCreateModal');
-    const createModal = document.getElementById('createModal');
-
-    openCreateModalButton.addEventListener('click', () => {
-        createModal.style.display = 'flex';
-    });
-
-    closeCreateModalButton.addEventListener('click', () => {
-        createModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target === createModal) {
-            createModal.style.display = 'none';
-        }
-    });
-
-</script>
+<script src="/script/classrooms-update-modal.js"></script>
+<script src="/script/modals.js"></script>
+<script src="/script/search-table.js"></script>
 </body>
 </html>

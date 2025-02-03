@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -69,14 +67,77 @@ public class StuffController {
     }
 
     @GetMapping("/stuff/students-dashboard")
-    public String showStuffStudentsDashboardPage(Model model, RedirectAttributes redirectAttributes) {
+    public String showStuffStudentsDashboardPage(Model model) {
         model.addAttribute("studentList", studentService.getAllStudents());
         return "stuff-students-dashboard-page";
     }
     @GetMapping("/stuff/teachers-dashboard")
-    public String showStuffTeachersDashboardPage(Model model, RedirectAttributes redirectAttributes) {
+    public String showStuffTeachersDashboardPage(Model model) {
         model.addAttribute("teacherList", teacherService.getAllTeachers());
         return "stuff-teachers-dashboard-page";
+    }
+
+    @PostMapping("/stuff/classrooms-dashboard/create")
+    public String createClassroom(@Valid @ModelAttribute("classroomDTO") ClassroomDTO classroomDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/classrooms-dashboard";
+            }
+
+            classroomService.createClassroom(classroomDTO);
+
+            String successMessage = "Classroom created successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/classrooms-dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/classrooms-dashboard";
+        }
+    }
+    @PostMapping("/stuff/classrooms-dashboard/update")
+    public String updateClassroom(@Valid @ModelAttribute("classroomDTO") ClassroomDTO classroomDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/classrooms-dashboard";
+            }
+
+            classroomService.updateClassroom(classroomDTO);
+
+            String successMessage = "Classroom updated successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/classrooms-dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/classrooms-dashboard";
+        }
+    }
+
+    @GetMapping("/stuff/classrooms-dashboard/delete")
+    public String removeClassroomById(@RequestParam long classroomId, RedirectAttributes redirectAttributes) {
+        try {
+
+            classroomService.removeById(classroomId);
+
+            String successMessage = "Classroom deleted successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/classrooms-dashboard";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/classrooms-dashboard";
+        }
     }
 
 }
