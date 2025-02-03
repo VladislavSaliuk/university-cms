@@ -1,5 +1,4 @@
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +13,21 @@
 <div th:if="${errorMessage}" role="alert" class="error-message">
     <p th:text="${errorMessage}"></p>
 </div>
+<nav class="navbar">
+    <div class="logo">Dashboard</div>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Classrooms</a></li>
+        <li><a href="#">Students</a></li>
+        <li><a href="#">Teachers</a></li>
+        <li><a href="#">Settings</a></li>
+    </ul>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</nav>
 <main class="table" id="customers_table">
     <section class="table__header">
         <h1>Classrooms</h1>
@@ -86,6 +100,7 @@
 </div>
 
 <script src="/script/classrooms-update-modal.js"></script>
+<script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>
 </body>
