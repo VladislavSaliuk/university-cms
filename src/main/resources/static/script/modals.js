@@ -54,4 +54,26 @@ function openStudentUpdateModal(button) {
     document.getElementById('update-modal').style.display = 'flex';
 }
 
+function openCourseUpdateModal(button) {
+    const courseId = button.getAttribute('data-course-id');
+    const courseName = button.getAttribute('data-course-name');
+    const courseDescription = button.getAttribute('data-course-description');
+    const userId = button.getAttribute('data-user-id');
+
+    document.getElementById('updatedCourseId').value = courseId;
+    document.getElementById('updatedCourseName').value = courseName;
+    document.getElementById('updatedCourseDescription').value = courseDescription;
+
+    const select = document.getElementById('updatedTeacher');
+    select.selectedIndex = -1;
+
+    const teacherOption = [...select.options].find(option => option.value === userId);
+    if (teacherOption) {
+        teacherOption.selected = true;
+    }
+
+
+    document.getElementById('update-modal').style.display = 'flex';
+}
+
 

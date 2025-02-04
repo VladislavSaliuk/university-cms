@@ -39,7 +39,7 @@
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
         </div>
-        <button class="btn-create" id="openModal">Create</button>
+        <button onclick="openCreateModal('create-modal')" class="btn-create">Create</button>
     </section>
     <section class="table__body">
         <table>
@@ -59,8 +59,13 @@
                 <td><span th:text="${course.courseDescription}"></span></td>
                 <td><span th:text="${course.teacherDTO.username}"></span></td>
                 <td>
-                    <button class="btn-update">Update</button>
-                    <button class="btn-delete">Delete</button>
+                    <button class="btn-update"
+                            th:data-course-id="${course.courseId}"
+                            th:data-course-name="${course.courseName}"
+                            th:data-course-description="${course.courseDescription}"
+                            th:data-user-id="${course.teacherDTO.userId}"
+                            onclick="openCourseUpdateModal(this)">Update</button>
+                    <a class="btn-delete" role="button" th:href="@{'/stuff/courses-dashboard/delete?courseId=' + ${course.courseId}}" >Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -68,26 +73,56 @@
     </section>
 </main>
 
-<div class="modal">
-    <form class="modal-content">
-        <span class="close">&times;</span>
+<div id="update-modal" class="modal">
+    <form th:action="@{/stuff/courses-dashboard/update}" th:object="${courseDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
+        <h2>Update Course</h2>
+
+        <input type="hidden" id="updatedCourseId" name="courseId">
+
+        <label>Course Name:</label>
+        <input type="text" id="updatedCourseName"  placeholder="Enter course name" th:field="*{courseName}">
+
+        <label>Description:</label>
+        <textarea rows="4" id="updatedCourseDescription"  placeholder="Enter description" th:field="*{courseDescription}"></textarea>
+
+        <label>Select Teacher:</label>
+        <select id="updatedTeacher" name="teacherDTO" class="choicebox">
+            <option th:each="teacher : ${teacherList}"
+                    th:value="${teacher.userId}"
+                    th:text="${teacher.username}">
+            </option>
+        </select>
+
+        <button class="submit-button">Update</button>
+    </form>
+</div>
+
+<div id="create-modal" class="modal">
+    <form th:action="@{/stuff/courses-dashboard/create}" th:object="${courseDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('create-modal')">&times;</span>
         <h2>Create Course</h2>
 
         <label>Course Name:</label>
-        <input type="text"  placeholder="Enter course name">
+        <input type="text"  placeholder="Enter course name" th:field="*{courseName}">
 
         <label>Description:</label>
-        <textarea rows="4"  placeholder="Enter description"></textarea>
+        <textarea rows="4"  placeholder="Enter description" th:field="*{courseDescription}"></textarea>
 
-        <label for="teacher">Select Teacher:</label>
-        <select id="teacher" class="choicebox">
+        <label>Select Teacher:</label>
+        <select class="choicebox" th:field="*{teacherDTO}">
             <option value="" disabled selected>Select a teacher</option>
-            <option th:each="teacher : ${teacherList}" th:value="${teacher.userId}" th:text="${teacher.username}"></option>
+            <option th:each="teacher : ${teacherList}"
+                    th:value="${teacher.userId}"
+                    th:text="${teacher.username}">
+            </option>
         </select>
 
         <button class="submit-button">Create</button>
     </form>
 </div>
+
+
 <script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,9 +67,11 @@ public class CourseService {
                     return new CourseNotFoundException("Course with " + courseDTO.getCourseId() + " Id not found!");
                 });
 
-        if (courseRepository.existsByCourseName(courseDTO.getCourseName())) {
-            log.warn("Course update failed. Course with name '{}' already exists!", courseDTO.getCourseName());
-            throw new CourseException("Course with " + courseDTO.getCourseName() + " name already exists!");
+        if (!updatedCourse.getCourseName().equals(courseDTO.getCourseName())) {
+            if (courseRepository.existsByCourseName(courseDTO.getCourseName())) {
+                log.warn("Course update failed. Course with name '{}' already exists!", courseDTO.getCourseName());
+                throw new CourseException("Course with " + courseDTO.getCourseName() + " name already exists!");
+            }
         }
 
         User user = userRepository.findById(courseDTO.getTeacherDTO().getUserId())
@@ -82,8 +86,8 @@ public class CourseService {
         }
 
         updatedCourse.setCourseName(courseDTO.getCourseName());
-        updatedCourse.setCourseDescription(updatedCourse.getCourseDescription());
-        updatedCourse.setUser(updatedCourse.getUser());
+        updatedCourse.setCourseDescription(courseDTO.getCourseDescription());
+        updatedCourse.setUser(user);
 
         log.info("Course with ID '{}' successfully updated.", courseDTO.getCourseId());
     }
@@ -94,6 +98,9 @@ public class CourseService {
                 .stream()
                 .map(CourseDTO::toCourseDTO)
                 .collect(Collectors.toList());
+
+        Collections.reverse(courses);
+
         log.info("Found {} courses.", courses.size());
         return courses;
     }

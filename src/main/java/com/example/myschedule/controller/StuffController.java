@@ -2,6 +2,8 @@ package com.example.myschedule.controller;
 
 import com.example.myschedule.converter.GroupDTOConverter;
 import com.example.myschedule.converter.GroupDTOPropertyEditor;
+import com.example.myschedule.converter.TeacherDTOConverter;
+import com.example.myschedule.converter.TeacherDTOPropertyEditor;
 import com.example.myschedule.dto.*;
 import com.example.myschedule.exception.*;
 import com.example.myschedule.service.*;
@@ -32,9 +34,12 @@ public class StuffController {
     private final TeacherService teacherService;
 
     private final GroupDTOConverter groupDTOConverter;
+
+    private final TeacherDTOConverter teacherDTOConverter;
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(GroupDTO.class, new GroupDTOPropertyEditor(groupDTOConverter));
+        binder.registerCustomEditor(TeacherDTO.class, new TeacherDTOPropertyEditor(teacherDTOConverter));
     }
     @GetMapping("/stuff")
     public String showStuffHomePage() {
@@ -240,6 +245,72 @@ public class StuffController {
         } catch (UserNotFoundException | GroupNotFoundException | UserException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/students-dashboard";
+        }
+    }
+
+    @PostMapping("/stuff/courses-dashboard/create")
+    public String createCourse(@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/courses-dashboard";
+            }
+
+            courseService.createCourse(courseDTO);
+
+            String successMessage = "Course created successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/courses-dashboard";
+        } catch (UserException | UserNotFoundException | CourseException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/courses-dashboard";
+        }
+    }
+    @PostMapping("/stuff/courses-dashboard/update")
+    public String updateCourse(@Valid @ModelAttribute("courseDTO") CourseDTO courseDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/courses-dashboard";
+            }
+
+            courseService.updateCourse(courseDTO);
+
+            String successMessage = "Course updated successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/courses-dashboard";
+        } catch (UserException | UserNotFoundException | CourseException | CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/courses-dashboard";
+        }
+    }
+    @GetMapping("/stuff/courses-dashboard/delete")
+    public String removeCourseById(@RequestParam long courseId, RedirectAttributes redirectAttributes) {
+        try {
+
+            courseService.removeById(courseId);
+
+            String successMessage = "Course deleted successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/courses-dashboard";
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = "Cannot delete course because it is associated with existing lessons.";
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/stuff/courses-dashboard";
+        } catch (CourseException | CourseNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/courses-dashboard";
         }
     }
 
