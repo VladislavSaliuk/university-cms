@@ -39,7 +39,7 @@
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
         </div>
-        <button class="btn-create" id="openModal">Create</button>
+        <button onclick="openCreateModal('create-modal')" class="btn-create">Create</button>
     </section>
     <section class="table__body">
         <table>
@@ -55,8 +55,11 @@
                 <td><span th:text="${group.groupId}"></span></td>
                 <td><span th:text="${group.groupName}"></span></td>
                 <td>
-                    <button class="btn-update">Update</button>
-                    <button class="btn-delete">Delete</button>
+                    <button class="btn-update"
+                            th:data-group-id="${group.getGroupId()}"
+                            th:data-group-number="${group.getGroupName()}"
+                            onclick="openGroupUpdateModal(this)">Update</button>
+                    <a class="btn-delete" role="button" th:href="@{'/stuff/groups-dashboard/delete?groupId=' + ${group.getGroupId()}}" >Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -64,17 +67,33 @@
     </section>
 </main>
 
-<div class="modal">
-    <form  class="modal-content">
-        <span class="close">&times;</span>
+<div id="update-modal" class="modal">
+    <form th:action="@{/stuff/groups-dashboard/update}" th:object="${groupDTO}" method="post" class="modal-content">
+
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
+        <h2>Update Group</h2>
+
+        <input type="hidden" id="updatedGroupId" th:field="*{groupId}">
+
+        <label>Classroom Number:</label>
+        <input type="text" id="updatedGroupName" placeholder="Enter group name" th:field="*{groupName}">
+
+        <button class="submit-button">Update</button>
+    </form>
+</div>
+
+<div id="create-modal" class="modal">
+    <form th:action="@{/stuff/groups-dashboard/create}" th:object="${groupDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('create-modal')">&times;</span>
         <h2>Create Group</h2>
 
         <label>Group Name:</label>
-        <input placeholder="Enter course name">
+        <input type="text" placeholder="Enter group name" th:field="*{groupName}">
 
         <button class="submit-button">Create</button>
     </form>
 </div>
+
 <script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>

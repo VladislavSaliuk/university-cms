@@ -24,3 +24,14 @@ function openClassroomUpdateModal(button) {
     document.getElementById('update-modal').style.display = 'flex';
 
 }
+
+function openGroupUpdateModal(button) {
+    const groupId = button.getAttribute('data-group-id');
+    const groupName = button.getAttribute('data-group-number');
+
+    document.getElementById('updatedGroupId').value = groupId;
+    document.getElementById('updatedGroupName').value = groupName;
+
+    document.getElementById('update-modal').style.display = 'flex';
+
+}

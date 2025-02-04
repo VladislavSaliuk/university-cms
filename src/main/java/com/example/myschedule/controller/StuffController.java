@@ -4,9 +4,10 @@ import com.example.myschedule.dto.ClassroomDTO;
 import com.example.myschedule.dto.CourseDTO;
 import com.example.myschedule.dto.GroupDTO;
 import com.example.myschedule.dto.LessonDTO;
-import com.example.myschedule.entity.Lesson;
 import com.example.myschedule.exception.ClassroomException;
 import com.example.myschedule.exception.ClassroomNotFoundException;
+import com.example.myschedule.exception.GroupException;
+import com.example.myschedule.exception.GroupNotFoundException;
 import com.example.myschedule.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -141,9 +142,76 @@ public class StuffController {
             String errorMessage = "Cannot delete classroom because it is associated with existing lessons.";
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (ClassroomException | ClassroomNotFoundException e) {
+        } catch (ClassroomException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
+        }
+    }
+
+    @PostMapping("/stuff/groups-dashboard/create")
+    public String createGroup(@Valid @ModelAttribute("groupDTO") GroupDTO groupDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/groups-dashboard";
+            }
+
+            groupService.createGroup(groupDTO);
+
+            String successMessage = "Group created successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/groups-dashboard";
+        } catch (GroupException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/groups-dashboard";
+        }
+    }
+    @PostMapping("/stuff/groups-dashboard/update")
+    public String updateGroup(@Valid @ModelAttribute("groupDTO") GroupDTO groupDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/groups-dashboard";
+            }
+
+            groupService.updateGroup(groupDTO);
+
+            String successMessage = "Group updated successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/groups-dashboard";
+        } catch (GroupException | GroupNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/groups-dashboard";
+        }
+    }
+
+    @GetMapping("/stuff/groups-dashboard/delete")
+    public String removeGroupById(@RequestParam long groupId, RedirectAttributes redirectAttributes) {
+        try {
+
+            groupService.removeById(groupId);
+
+            String successMessage = "Group deleted successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/groups-dashboard";
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = "Cannot delete group because it is associated with existing students.";
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/stuff/groups-dashboard";
+        } catch (GroupException | GroupNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/groups-dashboard";
         }
     }
 

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,9 +48,11 @@ public class GroupService {
                     return new GroupNotFoundException("Group with " + groupDTO.getGroupId() + " Id not found!");
                 });
 
-        if (groupRepository.existsByGroupName(groupDTO.getGroupName())) {
-            log.warn("Group with name {} already exists!", groupDTO.getGroupName());
-            throw new GroupException("Group with " + groupDTO.getGroupName() + " name already exists!");
+        if(!updatedGroup.getGroupName().equals(groupDTO.getGroupName())) {
+            if (groupRepository.existsByGroupName(groupDTO.getGroupName())) {
+                log.warn("Group with name {} already exists!", groupDTO.getGroupName());
+                throw new GroupException("Group with " + groupDTO.getGroupName() + " name already exists!");
+            }
         }
 
         updatedGroup.setGroupName(groupDTO.getGroupName());
@@ -65,6 +68,8 @@ public class GroupService {
                 .stream()
                 .map(GroupDTO::toGroupDTO)
                 .collect(Collectors.toList());
+
+        Collections.reverse(groups);
 
         log.info("Fetched {} groups", groups.size());
         return groups;
