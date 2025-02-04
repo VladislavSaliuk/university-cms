@@ -44,6 +44,14 @@ public class SecurityConfig {
                             .successHandler(customAuthenticationSuccessHandler)
                             .permitAll();
                 })
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
+                        .permitAll()
+                )
                 .build();
     }
 
