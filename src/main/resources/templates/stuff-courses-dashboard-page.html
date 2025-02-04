@@ -16,14 +16,14 @@
     <p th:text="${errorMessage}"></p>
 </div>
 <nav class="navbar">
-    <div class="logo">Dashboard</div>
+    <div class="logo">MySchedule</div>
     <ul class="nav-links" id="navLinks">
         <li><a href="/stuff/classrooms-dashboard">Classrooms</a></li>
         <li><a href="/stuff/groups-dashboard">Groups</a></li>
         <li><a href="/stuff/courses-dashboard">Courses</a></li>
         <li><a href="/stuff/lessons-dashboard">Lessons</a></li>
+        <li><a href="/stuff/students-dashboard">Students</a></li>
         <li><a href="/stuff/teachers-dashboard">Teachers</a></li>
-        <li><a href="/stuff/students-dashboard">Teachers</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">
         <span></span>
@@ -44,10 +44,10 @@
         <table>
             <thead>
             <tr>
-                <th> Id <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Course <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Description <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Teacher <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Id </th>
+                <th> Course </th>
+                <th> Description </th>
+                <th> Teacher </th>
                 <th> Actions </th>
             </tr>
             </thead>

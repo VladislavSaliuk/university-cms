@@ -14,14 +14,14 @@
     <p th:text="${errorMessage}"></p>
 </div>
 <nav class="navbar">
-    <div class="logo">Dashboard</div>
+    <div class="logo">MySchedule</div>
     <ul class="nav-links" id="navLinks">
         <li><a href="/stuff/classrooms-dashboard">Classrooms</a></li>
         <li><a href="/stuff/groups-dashboard">Groups</a></li>
         <li><a href="/stuff/courses-dashboard">Courses</a></li>
         <li><a href="/stuff/lessons-dashboard">Lessons</a></li>
+        <li><a href="/stuff/students-dashboard">Students</a></li>
         <li><a href="/stuff/teachers-dashboard">Teachers</a></li>
-        <li><a href="/stuff/students-dashboard">Teachers</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">
         <span></span>
@@ -58,7 +58,7 @@
                             th:data-classroom-id="${classroom.getClassRoomId()}"
                             th:data-classroom-number="${classroom.getClassroomNumber()}"
                             th:data-classroom-description="${classroom.getClassroomDescription()}"
-                            onclick="openUpdateModal(this)">Update</button>
+                            onclick="openClassroomUpdateModal(this)">Update</button>
                     <a class="btn-delete" role="button" th:href="@{'/stuff/classrooms-dashboard/delete?classroomId=' + ${classroom.getClassRoomId()}}" >Delete</a>
                 </td>
             </tr>
@@ -100,7 +100,6 @@
     </form>
 </div>
 
-<script src="/script/classrooms-update-modal.js"></script>
 <script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>

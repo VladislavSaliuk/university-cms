@@ -16,14 +16,14 @@
     <p th:text="${errorMessage}"></p>
 </div>
 <nav class="navbar">
-    <div class="logo">Dashboard</div>
+    <div class="logo">MySchedule</div>
     <ul class="nav-links" id="navLinks">
         <li><a href="/stuff/classrooms-dashboard">Classrooms</a></li>
         <li><a href="/stuff/groups-dashboard">Groups</a></li>
         <li><a href="/stuff/courses-dashboard">Courses</a></li>
         <li><a href="/stuff/lessons-dashboard">Lessons</a></li>
+        <li><a href="/stuff/students-dashboard">Students</a></li>
         <li><a href="/stuff/teachers-dashboard">Teachers</a></li>
-        <li><a href="/stuff/students-dashboard">Teachers</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">
         <span></span>
@@ -43,14 +43,14 @@
         <table>
             <thead>
             <tr>
-                <th> Id <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Username <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> E-mail <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Firstname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Lastname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Status <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Role <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Group <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Id  </th>
+                <th> Username </th>
+                <th> E-mail </th>
+                <th> Firstname </th>
+                <th> Lastname </th>
+                <th> Status </th>
+                <th> Role </th>
+                <th> Group </th>
                 <th> Actions </th>
             </tr>
             </thead>
@@ -61,11 +61,11 @@
                 <td><span th:text="${student.email}"></span></td>
                 <td><span th:text="${student.firstname}"></span></td>
                 <td><span th:text="${student.lastname}"></span></td>
-                <td><span th:text="${student.status}"></span></td>
-                <td><span th:text="${student.role}"></span></td>
+                <td><span th:text="${student.status.getStatusName()}"></span></td>
+                <td><span th:text="${student.role.getRoleName()}"></span></td>
                 <td><span th:text="${student.groupDTO.groupName}"></span></td>
                 <td>
-                    <button class="btn-assign-group">Assign group</button>
+                    <button class="btn-update">Update</button>
                 </td>
             </tr>
             </tbody>

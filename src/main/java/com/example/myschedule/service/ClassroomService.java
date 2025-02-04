@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +47,11 @@ public class ClassroomService {
                     return new ClassroomNotFoundException("Classroom with " + classroomDTO.getClassRoomId() + " Id not found!");
                 });
 
-        if (classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber())) {
-            log.warn("Classroom with number {} already exists!", classroomDTO.getClassroomNumber());
-            throw new ClassroomException("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!");
+        if (updatedClassroom.getClassroomNumber() != classroomDTO.getClassroomNumber()) {
+            if (classroomRepository.existsByClassroomNumber(classroomDTO.getClassroomNumber())) {
+                log.warn("Classroom with number {} already exists!", classroomDTO.getClassroomNumber());
+                throw new ClassroomException("Classroom with " + classroomDTO.getClassroomNumber() + " number already exists!");
+            }
         }
 
         updatedClassroom.setClassroomNumber(classroomDTO.getClassroomNumber());
@@ -64,6 +67,8 @@ public class ClassroomService {
                 .stream()
                 .map(ClassroomDTO::toClassroomDTO)
                 .collect(Collectors.toList());
+
+        Collections.reverse(classrooms);
 
         log.info("Fetched {} classrooms", classrooms.size());
         return classrooms;

@@ -16,14 +16,14 @@
     <p th:text="${errorMessage}"></p>
 </div>
 <nav class="navbar">
-    <div class="logo">Dashboard</div>
+    <div class="logo">MySchedule</div>
     <ul class="nav-links" id="navLinks">
         <li><a href="/stuff/classrooms-dashboard">Classrooms</a></li>
         <li><a href="/stuff/groups-dashboard">Groups</a></li>
         <li><a href="/stuff/courses-dashboard">Courses</a></li>
         <li><a href="/stuff/lessons-dashboard">Lessons</a></li>
-        <li><a href="/stuff/teachers-dashboard">Teachers</a></li>
-        <li><a href="/stuff/students-dashboard">Teachers</a></li>
+        <li><a href="/stuff/students-dashboard">Students</a></li>
+        <li><a class="active" href="/stuff/teachers-dashboard">Teachers</a></li>
     </ul>
     <div class="hamburger" onclick="toggleMenu()">
         <span></span>
@@ -33,7 +33,7 @@
 </nav>
 <main class="table" id="customers_table">
     <section class="table__header">
-        <h1>Students</h1>
+        <h1>Teachers</h1>
         <div class="input-group">
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
@@ -43,14 +43,13 @@
         <table>
             <thead>
             <tr>
-                <th> Id <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Username <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> E-mail <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Firstname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Lastname <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Status <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Role <span class="icon-arrow">&UpArrow;</span> </th>
-                <th> Group <span class="icon-arrow">&UpArrow;</span> </th>
+                <th> Id </th>
+                <th> Username </th>
+                <th> E-mail </th>
+                <th> Firstname </th>
+                <th> Lastname </th>
+                <th> Status </th>
+                <th> Role </th>
             </tr>
             </thead>
             <tbody>
@@ -60,8 +59,8 @@
                 <td><span th:text="${teacher.email}"></span></td>
                 <td><span th:text="${teacher.firstname}"></span></td>
                 <td><span th:text="${teacher.lastname}"></span></td>
-                <td><span th:text="${teacher.status}"></span></td>
-                <td><span th:text="${teacher.role}"></span></td>
+                <td><span th:text="${teacher.status.getStatusName()}"></span></td>
+                <td><span th:text="${teacher.role.getRoleName()}"></span></td>
             </tr>
             </tbody>
         </table>
