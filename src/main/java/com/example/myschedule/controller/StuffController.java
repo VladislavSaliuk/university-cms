@@ -1,13 +1,9 @@
 package com.example.myschedule.controller;
 
-import com.example.myschedule.dto.ClassroomDTO;
-import com.example.myschedule.dto.CourseDTO;
-import com.example.myschedule.dto.GroupDTO;
-import com.example.myschedule.dto.LessonDTO;
-import com.example.myschedule.exception.ClassroomException;
-import com.example.myschedule.exception.ClassroomNotFoundException;
-import com.example.myschedule.exception.GroupException;
-import com.example.myschedule.exception.GroupNotFoundException;
+import com.example.myschedule.converter.GroupDTOConverter;
+import com.example.myschedule.converter.GroupDTOPropertyEditor;
+import com.example.myschedule.dto.*;
+import com.example.myschedule.exception.*;
 import com.example.myschedule.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,6 +31,11 @@ public class StuffController {
 
     private final TeacherService teacherService;
 
+    private final GroupDTOConverter groupDTOConverter;
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(GroupDTO.class, new GroupDTOPropertyEditor(groupDTOConverter));
+    }
     @GetMapping("/stuff")
     public String showStuffHomePage() {
         return "stuff-home-page";
@@ -73,6 +75,8 @@ public class StuffController {
     @GetMapping("/stuff/students-dashboard")
     public String showStuffStudentsDashboardPage(Model model) {
         model.addAttribute("studentList", studentService.getAllStudents());
+        model.addAttribute("groupList", groupService.getAll());
+        model.addAttribute("studentDTO", new StudentDTO());
         return "stuff-students-dashboard-page";
     }
     @GetMapping("/stuff/teachers-dashboard")
@@ -212,6 +216,30 @@ public class StuffController {
         } catch (GroupException | GroupNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/groups-dashboard";
+        }
+    }
+
+    @PostMapping("/stuff/students-dashboard/update")
+    public String updateStudent(@Valid @ModelAttribute("studentDTO") StudentDTO studentDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/students-dashboard";
+            }
+
+            studentService.assignStudentToGroup(studentDTO);
+
+            String successMessage = "Student updated successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/students-dashboard";
+        } catch (UserNotFoundException | GroupNotFoundException | UserException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/students-dashboard";
         }
     }
 

@@ -62,13 +62,37 @@
                 <td><span th:text="${student.lastname}"></span></td>
                 <td><span th:text="${student.groupDTO.groupName}"></span></td>
                 <td>
-                    <button class="btn-update">Update</button>
+                    <button class="btn-update"
+                            th:data-user-id="${student.getUserId()}"
+                            th:data-group-id="${student.getGroupDTO().getGroupId()}"
+                            onclick="openStudentUpdateModal(this)">Update</button>
                 </td>
             </tr>
             </tbody>
         </table>
     </section>
 </main>
+
+<div id="update-modal" class="modal">
+    <form th:action="@{/stuff/students-dashboard/update}" th:object="${studentDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
+        <h2>Update Student</h2>
+
+        <input type="hidden" id="updatedUserId" name="userId">
+
+        <label>Group</label>
+        <select id="updatedGroup" name="groupDTO" class="choicebox">
+            <option th:each="group : ${groupList}"
+                    th:value="${group.groupId}"
+                    th:text="${group.groupName}">
+            </option>
+        </select>
+
+        <button class="submit-button">Update</button>
+    </form>
+</div>
+
+
 <script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>
