@@ -112,6 +112,10 @@ public class GroupServiceTest {
     @Test
     void updateGroup_shouldThrowException_whenGroupNameRepeats() {
 
+        String groupName = "Test group name 2";
+
+        groupDTO.setGroupName(groupName);
+
         when(groupRepository.findById(groupDTO.getGroupId()))
                 .thenReturn(Optional.of(group));
 

@@ -76,4 +76,41 @@ function openCourseUpdateModal(button) {
     document.getElementById('update-modal').style.display = 'flex';
 }
 
+function openLessonUpdateModal(button) {
+    const lessonId = button.getAttribute('data-lesson-id');
+    const courseId = button.getAttribute('data-course-id');
+    const groupId = button.getAttribute('data-group-id');
+    const startTime = button.getAttribute('data-start-time');
+    const endTime = button.getAttribute('data-end-time');
+    const dayOfWeek = button.getAttribute('data-day');
+    const classroomId = button.getAttribute('data-classroom-id');
+
+    document.getElementById('updatedLessonId').value = lessonId;
+    document.getElementById('updatedStartTime').value = startTime;
+    document.getElementById('updatedEndTime').value = endTime;
+    document.getElementById('updatedDay').value = dayOfWeek;
+
+    const courseSelect = document.getElementById('updatedCourse');
+    courseSelect.selectedIndex = -1;
+    const courseOption = [...courseSelect.options].find(option => option.value === courseId);
+    if (courseOption) {
+        courseOption.selected = true;
+    }
+
+    const groupSelect = document.getElementById('updatedGroup');
+    groupSelect.selectedIndex = -1;
+    const groupOption = [...groupSelect.options].find(option => option.value === groupId);
+    if (groupOption) {
+        groupOption.selected = true;
+    }
+
+    const classroomSelect = document.getElementById('updatedClassroom');
+    classroomSelect.selectedIndex = -1;
+    const classroomOption = [...classroomSelect.options].find(option => option.value === classroomId);
+    if (classroomOption) {
+        classroomOption.selected = true;
+    }
+
+    document.getElementById('update-modal').style.display = 'flex';
+}
 

@@ -114,6 +114,10 @@ public class ClassroomServiceTest {
     @Test
     void updateClassroom_shouldThrowException_whenClassroomNumberRepeats() {
 
+        long classroomNumber = 100;
+
+        classroomDTO.setClassroomNumber(classroomNumber);
+
         when(classroomRepository.findById(classroomDTO.getClassRoomId()))
                 .thenReturn(Optional.of(classroom));
 

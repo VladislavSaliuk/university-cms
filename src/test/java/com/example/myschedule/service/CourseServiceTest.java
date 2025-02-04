@@ -207,6 +207,10 @@ public class CourseServiceTest {
     @Test
     void updateCourse_shouldThrowException_whenCourseNameRepeats() {
 
+        String courseName = "Test course name 2";
+
+        courseDTO.setCourseName(courseName);
+
         when(courseRepository.findById(courseDTO.getCourseId()))
                 .thenReturn(Optional.of(course));
 
@@ -226,6 +230,10 @@ public class CourseServiceTest {
 
     @Test
     void updateCourse_shouldThrowException_whenUserNotFound() {
+
+        String courseName = "Test course name 2";
+
+        courseDTO.setCourseName(courseName);
 
         when(courseRepository.findById(courseDTO.getCourseId()))
                 .thenReturn(Optional.of(course));
@@ -249,6 +257,10 @@ public class CourseServiceTest {
     @ParameterizedTest
     @EnumSource(value = Role.class, names = {"STUDENT", "ADMIN", "STUFF"})
     void updateCourse_shouldThrowException_whenUserIsNotTeacher(Role role) {
+
+        String courseName = "Test course name 2";
+
+        courseDTO.setCourseName(courseName);
 
         user.setRole(role);
 

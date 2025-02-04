@@ -1,10 +1,8 @@
 package com.example.myschedule.controller;
 
-import com.example.myschedule.converter.GroupDTOConverter;
-import com.example.myschedule.converter.GroupDTOPropertyEditor;
-import com.example.myschedule.converter.TeacherDTOConverter;
-import com.example.myschedule.converter.TeacherDTOPropertyEditor;
+import com.example.myschedule.converter.*;
 import com.example.myschedule.dto.*;
+import com.example.myschedule.entity.DayOfWeek;
 import com.example.myschedule.exception.*;
 import com.example.myschedule.service.*;
 import jakarta.validation.Valid;
@@ -36,10 +34,19 @@ public class StuffController {
     private final GroupDTOConverter groupDTOConverter;
 
     private final TeacherDTOConverter teacherDTOConverter;
+
+    private final CourseDTOConverter courseDTOConverter;
+
+    private final ClassroomDTOConverter classroomDTOConverter;
+
+    private final DayOfWeekConverter dayOfWeekConverter;
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(GroupDTO.class, new GroupDTOPropertyEditor(groupDTOConverter));
         binder.registerCustomEditor(TeacherDTO.class, new TeacherDTOPropertyEditor(teacherDTOConverter));
+        binder.registerCustomEditor(CourseDTO.class, new CourseDTOPropertyEditor(courseDTOConverter));
+        binder.registerCustomEditor(ClassroomDTO.class, new ClassroomDTOPropertyEditor(classroomDTOConverter));
+        binder.registerCustomEditor(DayOfWeek.class, new DayOfWeekPropertyEditor(dayOfWeekConverter));
     }
     @GetMapping("/stuff")
     public String showStuffHomePage() {
@@ -311,6 +318,68 @@ public class StuffController {
         } catch (CourseException | CourseNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/courses-dashboard";
+        }
+    }
+
+    @PostMapping("/stuff/lessons-dashboard/create")
+    public String createLesson(@Valid @ModelAttribute("lessonDTO") LessonDTO lessonDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/lessons-dashboard";
+            }
+
+            scheduleService.createLesson(lessonDTO);
+
+            String successMessage = "Lesson created successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/lessons-dashboard";
+        } catch (ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException | UserNotFoundException  e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/lessons-dashboard";
+        }
+    }
+    @PostMapping("/stuff/lessons-dashboard/update")
+    public String updateLesson(@Valid @ModelAttribute("courseDTO") LessonDTO lessonDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        try {
+            if (bindingResult.hasErrors()) {
+                String errorMessage =  bindingResult
+                        .getAllErrors()
+                        .stream()
+                        .findFirst().map(error -> error.getDefaultMessage()).get();
+                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+                return "redirect:/stuff/lessons-dashboard";
+            }
+
+            scheduleService.updateLesson(lessonDTO);
+
+            String successMessage = "Lesson updated successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/lessons-dashboard";
+        } catch (LessonNotFoundException | ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException | UserNotFoundException  e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/lessons-dashboard";
+        }
+    }
+    @GetMapping("/stuff/lessons-dashboard/delete")
+    public String removeLessonById(@RequestParam long lessonId, RedirectAttributes redirectAttributes) {
+        try {
+
+            scheduleService.removeLessonById(lessonId);
+
+            String successMessage = "Lesson deleted successfully!";
+            redirectAttributes.addFlashAttribute("successMessage", successMessage);
+
+            return "redirect:/stuff/lessons-dashboard";
+        } catch (LessonNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/stuff/lessons-dashboard";
         }
     }
 

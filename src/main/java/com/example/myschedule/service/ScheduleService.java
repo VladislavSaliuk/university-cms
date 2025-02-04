@@ -113,6 +113,8 @@ public class ScheduleService {
                 .map(LessonDTO::toLessonDTO)
                 .collect(Collectors.toList());
 
+        Collections.reverse(lessons);
+
         log.info("Fetched {} lessons.", lessons.size());
 
         return lessons;

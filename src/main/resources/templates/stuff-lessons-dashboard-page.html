@@ -39,7 +39,7 @@
             <input type="search" placeholder="Search Data...">
             <img src="/img/search.png" alt="">
         </div>
-        <button class="btn-create" id="openModal">Create</button>
+        <button onclick="openCreateModal('create-modal')" class="btn-create">Create</button>
     </section>
     <section class="table__body">
         <table>
@@ -67,8 +67,16 @@
                 <td><span th:text="${lesson.courseDTO.teacherDTO.username}"></span></td>
                 <td><span th:text="${lesson.classroomDTO.classroomNumber}"></span></td>
                 <td>
-                    <button class="btn-update">Update</button>
-                    <button class="btn-delete">Delete</button>
+                    <button class="btn-update"
+                            th:data-lesson-id="${lesson.lessonId}"
+                            th:data-course-id="${lesson.courseDTO.courseId}"
+                            th:data-group-id="${lesson.groupDTO.groupId}"
+                            th:data-start-time="${lesson.startTime}"
+                            th:data-end-time="${lesson.endTime}"
+                            th:data-day="${lesson.dayOfWeek}"
+                            th:data-classroom-id="${lesson.classroomDTO.classRoomId}"
+                            onclick="openLessonUpdateModal(this)">Update</button>
+                    <a class="btn-delete" role="button" th:href="@{'/stuff/lessons-dashboard/delete?lessonId=' + ${lesson.lessonId}}" >Delete</a>
                 </td>
             </tr>
             </tbody>
@@ -76,44 +84,87 @@
     </section>
 </main>
 
-<div class="modal">
-    <form class="modal-content">
-        <span class="close">&times;</span>
+<div id="update-modal" class="modal">
+    <form th:action="@{/stuff/lessons-dashboard/update}" th:object="${lessonDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('create-modal')">&times;</span>
         <h2>Create Lesson</h2>
 
-        <label for="teacher">Select Course:</label>
-        <select id="teacher"  class="choicebox">
+        <input type="hidden" id="updatedLessonId" name="lessonId">
+
+        <label>Select Course:</label>
+        <select id="updatedCourse" name="courseDTO" class="choicebox">
             <option value="" disabled selected>Select a course</option>
             <option th:each="course : ${courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
         </select>
 
-        <label for="group">Select Group:</label>
-        <select id="group" class="choicebox">
+        <label>Select Group:</label>
+        <select id="updatedGroup" name="groupDTO" class="choicebox">
             <option value="" disabled selected>Select a group</option>
             <option th:each="group : ${groupList}" th:value="${group.groupId}" th:text="${group.groupName}"></option>
         </select>
 
-        <label for="startTime">Start Time:</label>
-        <input type="time" id="startTime" class="time-picker" />
+        <label>Start Time:</label>
+        <input id="updatedStartTime" type="time" th:field="*{startTime}" class="time-picker" />
 
-        <label for="endTime">End Time:</label>
-        <input type="time" id="endTime" class="time-picker" />
+        <label>End Time:</label>
+        <input id="updatedEndTime" type="time" th:field="*{endTime}" class="time-picker" />
 
-        <label for="day">Select Day:</label>
-        <select id="day" class="choicebox">
+        <label>Select Day:</label>
+        <select id="updatedDay" name="dayOfWeek" class="choicebox">
             <option value="" disabled selected>Select a day</option>
             <option th:each="day : ${T(com.example.myschedule.entity.DayOfWeek).values()}"
                     th:value="${day}" th:text="${day.getDayOfWeekName()}"></option>
         </select>
 
-        <label for="classRoom">Select Classroom:</label>
-        <select id="classRoom" class="choicebox">
+        <label>Select Classroom:</label>
+        <select id="updatedClassroom" name="classroomDTO" class="choicebox">
             <option value="" disabled selected>Select a classroom</option>
             <option th:each="classroom : ${classroomList}" th:value="${classroom.classRoomId}" th:text="${classroom.classroomNumber}"></option>
         </select>
         <button class="submit-button">Create</button>
     </form>
 </div>
+
+
+<div id="create-modal" class="modal">
+    <form th:action="@{/stuff/lessons-dashboard/create}" th:object="${lessonDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('create-modal')">&times;</span>
+        <h2>Create Lesson</h2>
+
+        <label>Select Course:</label>
+        <select class="choicebox" th:field="*{courseDTO}">
+            <option value="" disabled selected>Select a course</option>
+            <option th:each="course : ${courseList}" th:value="${course.courseId}" th:text="${course.courseName}"></option>
+        </select>
+
+        <label>Select Group:</label>
+        <select class="choicebox" th:field="*{groupDTO}">
+            <option value="" disabled selected>Select a group</option>
+            <option th:each="group : ${groupList}" th:value="${group.groupId}" th:text="${group.groupName}"></option>
+        </select>
+
+        <label>Start Time:</label>
+        <input type="time" th:field="*{startTime}" class="time-picker" />
+
+        <label>End Time:</label>
+        <input type="time" th:field="*{endTime}" class="time-picker" />
+
+        <label>Select Day:</label>
+        <select class="choicebox" th:field="*{dayOfWeek}" >
+            <option value="" disabled selected>Select a day</option>
+            <option th:each="day : ${T(com.example.myschedule.entity.DayOfWeek).values()}"
+                    th:value="${day}" th:text="${day.getDayOfWeekName()}"></option>
+        </select>
+
+        <label>Select Classroom:</label>
+        <select class="choicebox" th:field="*{classroomDTO}">
+            <option value="" disabled selected>Select a classroom</option>
+            <option th:each="classroom : ${classroomList}" th:value="${classroom.classRoomId}" th:text="${classroom.classroomNumber}"></option>
+        </select>
+        <button class="submit-button">Create</button>
+    </form>
+</div>
+
 <script src="/script/toggle-menu.js"></script>
 <script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>
