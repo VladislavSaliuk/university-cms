@@ -48,8 +48,6 @@
                 <th> E-mail </th>
                 <th> Firstname </th>
                 <th> Lastname </th>
-                <th> Status </th>
-                <th> Role </th>
                 <th> Group </th>
                 <th> Actions </th>
             </tr>
@@ -61,8 +59,6 @@
                 <td><span th:text="${student.email}"></span></td>
                 <td><span th:text="${student.firstname}"></span></td>
                 <td><span th:text="${student.lastname}"></span></td>
-                <td><span th:text="${student.status.getStatusName()}"></span></td>
-                <td><span th:text="${student.role.getRoleName()}"></span></td>
                 <td><span th:text="${student.groupDTO.groupName}"></span></td>
                 <td>
                     <button class="btn-update">Update</button>

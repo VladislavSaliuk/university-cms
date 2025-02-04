@@ -5,9 +5,12 @@ import com.example.myschedule.dto.CourseDTO;
 import com.example.myschedule.dto.GroupDTO;
 import com.example.myschedule.dto.LessonDTO;
 import com.example.myschedule.entity.Lesson;
+import com.example.myschedule.exception.ClassroomException;
+import com.example.myschedule.exception.ClassroomNotFoundException;
 import com.example.myschedule.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -95,7 +98,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (Exception e) {
+        } catch (ClassroomException | ClassroomNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
         }
@@ -118,7 +121,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (Exception e) {
+        } catch (ClassroomException | ClassroomNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
         }
@@ -134,7 +137,11 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
+            String errorMessage = "Cannot delete classroom because it is associated with existing lessons.";
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/stuff/classrooms-dashboard";
+        } catch (ClassroomException | ClassroomNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
         }
