@@ -18,7 +18,6 @@ public class ClassroomDTO {
     private long classRoomId;
 
     @Min(value = 0L, message = "Number cannot be negativ!")
-    @NotNull(message = "Classroom should contains number!")
     private long classroomNumber;
 
     private String classroomDescription;

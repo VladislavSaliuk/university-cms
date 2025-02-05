@@ -60,11 +60,11 @@
                 <td><span th:text="${student.email}"></span></td>
                 <td><span th:text="${student.firstname}"></span></td>
                 <td><span th:text="${student.lastname}"></span></td>
-                <td><span th:text="${student.groupDTO.groupName}"></span></td>
+                <td><span th:text="${student.groupDTO != null ? student.groupDTO.groupName : 'No Group'}"></span></span></td>
                 <td>
                     <button class="btn-update"
                             th:data-user-id="${student.getUserId()}"
-                            th:data-group-id="${student.getGroupDTO().getGroupId()}"
+                            th:data-group-id="${student.getGroupDTO() != null ? student.getGroupDTO().getGroupId() : ''}"
                             onclick="openStudentUpdateModal(this)">Update</button>
                 </td>
             </tr>

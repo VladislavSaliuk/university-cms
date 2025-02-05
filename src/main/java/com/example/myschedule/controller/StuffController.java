@@ -116,7 +116,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (ClassroomException | ClassroomNotFoundException e) {
+        } catch (ClassroomException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
         }
@@ -159,7 +159,7 @@ public class StuffController {
             String errorMessage = "Cannot delete classroom because it is associated with existing lessons.";
             redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/stuff/classrooms-dashboard";
-        } catch (ClassroomException e) {
+        } catch (ClassroomNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/classrooms-dashboard";
         }

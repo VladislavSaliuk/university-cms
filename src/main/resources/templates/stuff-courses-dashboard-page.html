@@ -57,13 +57,13 @@
                 <td><span th:text="${course.courseId}"></span></td>
                 <td><span th:text="${course.courseName}"></span></td>
                 <td><span th:text="${course.courseDescription}"></span></td>
-                <td><span th:text="${course.teacherDTO.username}"></span></td>
+                <td><span th:text="${course.teacherDTO != null ? course.teacherDTO.username : 'No teacher'}"></span></td>
                 <td>
                     <button class="btn-update"
                             th:data-course-id="${course.courseId}"
                             th:data-course-name="${course.courseName}"
                             th:data-course-description="${course.courseDescription}"
-                            th:data-user-id="${course.teacherDTO.userId}"
+                            th:data-user-id="${course.teacherDTO != null ? course.teacherDTO.userId : ''}"
                             onclick="openCourseUpdateModal(this)">Update</button>
                     <a class="btn-delete" role="button" th:href="@{'/stuff/courses-dashboard/delete?courseId=' + ${course.courseId}}" >Delete</a>
                 </td>
