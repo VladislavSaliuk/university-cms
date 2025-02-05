@@ -86,7 +86,7 @@
 
 <div id="update-modal" class="modal">
     <form th:action="@{/stuff/lessons-dashboard/update}" th:object="${lessonDTO}" method="post" class="modal-content">
-        <span class="close" onclick="closeModal('create-modal')">&times;</span>
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
         <h2>Create Lesson</h2>
 
         <input type="hidden" id="updatedLessonId" name="lessonId">

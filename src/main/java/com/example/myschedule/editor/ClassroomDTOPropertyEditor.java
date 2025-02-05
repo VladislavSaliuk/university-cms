@@ -1,4 +1,6 @@
-package com.example.myschedule.converter;
+package com.example.myschedule.editor;
+
+import com.example.myschedule.converter.ClassroomDTOConverter;
 
 import java.beans.PropertyEditorSupport;
 
