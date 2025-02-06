@@ -233,16 +233,8 @@ public class StuffController {
     }
 
     @PostMapping("/stuff/students-dashboard/update")
-    public String updateStudent(@Valid @ModelAttribute("studentDTO") StudentDTO studentDTO , BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String updateStudent(@Valid @ModelAttribute("studentDTO") StudentDTO studentDTO , RedirectAttributes redirectAttributes) {
         try {
-            if (bindingResult.hasErrors()) {
-                String errorMessage =  bindingResult
-                        .getAllErrors()
-                        .stream()
-                        .findFirst().map(error -> error.getDefaultMessage()).get();
-                redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-                return "redirect:/stuff/students-dashboard";
-            }
 
             studentService.assignStudentToGroup(studentDTO);
 
@@ -250,7 +242,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/students-dashboard";
-        } catch (UserNotFoundException | GroupNotFoundException | UserException e) {
+        } catch (UserNotFoundException | GroupNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/students-dashboard";
         }
@@ -274,7 +266,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/courses-dashboard";
-        } catch (UserException | UserNotFoundException | CourseException e) {
+        } catch (UserNotFoundException | CourseException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/courses-dashboard";
         }
@@ -297,7 +289,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/courses-dashboard";
-        } catch (UserException | UserNotFoundException | CourseException | CourseNotFoundException e) {
+        } catch (UserNotFoundException | CourseException | CourseNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/courses-dashboard";
         }
@@ -340,7 +332,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/lessons-dashboard";
-        } catch (ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException | UserNotFoundException  e) {
+        } catch (ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/lessons-dashboard";
         }
@@ -363,7 +355,7 @@ public class StuffController {
             redirectAttributes.addFlashAttribute("successMessage", successMessage);
 
             return "redirect:/stuff/lessons-dashboard";
-        } catch (LessonNotFoundException | ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException | UserNotFoundException  e) {
+        } catch (LessonNotFoundException | ClassroomNotFoundException | GroupNotFoundException | CourseNotFoundException | OverlapTimeException  e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/stuff/lessons-dashboard";
         }

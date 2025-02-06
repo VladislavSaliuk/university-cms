@@ -176,6 +176,22 @@ thead th span {
     transition: .2s ease-in-out;
 }
 
+.status {
+    padding: .4rem 0;
+    border-radius: 2rem;
+    text-align: center;
+}
+
+.status.active {
+    background-color: #86e49d;
+    color: #006b21;
+}
+
+.status.banned {
+    background-color: #d893a3;
+    color: #b30021;
+}
+
 thead th:hover span {
     border: 1.4px solid #6c00bd;
 }

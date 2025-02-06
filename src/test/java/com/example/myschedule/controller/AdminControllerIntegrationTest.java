@@ -1,8 +1,12 @@
 package com.example.myschedule.controller;
 
+import com.example.myschedule.dto.UserDTO;
+import com.example.myschedule.entity.Status;
 import com.example.myschedule.entity.User;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +23,10 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Testcontainers
@@ -61,6 +68,51 @@ public class AdminControllerIntegrationTest {
         Assert.assertNotNull(userList);
         Assert.assertFalse(userList.isEmpty());
         Assert.assertEquals(10, userList.size());
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L})
+    @WithMockUser(roles = "ADMIN")
+    public void updateUser_shouldReturnSuccessMessage(long userId) throws Exception {
+
+        UserDTO userDTO = UserDTO.builder()
+                .userId(userId)
+                .status(Status.BANNED)
+                .build();
+
+        MvcResult result = mockMvc.perform(post("/admin/dashboard/update")
+                        .flashAttr("userDTO", userDTO))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/dashboard"))
+                .andExpect(flash().attributeExists("successMessage"))
+                .andReturn();
+
+        String successMessage = (String) result.getFlashMap().get("successMessage");
+        assertNotNull(successMessage);
+        assertEquals("Status updated successfully!", successMessage);
+
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    public void updateUser_shouldReturnErrorMessageWhenUserNotFound() throws Exception {
+
+        UserDTO userDTO = UserDTO.builder()
+                .userId(100L)
+                .status(Status.BANNED)
+                .build();
+
+        MvcResult result = mockMvc.perform(post("/admin/dashboard/update")
+                        .flashAttr("userDTO", userDTO))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/dashboard"))
+                .andExpect(flash().attributeExists("errorMessage"))
+                .andReturn();
+
+        String errorMessage = (String) result.getFlashMap().get("errorMessage");
+        assertNotNull(errorMessage);
+        assertEquals("User with " + userDTO.getUserId() + " Id not found!", errorMessage);
 
     }
 

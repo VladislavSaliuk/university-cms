@@ -114,3 +114,12 @@ function openLessonUpdateModal(button) {
     document.getElementById('update-modal').style.display = 'flex';
 }
 
+function openUpdateUserModal(button) {
+    const userId = button.getAttribute('data-user-id');
+    const status = button.getAttribute('data-status');
+
+    document.getElementById('updatedUserId').value = userId;
+    document.getElementById('updatedStatus').value = status;
+
+    document.getElementById('update-modal').style.display = 'flex';
+}

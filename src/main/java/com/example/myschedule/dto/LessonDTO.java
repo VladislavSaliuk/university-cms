@@ -22,7 +22,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class LessonDTO {
 
-    @NotNull(message = "Lesson should contains Id!")
     private long lessonId;
 
     private CourseDTO courseDTO;

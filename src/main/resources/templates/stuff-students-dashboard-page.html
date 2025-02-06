@@ -50,6 +50,7 @@
                 <th> Firstname </th>
                 <th> Lastname </th>
                 <th> Group </th>
+                <th> Status </th>
                 <th> Actions </th>
             </tr>
             </thead>
@@ -61,6 +62,12 @@
                 <td><span th:text="${student.firstname}"></span></td>
                 <td><span th:text="${student.lastname}"></span></td>
                 <td><span th:text="${student.groupDTO != null ? student.groupDTO.groupName : 'No Group'}"></span></span></td>
+                <td>
+                    <p th:classappend="${student.status.getStatusName() == 'Active'} ? 'active' : 'banned'"
+                       class="status"
+                       th:text="${student.status.getStatusName()}">
+                    </p>
+                </td>
                 <td>
                     <button class="btn-update"
                             th:data-user-id="${student.getUserId()}"

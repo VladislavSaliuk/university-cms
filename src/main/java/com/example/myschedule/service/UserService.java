@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,6 +81,8 @@ public class UserService  {
                 .stream()
                 .map(UserDTO::toUserDTO)
                 .collect(Collectors.toList());
+
+        Collections.reverse(users);
 
         log.info("Fetched {} users", users.size());
         return users;

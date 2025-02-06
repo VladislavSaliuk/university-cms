@@ -49,6 +49,7 @@
                 <th> E-mail </th>
                 <th> Firstname </th>
                 <th> Lastname </th>
+                <th> Status </th>
             </tr>
             </thead>
             <tbody>
@@ -58,6 +59,12 @@
                 <td><span th:text="${teacher.email}"></span></td>
                 <td><span th:text="${teacher.firstname}"></span></td>
                 <td><span th:text="${teacher.lastname}"></span></td>
+                <td>
+                    <p th:classappend="${teacher.status.getStatusName() == 'Active'} ? 'active' : 'banned'"
+                       class="status"
+                       th:text="${teacher.status.getStatusName()}">
+                    </p>
+                </td>
             </tr>
             </tbody>
         </table>

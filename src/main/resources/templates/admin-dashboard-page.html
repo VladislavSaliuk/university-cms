@@ -10,6 +10,12 @@
 </head>
 
 <body>
+<div th:if="${successMessage}" role="alert" class="success-message">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}" role="alert" class="error-message">
+    <p th:text="${errorMessage}"></p>
+</div>
 <main class="table" id="customers_table">
     <section class="table__header">
         <h1>Users</h1>
@@ -29,6 +35,7 @@
                 <th> Lastname </th>
                 <th> Role </th>
                 <th> Status </th>
+                <th> Action </th>
             </tr>
             </thead>
             <tbody>
@@ -39,12 +46,43 @@
                 <td><span th:text="${user.firstname}"></span></td>
                 <td><span th:text="${user.lastname}"></span></td>
                 <td><span th:text="${user.role.getRoleName()}"></span></td>
-                <td><p class="status active"  th:text="${user.status.getStatusName()}"></p></td>
+                <td>
+                    <p th:classappend="${user.status.getStatusName() == 'Active'} ? 'active' : 'banned'"
+                       class="status"
+                       th:text="${user.status.getStatusName()}">
+                    </p>
+                </td>
+                <td>
+                    <button class="btn-update"
+                            th:data-user-id="${user.userId}"
+                            th:data-status="${user.status}"
+                            onclick="openUpdateUserModal(this)">Update</button>
+                </td>
             </tr>
             </tbody>
         </table>
     </section>
 </main>
+
+<div id="update-modal" class="modal">
+    <form th:action="@{/admin/dashboard/update}" th:object="${userDTO}" method="post" class="modal-content">
+        <span class="close" onclick="closeModal('update-modal')">&times;</span>
+        <h2>Update Student</h2>
+
+        <input type="hidden" id="updatedUserId" name="userId">
+
+        <label>Status</label>
+        <select id="updatedStatus" name="status" class="choicebox">
+            <option th:each="status : ${T(com.example.myschedule.entity.Status).values()}"
+                    th:value="${status}" th:text="${status.getStatusName()}"></option>
+        </select>
+
+
+        <button class="submit-button">Update</button>
+    </form>
+</div>
+
+<script src="/script/modals.js"></script>
 <script src="/script/search-table.js"></script>
 </script>
 </body>
