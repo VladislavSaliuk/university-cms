@@ -10,9 +10,6 @@
 - **Session Scheduling**: Ensure schedules are created without overlapping time slots
 - **User Management**: Ban/Unban users or change their roles with admin credentials
 - **Personal portfolio**: pages, where you can find my contacts and CV 
-- **CRUD for classrooms**: creating, updating, deleting and retreaving classrooms with stuff credentials
-- **CRUD for groups**: creating, updating, deleting and retreaving groups with stuff credentials
-- **CRUD for courses**: creating, updating, deleting and retreaving courses with stuff credentials
 
 --- 
 
@@ -20,6 +17,7 @@
 
 - **Programming language**: Java 11
 - **Framework**: Spring Boot, Spring Core, Spring Data JPA, Spring Web
+- **Client**: HTNL, CSS, Bootstrap, JavaScript
 - **Authorization**: Spring Security, HttpSession
 - **Database**: PostgeSQL
 - **Migrations**: FlyWay
